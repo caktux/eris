@@ -1,0 +1,150 @@
+;This should be complete on functional bits all it should require is addition of query functions
+
+{
+	(def 'DOUG 0x0)
+
+	;c3d compatibility structure
+	(def 'indicator 0x10)
+	(def 'dmpointer 0x11)
+	(def 'UIpointer 0x12)
+	(def 'blob 0x13)
+	(def 'parent 0x14)
+	(def 'owner 0x15)
+	(def 'creator 0x16)
+	(def 'time 0x17)
+
+	(def 'score 0x20)
+	(def 'status 0x21)
+
+	(def 'cmd (calldataload 0))
+	;(Link to parent)
+	(def 'parentlink (calldataload 0x20))
+	;(Change Status)
+	(def 'newstatus (calldataload 0x20))
+	;(Up/downvote)
+	(def 'voter (calldataload 0x20))
+	;(Init)
+	(def 'contentblob (calldataload 0x20))
+	(def 'initmodel (calldataload 0x40))
+	(def 'initUI (calldataload 0x60))
+	(def 'initowner (calldataload 0x80))
+
+	;Helpful "Functions"
+	(def 'NEG (value) (- 0 value))
+	(def 'safeslot @@(NEG 1))
+	(def 'safepoint (NEG 1))
+
+	(def 'CHECKBYLAW (raw
+		[[(safeslot)]]@0x0
+		[[(- (safeslot) 1)]]@0x20
+		[[(- (safeslot) 2)]]@0x40
+		[0x0]"checkperm"
+		[0x20] "doug"
+		[0x40](caller)
+		(call (- (GAS) 100) @@(DOUG) 0 0x0 0x60 0x0 0x20)
+		(pop)
+		(= @0x0 1) ;put 1 on stack if 1 0 otherwise
+		[0x40]@@(- (safeslot) 2)
+		[0x20]@@(- (safeslot) 1)
+		[0x0]@@(safeslot)
+	))
+
+  	[[(safepoint)]](NEG 2)
+
+  	[[(DOUG)]] ;Doug's Address
+  	[[(creator)]](CALLER)
+  	[[(time)]](NUMBER)
+
+	(return 0 (lll {
+		(when (&& (= (caller) @@(creator)) (= (cmd) "init") (= @@(indicator) 0))
+			{
+				[[(indicator)]]0x88554646AB ;Attached Content indicator
+				[[(dmpointer)]](initmodel)
+				[[(UIpointer)]](initUI)
+				[[(blob)]](contentblob)
+				[[(owner)]](initowner)
+				(STOP)
+			}
+		)
+
+		(unless (CHECKBYLAW) (STOP)) ;If not a bylaw stop
+
+		(when (= (cmd) "link")
+			{
+				[[(parent)]](parentlink)
+			}
+		)
+
+		(when (= (cmd) "changestatus")
+			{
+				[[(status)]](newstatus)
+			}
+		)
+		
+		(when (= (cmd) "upvote")
+			{
+				[0x0] @@(voter)
+				(when (= @@(voter) 0)
+					{
+						;When this person hasn't voted before
+						[[(score)]](+ @@(score) 1)
+						[[(voter)]]1
+					}
+				)
+
+				(when (= @@(voter) 1)
+					{
+						;When this person has upvoted before (un-upvote)
+						[[(score)]](- @@(score) 1)
+						[[(voter)]]0
+					}
+				)
+
+				(when (= @@(voter) 2)
+					{
+						;When this person has downvoted before
+						[[(score)]](+ @@(score) 2)
+						[[(voter)]]1
+					}
+				)
+			}
+			[0x20]@@(score)
+			[0x40]@@(author)
+			(return 0x0 0x60)
+		)
+    	
+		(when (= (calldataload 0) "downvote")
+			{
+				[0x0] @@(voter)
+				(when (= @@(voter) 0)
+					{
+						;When this person hasn't voted before
+						[[(score)]](- @@(score) 1)
+						[[(voter)]]2
+					}
+				)
+
+				(when (= @@(voter) 1)
+					{
+						;When this person has upvoted before
+						[[(score)]](- @@(score) 2)
+						[[(voter)]]2
+					}
+				)
+
+				(when (= @@(voter) 2)
+					{
+						;When this person has downvoted before (un-downvote)
+						[[(score)]](+ @@(score) 1)
+						[[(voter)]]0
+					}
+				)
+			}
+			[0x20]@@(score)
+			[0x40]@@(author)
+			(return 0x0 0x60)
+		)
+		
+
+  	} 0))
+}

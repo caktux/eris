@@ -1,3 +1,5 @@
+;This should be complete on functional bits all it should require is addition of query functions
+
 {
 	;General structure
 	(def 'DOUG 0x0)
@@ -80,7 +82,7 @@
 
 	(return 0 (lll {
 		;Body
-		(when (&& (= (cmd) "init") (= (CALLER) @@(creator)) (= @@0x10 0)) ;Creator is initializing an uninitialized Structural contract
+		(when (&& (= (cmd) "init") (= (CALLER) @@(creator)) (= @@(indicator) 0)) ;Creator is initializing an uninitialized Structural contract
 			{
 				[[(indicator)]]0x88554646BA ;Structural
 				[[(dmpointer)]](initmodel)

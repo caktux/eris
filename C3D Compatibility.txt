@@ -52,3 +52,22 @@ Helpful compatibility definitions
 	(def 'timeslot (addr) (+ addr 7))
 
 AB - Contract with c3d content attached
+
+0x10 : 0x88554646AB (I) [see other entries (AA, BA, BB)]
+0x11 : Datamodel.JSON (B/C)
+0x12 : UI structure (B/C)
+0x13 : content (B)
+0x14 : Parent (C)
+0x15 : Owner (K)
+0x16 : Creator (C)
+0x17 : TimeStamp (V)
+
+;c3d compatibility structure
+(def 'indicator 0x10)
+(def 'dmpointer 0x11)
+(def 'UIpointer 0x12)
+(def 'content 0x13)
+(def 'parent 0x14)
+(def 'owner 0x15)
+(def 'creator 0x16)
+(def 'time 0x17)
