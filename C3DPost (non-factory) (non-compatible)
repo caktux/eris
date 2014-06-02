@@ -1,0 +1,82 @@
+{
+	(def 'score 0x11)
+	(def 'author 0x10)
+  	[[0x0]] ;Doug's Address
+  	[[0x1]] ;Post Factory address
+  	[[0x10]] ;post info and stuff
+	(return 0 (lll {
+		(when (&& (= (caller) @@0x1) (= (calldataload 0) "init"))
+			{
+				;Do initialization of post data etc
+			}
+		)
+		[0x0]"checkperm"
+		[0x20]"doug"
+		
+		[0x40](caller)
+		[0x60]0
+		(call (gass) @@0x0 0 0x0 0x60 0x60 0x20)
+		(unless @0x60 (STOP)) ;If not a bylaw stop
+
+		[0x0] @@(calldataload 0x20)
+		(when (= (calldataload 0) "upvote")
+			{
+				(when (= @@(calldataload 0x20) 0)
+					{
+						;When this person hasn't voted before
+						[[(score)]](+ @@(score) 1)
+						[[(calldataload 0x20)]]1
+					}
+				)
+
+				(when (= @@(calldataload 0x20) 1)
+					{
+						;When this person has upvoted before (un-upvote)
+						[[(score)]](- @@(score) 1)
+						[[(calldataload 0x20)]]0
+					}
+				)
+
+				(when (= @@(calldataload 0x20) 2)
+					{
+						;When this person has downvoted before
+						[[(score)]](+ @@(score) 2)
+						[[(calldataload 0x20)]]1
+					}
+				)
+			}
+		)
+    	
+		(when (= (calldataload 0) "downvote")
+			{
+				(when (= @@(calldataload 0x20) 0)
+					{
+						;When this person hasn't voted before
+						[[(score)]](- @@(score) 1)
+						[[(calldataload 0x20)]]2
+					}
+				)
+
+				(when (= @@(calldataload 0x20) 1)
+					{
+						;When this person has upvoted before
+						[[(score)]](- @@(score) 2)
+						[[(calldataload 0x20)]]2
+					}
+				)
+
+				(when (= @@(calldataload 0x20) 2)
+					{
+						;When this person has downvoted before (un-downvote)
+						[[(score)]](+ @@(score) 1)
+						[[(calldataload 0x20)]]0
+					}
+				)
+			}
+		)
+		[0x20]@@(score)
+		[0x40]@@(author)
+		(return 0x0 0x60)
+
+  	} 0))
+}

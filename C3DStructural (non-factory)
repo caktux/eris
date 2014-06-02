@@ -1,0 +1,149 @@
+{
+	;General structure
+	(def 'DOUG 0x0)
+	(def 'head 0x21)
+	(def 'tail 0x20)
+
+	;c3d compatibility structure
+	(def 'indicator 0x10)
+	(def 'dmpointer 0x11)
+	(def 'UIpointer 0x12)
+	(def 'LLstart 0x13)
+	(def 'parent 0x14)
+	(def 'owner 0x15)
+	(def 'creator 0x16)
+	(def 'time 0x17)
+
+
+	;Linked list structure definitions
+	(def 'nextslot (addr) (+ addr 2))
+	(def 'nextlink (addr) @@(+ addr 2))
+	(def 'prevslot (addr) (+ addr 1))
+	(def 'prevlink (addr) @@(+ addr 1))
+
+	(def 'typeslot (addr) (+ addr 3))
+	(def 'dataslot (addr) (+ addr 4))
+	(def 'modelslot (addr) (+ addr 5))
+	(def 'UIlot (addr) (+ addr 6))
+	(def 'timeslot (addr) (+ addr 7))
+
+	;API definitions
+	;(ADD)
+	(def 'cmd (calldataload 0x0))
+	(def 'linkID (calldataload 0x20))
+	(def 'main (calldataload 0x40))
+	(def 'type (calldataload 0x60))
+	(def 'data (calldataload 0x80))
+	(def 'model (calldataload 0xA0))
+	(def 'UI (calldataload 0xC0))
+	;(Init)
+	(def 'initmodel (calldataload 0x20))
+	(def 'initUI (calldataload 0x40))
+	(def 'initowner (calldataload 0x60))
+	;(Bind)
+	(def 'parentaddr (calldataload 0x20))
+
+	;Helpful "Functions"
+	(def 'NEG (value) (- 0 value))
+	(def 'safeslot @@(NEG 1))
+	(def 'safepoint (NEG 1))
+
+	(def 'CHECKBYLAW (raw
+		[[(safeslot)]]@0x0
+		[[(- (safeslot) 1)]]@0x20
+		[[(- (safeslot) 2)]]@0x40
+		[0x0]"checkperm"
+		[0x20] "doug"
+		[0x40](caller)
+		(call (- (GAS) 100) @@(DOUG) 0 0x0 0x60 0x0 0x20)
+		(pop)
+		(= @0x0 1) ;put 1 on stack if 1 0 otherwise
+		[0x40]@@(- (safeslot) 2)
+		[0x20]@@(- (safeslot) 1)
+		[0x0]@@(safeslot)
+	))
+
+	[[(safepoint)]](NEG 2)
+
+	[[0x0]] ;DOUG's Address
+
+	[[(LLstart)]](head)
+	[[(creator)]](CALLER) ;Creator of the contract (only they can initialize)
+	[[(time)]](NUMBER) ;block when this list was created
+
+	[[(tail)]] 0x30;Tail
+	[[(head)]] 0x30;Head
+
+	[[0x30]] 0xDEADBEEF ;Filler NEVER EVER EVER! (I mean it) delete this entry
+	[[0x31]] 0xDEADBEEF ;Filler
+	[[0x32]] 0x0 ;This will be the pointer to the first real entry
+
+	(return 0 (lll {
+		;Body
+		(when (&& (= (cmd) "init") (= (CALLER) @@(creator)) (= @@0x10 0)) ;Creator is initializing an uninitialized Structural contract
+			{
+				[[(indicator)]]0x88554646BA ;Structural
+				[[(dmpointer)]](initmodel)
+				[[(UIpointer)]](initUI)
+				[[(owner)]](initowner)
+			}
+		)
+
+		(when (= (cmd) "bind")
+			{
+				;
+				(unless (|| (= (CALLER) @@(owner)) (CHECKBYLAW))
+				[[(parent)]](parentaddr)
+			}
+		)
+
+		(when (= (cmd) "addlink")
+			{
+				;Checks
+				(unless (&& (= @@(linkID) 0) (= @@(+ (linkID) 1) 0) (= @@(+ (linkID) 2) 0) (= @@(- (linkID) 1) 0) (= @@(- (linkID) 2) 0)) (STOP))
+				(unless (&& (= @@(+ (linkID) 3) 0) (= @@(+ (linkID) 4) 0) (= @@(+ (linkID) 5) 0)(= @@(+ (linkID) 6) 0) (STOP))
+				(unless (&& (> (linkID) 0x40) (< (linkID) (NEG 0x10))) (STOP))
+
+				(unless (CHECKBYLAW) (STOP)) ;only bylaws can call
+
+				;Add link
+				[[(linkID)]](main)
+				[[(prevslot (linkID))]]@@(head)
+				[[(nextslot @@(head))]](linkID)
+				[[(head)]](linkID)
+
+				;Data Attached
+				[[(typeslot (linkID))]](type)
+				[[(dataslot (linkID))]](data)
+				[[(modelslot (linkID))]](model)
+				[[(UIslot (linkID))]](UI)
+				[[(timeslot)]](NUMBER)
+
+			}
+		)
+
+		(when (= (cmd) "rmlink")
+			{
+				;checks
+				(unless (&& (> (linkID) 0x40) (< (linkID) (NEG 0x10))) (STOP)) ;TOO LOW or TOO HIGH
+				(unless (= (linkID) (nextlink (prevlink (linkID)))) (STOP)) ;Must line up with a link
+
+				(unless (CHECKBYLAW) (STOP)) ;Only Bylaws can call
+
+				;Removal of link
+				[[(linkID)]]0
+				[[(nextslot (prevlink (linkID)))]](nextlink (linkID))
+				[[(prevslot (nextlink (linkID)))]](prevlink (linkID))
+				[[(nextslot (linkID))]]0
+				[[(prevslot (linkID))]]0
+
+				;Data Attached
+				[[(typeslot (linkID))]]0
+				[[(dataslot (linkID))]]0
+				[[(modelslot (linkID))]]0
+				[[(UIslot (linkID))]]0
+				[[(timeslot)]]0
+			}
+		)
+	} 0))
+}
