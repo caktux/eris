@@ -57,10 +57,12 @@ Similarly `BB` contracts are mirrors of `BA` contracts and the c3D system will s
 * (linkID)+1 : (A)    : Previous link
 * (linkID)+2 : (A)    : Next link
 * (linkID)+3 : (I)    : Type [ 0 => Contract || 1 => Blob || 2 => Datamodel Only ]
-* (linkID)+4 : (B||C) : Content
-* (linkID)+5 : (B||C) : Datamodel.json (*note*: if the content is a pointer to an `AB` contract this would typically be blank)
-* (linkID)+6 : (B||C) : UI structure (*note*: if the content is a pointer to an `AB` contract this would typically be blank)
-* (linkID)+7 : (V)    : Timestamp
+* (linkID)+4 : (V)    : Behaviour [0 => Ignore || 1 => Treat Normally || 2 => UI structure ||
+                                        3 => Flash Notice || 4 => Datamodel list || 5 => Blacklist]
+* (linkID)+5 : (B||C) : Content
+* (linkID)+6 : (B||C) : Datamodel.json (*note*: if the content is a pointer to an `AB` contract this would typically be blank)
+* (linkID)+7 : (B||C) : UI structure (*note*: if the content is a pointer to an `AB` contract this would typically be blank)
+* (linkID)+8 : (V)    : Timestamp
 
 #### Helpful Compatibility Definitions for Linked List Entries (primarily used by DOUGs ByLaws)
 
@@ -70,13 +72,14 @@ Similarly `BB` contracts are mirrors of `BA` contracts and the c3D system will s
 (def 'prevslot (addr) (+ addr 1))
 (def 'prevlink (addr) @@(+ addr 1))
 (def 'typeslot (addr) (+ addr 3))
-(def 'dataslot (addr) (+ addr 4))
-(def 'modelslot (addr) (+ addr 5))
-(def 'UIlot (addr) (+ addr 6))
-(def 'timeslot (addr) (+ addr 7))
+(def 'behaviourslot (addr) (+ addr 4))
+(def 'dataslot (addr) (+ addr 5))
+(def 'modelslot (addr) (+ addr 6))
+(def 'UIlot (addr) (+ addr 7))
+(def 'timeslot (addr) (+ addr 8))
 ```
 
-### BA Contracts -- c3D Content Contract
+### AB Contracts -- c3D Content Contract
 
 #### Top Level Contract Storage Slots
 
@@ -101,7 +104,3 @@ Similarly `BB` contracts are mirrors of `BA` contracts and the c3D system will s
 (def 'creator 0x16)
 (def 'time 0x17)
 ```
-
-#### Individual Entries for BA Contracts
-
-*Note* BA contracts will never have linked lists as they are predominantly used to track meta information regarding individual content blobs.
