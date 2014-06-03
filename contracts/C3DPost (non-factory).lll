@@ -1,4 +1,12 @@
-;This should be complete on functional bits all it should require is addition of query functions
+; Name: c3D Forum Post Contract
+; Author: Dennis McKinnon <dennis@projectdouglas.org>
+; Copyright: 2014 Project Douglas
+; License: see => https://github.com/project-douglas/c3D-contracts/blob/master/LICENSE.md
+;
+; Structure Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/Structure.md
+; API Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/API.md
+;
+; Note, this contract should only be used for testing purposes
 
 {
 	(def 'DOUG 0x0)
@@ -83,7 +91,7 @@
 				[[(status)]](newstatus)
 			}
 		)
-		
+
 		(when (= (cmd) "upvote")
 			{
 				[0x0] @@(voter)
@@ -115,7 +123,7 @@
 			[0x40]@@(author)
 			(return 0x0 0x60)
 		)
-    	
+
 		(when (= (calldataload 0) "downvote")
 			{
 				[0x0] @@(voter)
@@ -147,7 +155,7 @@
 			[0x40]@@(author)
 			(return 0x0 0x60)
 		)
-		
+
 
   	} 0))
 }

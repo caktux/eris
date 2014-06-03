@@ -1,4 +1,12 @@
-;This should be complete on functional bits all it should require is addition of query functions
+; Name: c3D Forum Structural Contract
+; Author: Dennis McKinnon <dennis@projectdouglas.org>
+; Copyright: 2014 Project Douglas
+; License: see => https://github.com/project-douglas/c3D-contracts/blob/master/LICENSE.md
+;
+; Structure Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/Structure.md
+; API Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/API.md
+;
+; Note, this contract should only be used for testing purposes
 
 {
 	;General structure
