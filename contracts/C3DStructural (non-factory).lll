@@ -6,9 +6,10 @@
 ; Structure Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/Structure.md
 ; API Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/API.md
 
+;Note: This contract should only be used for testing purposes
 
-;TODO:
-;Re-Enable the checks (Fix checkBylaws)
+;TODO Re-Enable Bylaw control (after specializing for Swarum)
+
 {
 	;General structure
 	(def 'DOUG 0x0)
@@ -33,10 +34,11 @@
 	(def 'prevlink (addr) @@(+ addr 1))
 
 	(def 'typeslot (addr) (+ addr 3))
-	(def 'dataslot (addr) (+ addr 4))
-	(def 'modelslot (addr) (+ addr 5))
-	(def 'UIslot (addr) (+ addr 6))
-	(def 'timeslot (addr) (+ addr 7))
+	(def 'behaviour (addr) (+ addr 4))
+	(def 'dataslot (addr) (+ addr 5))
+	(def 'modelslot (addr) (+ addr 6))
+	(def 'UIslot (addr) (+ addr 7))
+	(def 'timeslot (addr) (+ addr 8))
 
 	;API definitions
 	;(ADD)
@@ -44,9 +46,10 @@
 	(def 'linkID () (calldataload 0x20))
 	(def 'main () (calldataload 0x40))
 	(def 'type () (calldataload 0x60))
-	(def 'data () (calldataload 0x80))
-	(def 'model () (calldataload 0xA0))
-	(def 'UI () (calldataload 0xC0))
+	(def 'behaviour () (calldataload 0x80))
+	(def 'data () (calldataload 0xA0))
+	(def 'model () (calldataload 0xC0))
+	(def 'UI () (calldataload 0xE0))
 	;(Init)
 	(def 'initmodel () (calldataload 0x20))
 	(def 'initUI () (calldataload 0x40))
@@ -59,7 +62,7 @@
 	(def 'safeslot () @@(NEG 1))
 	(def 'safepoint () (NEG 1))
 
-;	(def 'CHECKBYLAW (raw
+;	(def 'CHECKBYLAW () (raw
 ;		[[safeslot]]@0x0
 ;		[[(- safeslot 1)]]@0x20
 ;		[[(- safeslot 2)]]@0x40
@@ -85,8 +88,8 @@
 	[[creator]](CALLER) ;Creator of the contract (only they can initialize)
 	[[time]](NUMBER) ;block when this list was created
 
-	[[tailslot]] 0x30;Tail
-	[[headslot]] 0x30;Head
+	[[tailslot]] 0x30 ;Tail
+	[[headslot]] 0x30 ;Head
 
 	[[0x30]] 0xDEADBEEF ;Filler NEVER EVER EVER! (I mean it) delete this entry
 	[[0x31]] 0xDEADBEEF ;Filler
@@ -130,6 +133,7 @@
 
 				;Data Attached
 				[[(typeslot (linkID))]](type)
+				[[(behaviourslot (linkID))]](behaviour)
 				[[(dataslot (linkID))]](data)
 				[[(modelslot (linkID))]](model)
 				[[(UIslot (linkID))]](UI)
@@ -162,7 +166,6 @@
 
 				;Data Attached
 				[[(typeslot (linkID))]]0
-				[[(behaviourslot (linkID))]]0
 				[[(dataslot (linkID))]]0
 				[[(modelslot (linkID))]]0
 				[[(UIslot (linkID))]]0
