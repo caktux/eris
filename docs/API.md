@@ -6,21 +6,29 @@ The API for the Structural contracts are as follows:
 
 To deploy these contracts you will use the non-factory contracts from the contracts directory.
 
-### Initialize
+### Initialize -- `AB` Contract
 
-"init" (linkID) (datamodel.json) (UI Structure) 0xOwnerAddress
+`init` (linkID) (datamodel.json) (ui) 0xOwnerAddress
 
 These fields correspond to the fields listed in the `Structure.md` file.
 
 *Note* when testing in isolation, don't worry about the `OwnerAddress` because the only place used in the testing contracts are commented out -- you can stick something in there if you want, or just leave blank.
 
-### Set a Parent
+### Initialize -- `BA` Contract
 
-"bind" 0xParentAddress
+`init` (datamodel.json) (ui) 0xOwnerAddress
 
-### Add Link
+These fields correspond to the fields listed in the `Structure.md` file.
 
-"addlink" (linkID) (main) (type) (content) (datamodel.json) (UIstructural)
+*Note* when testing in isolation, don't worry about the `OwnerAddress` because the only place used in the testing contracts are commented out -- you can stick something in there if you want, or just leave blank.
+
+### Set a Parent -- `AB` and `BA` Contracts
+
+`bind` 0xParentAddress
+
+### Add Link -- `BA` Contracts
+
+`addlink` (linkID) (main) (type) (behaviour) (content) (datamodel.json) (ui)
 
 These fields correspond to the fields listed in the `Structure.md` file.
 
