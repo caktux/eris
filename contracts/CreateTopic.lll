@@ -1,0 +1,82 @@
+;Create Topic
+
+{
+	(def 'repreq 20)
+	(def 'upcap 100)
+	(def 'downcap )
+	(def 'uprep 10)
+	(def 'downrep 2)
+	(def 'gass (- (GAS) 100))
+
+	(def 'DOUG 0x0)
+	(def 'REP 0x1)
+	(def 'STF 0x2)
+	(def 'SWARUM 0x3)
+
+	;INSERT API HERE
+	;(linkID)(blobinner)(modelinner)(UIinner)(blobouter)(modelouter)(UIouter)
+
+	(def 'linkID () (calldataload 0x0))
+	(def 'blobinner () (calldataload 0x20))
+	(def 'modelinner () (calldataload 0x40))
+	(def 'UIinner () (calldataload 0x60))
+	(def 'blobouter () (calldataload 0x80))
+	(def 'modelouter () (calldataload 0xA0))
+	(def 'UIouter () (calldataload 0xE0))
+
+	[[DOUG]] 0x0;Doug's Address
+	[[REP]] 0 ;Rep
+	[[STF]] 0 ;Post Tracker
+	(return 0 (lll 
+		{
+			;Update the names
+			[0x0]"get"
+			[0x20]"rep"
+			(call (gass) @@DOUG 0 0x0 0x40 0x40 0x20)
+			[[REP]]@0x40
+
+			[0x0]"get"
+			[0x20]"swarumtopicfactory"
+			[0x40] 0
+			(call (gass) @@DOUG 0 0x0 0x40 0x40 0x20)
+			[[STF]]@0x40
+
+			[0x0]"get"
+			[0x20]"swarum"
+			[0x40] 0
+			(call (gass) @@DOUG 0 0x0 0x40 0x40 0x20)
+			[[SWARUM]]@0x40
+
+			;Get user info and check they have required rep and no more then 3 strikes
+			[0x0]"get"
+			[0x20](caller)
+			[0x40]0
+			(call (gass) @@REP 0 0x0 0x40 0x40 0xA0)
+			(unless (&& (>= @0x40 (repreq)) (<= @0x60 3)) (STOP))
+
+			;Time to DO SHIT!
+			;Call Topic Factory -> And init
+			[0x0](blob)
+			[0x20](model)
+			[0x40](UI)
+			[0x60](caller)
+			[0x80]0
+			(call (gass) @@STF 0 0x0 0x60 0x80 0x20) ;Returns address of topic
+
+			[0x0]"bind"
+			[0x20]@@SWARUM
+			(call (gass) @0x80 0 0x0 0x40 0x0 0x0) ;Bind to parent
+
+			[0x0]"addlink"
+			[0x20](linkID)
+			[0x40]0 ;main
+			[0x60]0 ;type
+			[0x80]1 ;Treat normally
+			;NOT SURE WHAT YOU WANT TO DO WITH THESE
+			[0xA0](blobouter) ;data
+			[0xC0](modelouter) ;model
+			[0xE0](UIouter) ;UI
+			(call (gass) @@SWARUM 0 0x0 0x100 0x0 0x20)
+		}
+	0 ))
+}
