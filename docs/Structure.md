@@ -32,11 +32,12 @@ Similarly `BB` contracts are mirrors of `BA` contracts and the c3D system will s
 * 0x10 : (I)    : [0x88554646BA]
 * 0x11 : (B||C) : pointer to an applicable datamodel.json
 * 0x12 : (B||C) : pointer to an applicable set (or single) of UI file(s) structure
-* 0x13 : (A)    : Linked List Start
+* 0x13 : (B||C) : content
 * 0x14 : (C)    : Parent of this c3D contract
 * 0x15 : (K)    : Owner of this c3D contract
 * 0x16 : (C)    : Creator of this c3D contract
 * 0x17 : (V)    : TimeStamp this c3D contract was created
+* 0x18 : (A)    : Linked list start
 
 #### Helpful Compatibility Definitions for Top Level Storage (primarily used by DOUGs ByLaws)
 
@@ -44,11 +45,12 @@ Similarly `BB` contracts are mirrors of `BA` contracts and the c3D system will s
 (def 'indicator 0x10)
 (def 'dmpointer 0x11)
 (def 'UIpointer 0x12)
-(def 'LLstart 0x13)
+(def 'blob)
 (def 'parent 0x14)
 (def 'owner 0x15)
 (def 'creator 0x16)
 (def 'time 0x17)
+(def 'LLstart 0x13)
 ```
 
 #### Individual Entity Entries

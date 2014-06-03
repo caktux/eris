@@ -8,7 +8,7 @@ To deploy these contracts you will use the non-factory contracts from the contra
 
 ### Initialize -- `AB` Contract
 
-`init` (linkID) (datamodel.json) (ui) 0xOwnerAddress
+`init` (blob) (datamodel.json) (ui) 0xOwnerAddress
 
 These fields correspond to the fields listed in the `Structure.md` file.
 
@@ -16,7 +16,7 @@ These fields correspond to the fields listed in the `Structure.md` file.
 
 ### Initialize -- `BA` Contract
 
-`init` (datamodel.json) (ui) 0xOwnerAddress
+`init` (blob) (datamodel.json) (ui) 0xOwnerAddress
 
 These fields correspond to the fields listed in the `Structure.md` file.
 

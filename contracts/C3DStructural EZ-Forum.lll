@@ -18,11 +18,12 @@
 	(def 'indicator 0x10)
 	(def 'dmpointer 0x11)
 	(def 'UIpointer 0x12)
-	(def 'LLstart 0x13)
+	(def 'blob 0x13)
 	(def 'parent 0x14)
 	(def 'owner 0x15)
 	(def 'creator 0x16)
 	(def 'time 0x17)
+	(def 'LLstart 0x18)
 
 
 	;Linked list structure definitions
@@ -49,9 +50,10 @@
 	(def 'model () (calldataload 0xC0))
 	(def 'UI () (calldataload 0xE0))
 	;(Init)
-	(def 'initmodel () (calldataload 0x20))
-	(def 'initUI () (calldataload 0x40))
-	(def 'initowner () (calldataload 0x60))
+	(def 'contentblob () (calldataload 0x20))
+	(def 'initmodel () (calldataload 0x40))
+	(def 'initUI () (calldataload 0x60))
+	(def 'initowner () (calldataload 0x80))
 	;(Bind)
 	(def 'parentaddr () (calldataload 0x20))
 
@@ -98,6 +100,7 @@
 		(when (= (cmd) "init"); (= (CALLER) @@creator) (= @@indicator 0)) ;Creator is initializing an uninitialized Structural contract
 			{
 				[[indicator]]0x88554646BA ;Structural
+				[[blob]](contentblob)
 				[[dmpointer]](initmodel)
 				[[UIpointer]](initUI)
 				[[owner]](initowner)

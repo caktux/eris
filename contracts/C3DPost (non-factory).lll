@@ -6,8 +6,6 @@
 ; Structure Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/Structure.md
 ; API Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/API.md
 
-;TODO Reactivate bylaw control
-
 {
 	(def 'DOUG 0x0)
 
@@ -78,7 +76,7 @@
 			}
 		)
 
-		(when (= (cmd) "link")
+		(when (= (cmd) "bind")
 			{
 				[[parent]](parentlink)
 			}

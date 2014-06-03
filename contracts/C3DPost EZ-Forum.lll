@@ -76,7 +76,7 @@
 			}
 		)
 
-		(when (= (cmd) "link")
+		(when (= (cmd) "bind")
 			{
 				[[parent]](parentlink)
 			}
