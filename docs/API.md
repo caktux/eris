@@ -8,9 +8,11 @@ To deploy these contracts you will use the non-factory contracts from the contra
 
 ### Initialize
 
-"init" (datamodel.json) (UI Structure) 0xOwnerAddress
+"init" (linkID) (datamodel.json) (UI Structure) 0xOwnerAddress
 
-When testing in isolation, don't worry about the `OwnerAddress` because the only place used in the testing contracts are commented out -- you can stick something in there if you want, or just leave blank.
+These fields correspond to the fields listed in the `Structure.md` file.
+
+*Note* when testing in isolation, don't worry about the `OwnerAddress` because the only place used in the testing contracts are commented out -- you can stick something in there if you want, or just leave blank.
 
 ### Set a Parent
 
@@ -20,7 +22,7 @@ When testing in isolation, don't worry about the `OwnerAddress` because the only
 
 "addlink" (linkID) (main) (type) (content) (datamodel.json) (UIstructural)
 
-These fields correspond to the fields listed in the `Structure.md` file
+These fields correspond to the fields listed in the `Structure.md` file.
 
 *Note* `linkID` is determined in the c3D layer, not in the ethereum layer. It is the responsibility of the c3D client to avoid collisions. If a duplicate `linkID` is sent to the contract, the contract will simply not accept it. A handy trick is add 0 to the end of the `linkID` just to ensure there are at least 16 slots separating linked list entries which is more then sufficient.
 
