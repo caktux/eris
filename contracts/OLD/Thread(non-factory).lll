@@ -62,23 +62,23 @@
 	(def 'safeslot () @@(NEG 1))
 	(def 'safepoint () (NEG 1))
 
-;	(def 'CHECKBYLAW () (raw
-;		[[safeslot]]@0x0
-;		[[(- safeslot 1)]]@0x20
-;		[[(- safeslot 2)]]@0x40
-;		[0x0]"checkperm"
-;		[0x20] "doug"
-;		[0x40](caller)
-;		(call (- (GAS) 100) @@DOUG 0 0x0 0x60 0x0 0x20)
-;		(pop)
-;		(= @0x0 1) ;put 1 on stack if 1 0 otherwise
-;		[0x40]@@(- safeslot 2)
-;		[0x20]@@(- safeslot 1)
-;		[0x0]@@safeslot
-;		[[safeslot]]0
-;		[[(- safeslot 1)]]0
-;		[[(- safeslot 2)]]0
-;	))
+	(def 'CHECKBYLAW (raw
+		[[(safeslot)]]@0x0
+		[[(- (safeslot) 1)]]@0x20
+		[[(- safeslot 2)]]@0x40
+		[0x0]"checkperm"
+		[0x20] "doug"
+		[0x40](caller)
+		(call (- (GAS) 100) @@DOUG 0 0x0 0x60 0x0 0x20)
+		pop
+		(= @0x0 1) ;put 1 on stack if 1 0 otherwise
+		[0x40]@@(- safeslot 2)
+		[0x20]@@(- safeslot 1)
+		[0x0]@@safeslot
+		[[safeslot]]0
+		[[(- safeslot 1)]]0
+		[[(- safeslot 2)]]0
+	))
 
 	[[safepoint]](NEG 2)
 

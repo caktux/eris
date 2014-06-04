@@ -10,7 +10,8 @@
 
 {
 	;General structure
-	(def 'DOUG 0x0)
+	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE)
+
 	(def 'headslot 0x21)
 	(def 'tailslot 0x20)
 
@@ -61,24 +62,26 @@
 	(def 'NEG (value) (- 0 value))
 	(def 'safeslot () @@(NEG 1))
 	(def 'safepoint () (NEG 1))
+	(def 'stack () (NEG 2))
+	[[(safepoint)]](NEG 3)
 
-;	(def 'CHECKBYLAW () (raw
-;		[[safeslot]]@0x0
-;		[[(- safeslot 1)]]@0x20
-;		[[(- safeslot 2)]]@0x40
-;		[0x0]"checkperm"
-;		[0x20] "doug"
-;		[0x40](caller)
-;		(call (- (GAS) 100) @@DOUG 0 0x0 0x60 0x0 0x20)
-;		(pop)
-;		(= @0x0 1) ;put 1 on stack if 1 0 otherwise
-;		[0x40]@@(- safeslot 2)
-;		[0x20]@@(- safeslot 1)
-;		[0x0]@@safeslot
-;		[[safeslot]]0
-;		[[(- safeslot 1)]]0
-;		[[(- safeslot 2)]]0
-;	))
+	(def 'CHECKBYLAW () (seq
+		[[(safeslot)]]@0x0
+		[[(- (safeslot) 1)]]@0x20
+		[[(- (safeslot) 2)]]@0x40
+		[0x0]"checkperm"
+		[0x20] "doug"
+		[0x40](caller)
+		(call (- (GAS) 100) DOUG 0 0x0 0x60 0x0 0x20)
+		[[(stack)]](= @0x0 1)
+		[0x40]@@(- (safeslot) 2)
+		[0x20]@@(- (safeslot) 1)
+		[0x0]@@(safeslot)
+		[[(safeslot)]]0
+		[[(- (safeslot) 1)]]0
+		[[(- (safeslot) 2)]]0
+		@@(stack)
+	))
 
 	[[safepoint]](NEG 2)
 
@@ -110,7 +113,6 @@
 
 		(when (= (cmd) "bind")
 			{
-				;
 				;(unless (|| (= (CALLER) @@(owner)) (CHECKBYLAW))
 				[[parent]](parentaddr)
 				(STOP)

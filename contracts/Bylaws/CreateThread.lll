@@ -1,0 +1,124 @@
+;Create Topic
+
+{
+	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE
+
+	(def 'repreq 20)
+	(def 'upcap 100)
+	(def 'downcap 100)
+	(def 'uprep 10)
+	(def 'downrep 2)
+	(def 'gass (- (GAS) 100))
+
+	(def 'REP 0x1)
+	(def 'STF 0x2)
+	(def 'SPF 0x3)
+	(def 'thread 0x4)
+	(def 'post 0x5)
+
+	;INSERT API HERE
+	;Fuckit read it from below :P
+
+	(def 'topic () (calldataload 0x0))
+
+	(def 'threadlinkID () (calldataload 0x20))
+	(def 'threadblob () (calldataload 0x40))
+	(def 'threadmode () (calldataload 0x60))
+	(def 'threadUI () (calldataload 0x80))
+	(def 'threadblobouter () (calldataload 0xA0))
+	(def 'threadmodelouter () (calldataload 0xC0))
+	(def 'threadUIouter () (calldataload 0xE0))
+
+	(def 'postlinkID () (calldataload 0x100))
+	(def 'postblob () (calldataload 0x120))
+	(def 'postmode () (calldataload 0x140))
+	(def 'postUI () (calldataload 0x160))
+	(def 'postblobouter () (calldataload 0x180))
+	(def 'postmodelouter () (calldataload 0x1A0))
+	(def 'postUIouter () (calldataload 0x1C0))
+
+	(return 0 (lll 
+		{
+			;Update the names
+			[0x0]"get"
+			[0x20]"rep"
+			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
+			[[REP]]@0x40
+
+			[0x0]"get"
+			[0x20]"swarumthreadfactory"
+			[0x40] 0
+			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
+			[[STF]]@0x40
+
+			[0x0]"get"
+			[0x20]"swarumpostfactory"
+			[0x40] 0
+			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
+			[[SPF]]@0x40
+
+			[0x0]"get"
+			[0x20]"swarum"
+			[0x40] 0
+			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
+			[[SWARUM]]@0x40
+
+			;Get user info and check they have required rep and no more then 3 strikes
+			[0x0]"get"
+			[0x20](caller)
+			[0x40]0
+			(call (gass) @@REP 0 0x0 0x40 0x40 0xA0)
+			(unless (&& (>= @0x40 (repreq)) (<= @0x60 3)) (STOP))
+
+			;Time to DO SHIT!
+
+			;Call Thread Factory -> And init
+			[0x0](threadblob)
+			[0x20](threadmodel)
+			[0x40](threadUI)
+			[0x60](caller)
+			[0x80]0
+			(call (gass) @@STF 0 0x0 0x60 0x80 0x20) ;Returns address of thread
+			[[thread]]@0x80
+
+			[0x0]"bind"
+			[0x20](topic)
+			(call (gass) @0x80 0 0x0 0x40 0x0 0x0) ;Bind to parent
+
+			[0x0]"addlink"
+			[0x20](threadlinkID)
+			[0x40]@@thread ;main
+			[0x60]1 ;type
+			[0x80]1 ;Treat normally
+			;NOT SURE WHAT YOU WANT TO DO WITH THESE
+			[0xA0](threadblobouter) ;data
+			[0xC0](threadmodelouter) ;model
+			[0xE0](threadUIouter) ;UI
+			(call (gass) (topic) 0 0x0 0x100 0x0 0x20)
+
+			;Call post Factory -> And init
+			[0x0](postblob)
+			[0x20](postmodel)
+			[0x40](postUI)
+			[0x60](postcaller)
+			[0x80]0
+			(call (gass) @@SPF 0 0x0 0x60 0x80 0x20) ;Returns address of post
+			[[post]]@0x80
+
+			[0x0]"bind"
+			[0x20]@@thread
+			(call (gass) @0x80 0 0x0 0x40 0x0 0x0) ;Bind to thread
+
+			[0x0]"addlink"
+			[0x20](postlinkID)
+			[0x40]@@post ;main
+			[0x60]1 ;type
+			[0x80]1 ;Treat normally
+			;NOT SURE WHAT YOU WANT TO DO WITH THESE
+			[0xA0](postblobouter) ;data
+			[0xC0](postmodelouter) ;model
+			[0xE0](postUIouter) ;UI
+			(call (gass) @@thread 0 0x0 0x100 0x0 0x20)
+		}
+	0 ))
+}
