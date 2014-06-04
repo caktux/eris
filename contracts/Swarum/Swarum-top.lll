@@ -12,9 +12,6 @@
 	;General structure
 	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE)
 
-	(def 'headslot 0x21)
-	(def 'tailslot 0x20)
-
 	;c3d compatibility structure
 	(def 'indicator 0x10)
 	(def 'dmpointer 0x11)
@@ -25,6 +22,9 @@
 	(def 'creator 0x16)
 	(def 'time 0x17)
 	(def 'LLstart 0x18)
+
+	(def 'headslot LLstart)
+	(def 'tailslot 0x20)
 
 
 	;Linked list structure definition
@@ -95,8 +95,6 @@
 	[[headslot]] 0x30 ;Head
 
 	[[0x30]] 0xDEADBEEF ;Filler NEVER EVER EVER! (I mean it) delete this entry
-	[[0x31]] 0xDEADBEEF ;Filler
-	[[0x32]] 0x0 ;This will be the pointer to the first real entry
 
 	(return 0 (lll {
 		;Body
@@ -123,7 +121,7 @@
 			{
 				;Checks
 				(unless (&& (= @@(linkID) 0) (= @@(+ (linkID) 1) 0) (= @@(+ (linkID) 2) 0) (= @@(- (linkID) 1) 0) (= @@(- (linkID) 2) 0)) (STOP))
-				(unless (&& (= @@(+ (linkID) 3) 0) (= @@(+ (linkID) 4) 0) (= @@(+ (linkID) 5) 0) (= @@(+ (linkID) 6) 0) (= @@(+ (linkID) 7) 0)) (STOP))
+				(unless (&& (= @@(+ (linkID) 3) 0) (= @@(+ (linkID) 4) 0) (= @@(+ (linkID) 5) 0) (= @@(+ (linkID) 6) 0) (= @@(+ (linkID) 7) 0) (= @@(+ (linkID) 8) 0)) (STOP))
 				(unless (&& (> (linkID) 0x40) (< (linkID) (NEG 0x10))) (STOP))
 
 				;(unless (CHECKBYLAW) (STOP)) ;only bylaws can call
@@ -131,7 +129,7 @@
 				;Add link
 				[[(linkID)]](main)
 				[[(prevslot (linkID))]]@@headslot
-				[[(nextslot @@(head))]](linkID)
+				[[(nextslot @@headslot)]](linkID)
 				[[headslot]](linkID)
 
 				;Data Attached
