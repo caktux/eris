@@ -15,6 +15,7 @@
 	(def 'safeslot () @@(NEG 1))
 	(def 'safepoint () (NEG 1))
 	(def 'stack () (NEG 2))
+	(def 'gass () (- (GAS) 100))
 	[[(safepoint)]](NEG 3)
 
 	(def 'CHECKBYLAW () (seq
@@ -24,7 +25,7 @@
 		[0x0]"checkperm"
 		[0x20] "doug"
 		[0x40](caller)
-		(call (- (GAS) 100) DOUG 0 0x0 0x60 0x0 0x20)
+		(call (gass) DOUG 0 0x0 0x60 0x0 0x20)
 		[[(stack)]](= @0x0 1)
 		[0x40]@@(- (safeslot) 2)
 		[0x20]@@(- (safeslot) 1)
