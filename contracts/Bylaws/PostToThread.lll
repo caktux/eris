@@ -11,20 +11,20 @@
 	(def 'gass (- (GAS) 100))
 
 	(def 'REP 0x1)
-	(def 'STF 0x2)
-	(def 'SWARUM 0x3)
-	(def 'topic 0x4)
+	(def 'SPF 0x2)
 
 	;INSERT API HERE
-	;(linkID)(blobinner)(modelinner)(UIinner)(blobouter)(modelouter)(UIouter)
+	;(threadAddr)(linkID)(blobinner)(modelinner)(UIinner)(blobouter)(modelouter)(UIouter)
 
-	(def 'linkID () (calldataload 0x0))
-	(def 'blobinner () (calldataload 0x20))
-	(def 'modelinner () (calldataload 0x40))
-	(def 'UIinner () (calldataload 0x60))
-	(def 'blobouter () (calldataload 0x80))
-	(def 'modelouter () (calldataload 0xA0))
-	(def 'UIouter () (calldataload 0xC0))
+	(def 'thread () (calldataload 0x0)) ;Note this is the thread contract address
+
+	(def 'linkID () (calldataload 0x20))
+	(def 'blobinner () (calldataload 0x40))
+	(def 'modelinner () (calldataload 0x60))
+	(def 'UIinner () (calldataload 0x80))
+	(def 'blobouter () (calldataload 0xA0))
+	(def 'modelouter () (calldataload 0xC0))
+	(def 'UIouter () (calldataload 0xE0))
 
 
 	(return 0 (lll 
@@ -36,16 +36,10 @@
 			[[REP]]@0x40
 
 			[0x0]"get"
-			[0x20]"swarumtopicfactory"
+			[0x20]"swarumpostfactory"
 			[0x40] 0
 			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
-			[[STF]]@0x40
-
-			[0x0]"get"
-			[0x20]"swarum"
-			[0x40] 0
-			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
-			[[SWARUM]]@0x40
+			[[SPF]]@0x40
 
 			;Get user info and check they have required rep and no more then 3 strikes
 			[0x0]"get"
@@ -55,22 +49,22 @@
 			(unless (&& (>= @0x40 (repreq)) (<= @0x60 3)) (STOP))
 
 			;Time to DO SHIT!
-			;Call Topic Factory -> And init
+			;Call Post Factory -> And init
 			[0x0](blob)
 			[0x20](model)
 			[0x40](UI)
 			[0x60](caller)
 			[0x80]0
-			(call (gass) @@STF 0 0x0 0x60 0x80 0x20) ;Returns address of topic
-			[[topic]]@0x80
+			(call (gass) @@SPF 0 0x0 0x60 0x80 0x20) ;Returns address of post
+			[[post]]@0x80
 
 			[0x0]"bind"
-			[0x20]@@SWARUM
-			(call (gass) @@topic 0 0x0 0x40 0x0 0x0) ;Bind to parent
+			[0x20](thread)
+			(call (gass) @@post 0 0x0 0x40 0x0 0x0) ;Bind to parent
 
 			[0x0]"addlink"
 			[0x20](linkID)
-			[0x40]@@topic ;main
+			[0x40]@@post ;main
 			[0x60]0 ;type
 			[0x80]1 ;Treat normally
 			;NOT SURE WHAT YOU WANT TO DO WITH THESE

@@ -1,0 +1,63 @@
+;Factory template
+{
+	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE
+
+	;Helpful "Functions"
+	(def 'NEG (value) (- 0 value))
+	(def 'safeslot () @@(NEG 1))
+	(def 'safepoint () (NEG 1))
+	(def 'stack () (NEG 2))
+	[[(safepoint)]](NEG 3)
+
+	(def 'CHECKBYLAW () (seq
+		[[(safeslot)]]@0x0
+		[[(- (safeslot) 1)]]@0x20
+		[[(- (safeslot) 2)]]@0x40
+		[0x0]"checkperm"
+		[0x20] "doug"
+		[0x40](caller)
+		(call (- (GAS) 100) DOUG 0 0x0 0x60 0x0 0x20)
+		[[(stack)]](= @0x0 1)
+		[0x40]@@(- (safeslot) 2)
+		[0x20]@@(- (safeslot) 1)
+		[0x0]@@(safeslot)
+		[[(safeslot)]]0
+		[[(- (safeslot) 1)]]0
+		[[(- (safeslot) 2)]]0
+		@@(stack)
+	))
+
+
+	(return 0 (lll {
+
+		(when (= (calldataload 0x0) "create")
+			{
+				;(unless (CHECKBYLAW) (STOP))
+
+				;Create the code
+				[0x0](create 0 0 (lll {
+
+					[[0x0]]0xDEADBEEF
+					(return 0 (lll{
+						
+						;PUT CODE HERE
+
+					} 0))
+
+				} 0))
+
+				[[@0x0]]1 ;note that this contract was made here
+
+				[0x0]1
+				(return 0x0 0x20)
+			}
+		)
+		(when (= (calldataload 0x0) "check")
+			{
+				[0x0]@@(calldataload 0x20)
+				(return 0x0 0x20)
+			}
+		)
+
+	} 0))
+}

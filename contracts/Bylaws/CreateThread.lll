@@ -57,12 +57,6 @@
 			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
 			[[SPF]]@0x40
 
-			[0x0]"get"
-			[0x20]"swarum"
-			[0x40] 0
-			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
-			[[SWARUM]]@0x40
-
 			;Get user info and check they have required rep and no more then 3 strikes
 			[0x0]"get"
 			[0x20](caller)

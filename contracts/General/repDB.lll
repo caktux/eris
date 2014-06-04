@@ -1,0 +1,68 @@
+{
+	;init
+	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE
+
+	(def 'cmd () (calldataload 0x0))
+	(def 'target () (calldataload 0x20))
+	(def 'rep () (calldataload 0x40))
+
+	;Helpful "Functions"
+	(def 'NEG (value) (- 0 value))
+	(def 'safeslot () @@(NEG 1))
+	(def 'safepoint () (NEG 1))
+	(def 'stack () (NEG 2))
+	[[(safepoint)]](NEG 3)
+
+	(def 'CHECKBYLAW () (seq
+		[[(safeslot)]]@0x0
+		[[(- (safeslot) 1)]]@0x20
+		[[(- (safeslot) 2)]]@0x40
+		[0x0]"checkperm"
+		[0x20] "doug"
+		[0x40](caller)
+		(call (- (GAS) 100) DOUG 0 0x0 0x60 0x0 0x20)
+		[[(stack)]](= @0x0 1)
+		[0x40]@@(- (safeslot) 2)
+		[0x20]@@(- (safeslot) 1)
+		[0x0]@@(safeslot)
+		[[(safeslot)]]0
+		[[(- (safeslot) 1)]]0
+		[[(- (safeslot) 2)]]0
+		@@(stack)
+	))
+	(return 0 (lll{
+		;Body
+		(when (= (cmd) "get")
+			{
+				[0x0]@@(target)
+				[0x20]@@(+ (target) 1)
+				[0x40]@@(+ (target) 2)
+				[0x60]@@(+ (target) 3)
+				[0x80]@@(+ (target) 4)
+				(return 0x0 0x100)		
+			}
+		)
+
+		(when (= (cmd) "set")
+			{
+				;(unless (CHECKBYLAW) (STOP))
+				[[(target)]](rep)
+			}
+		)
+
+		(when (= (cmd) "addstrike")
+			{
+				;(unless (CHECKBYLAW) (STOP))
+				[[(+ (target) 1)]](+ @@(+ (target) 1) 1)
+			}
+		)
+
+		(when (= (cmd) "rmstrike")
+			{
+				;(unless (CHECKBYLAW) (STOP))
+				[[(+ (target) 1)]](- @@(+ (target) 1) 1)
+			}
+		)
+
+	} 0))
+}

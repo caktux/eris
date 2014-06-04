@@ -1,0 +1,336 @@
+;Doug-v6
+;
+;Default Behaviour: Bylaw status is required to edit the DOUG table
+
+;Usage:		
+
+
+;Default behaviour: If the permission name has been registered but the rule for a specific permission level
+;					does not yet exist. The the permission is automatically rejected.
+;					If the permission name does not exist then the request is automatically rejected
+;					If the ACL does not have any rules for giving ACL permissions, then requested 
+;					permissions are automatically granted.
+;
+;Use:				Requesting permissions work for any contract's permissions. Setting permissions requires
+;					one to have already gotten the ACL permissions. Adding a permission rule similarly requires
+;					Previously obtained permissions. Note that is a contract has these permissions they can do
+;					a lot of damage without any controls on them. As such these permissions should probably only
+;					be given to contracts and used through them.
+
+
+;API
+;Check Name 	- Permission needed: 0
+; 				- Form: "check" "Name"
+;				- Returns: 0 (DNE), 0xContractAddress
+
+;Get DB Size 	- Permission needed: 0
+;				- Form: "dbsize"
+;				- Returns: # of entries
+
+;Data Dump 		- Permission needed: 0
+;				- Form: "dump"
+;				- Returns: list["Name":0xContractAddress]
+
+;In list? 	 	- Permission needed: 0
+; (Known names)	- Form: "known" "Name"
+;				- Returns: 1 (Is Known), 0 (Not)
+
+;Register Name 	- Permission needed: 1
+;				- Form: "register" "Name" <0xTargetAddress>
+;				- Returns: 1 (Success), 0 (Failure)
+
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;Check Permission 	- Permission needed: 0
+;					- Form: "check" "Permission Name" <0xTargetAddress>
+;					- Returns: Permission number requested
+;
+;Fetch 				- Permission needed: 0
+; 					- Form: "fetch" #ofperms list["Permission name":#permission]
+; 					- Returns: list[poll creation contract addresses]
+;
+;Request Permission - Permission needed: 0
+;					- Form: "request" "Permission Name" #permission <0xTargetAddress>
+;					- Returns: Nothing
+;
+;Request Permission - Permission needed: 0
+; (Multiple) 		- Form: "request" "type" #ofperms list["Permission name":#permission] <0xTargetAddress>
+;					- Returns: Nothing
+;
+;Set Permission 	- Permission needed: 1
+;(give/change)		- Form: "set" "Permission Name" #permission <0xTargetAddress>
+;					- Returns: 1(success), 0(failure)
+;
+;Add rule			- Permission needed: 1
+;(replace rule)		- Form: "addrule" "Permission Name" #permission 0xRuleAddress
+;					- Returns: 1(success), 0(failure)
+;
+;Add type 			- Permission needed: 1
+; (replace type)	- Form: "addtype" "Type Name" 0xTypeAddress
+; 					- Returns: 1(success), 0(failure)
+;
+;Add Permission 	- Permission needed: 1
+;					- Form: "addperm" "Permission Name"
+; 					- Returns: 1(success), 0(failure)
+
+;Structure
+;=========
+
+;Names List
+;----------
+;The Names list is implemented as a linked list for future proofability
+;At some point in the future it might be desirable to be able to edit 
+;And store some data tied to a contract name. This is not currently used
+;But would be easy to add in slots "name"+i>2. This linked list is
+;Bi-Directional in order to future proof incase deletions are someday 
+;wanted.
+; 
+;@@"name" 0xContractAddress
+;+1 "previous name"
+;+2 "next name"
+
+;Name History
+;------------
+;This version of Doug will store a history of every contract which has
+;Been registered to Doug for each nameover the course of his existance.
+;It is implemented as a uni-directional linked list starting at "name"
+;
+;@0xContractforname 0xPreviouscontractforname
+
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+;Permissions for address
+;@Address bitstring 
+;+1
+;...
+;
+;Permission storage by name (internal offset of 0x100000)
+;@"permission name"+0x100000 row|start position
+;+1 Address for permission 1
+;+2 Address for permission 2
+;...
+;+7 Address for permission 7
+;
+;position number between 1-32 (5 bits)
+;
+;PCM storage by name (internal offset of 0x200000)
+;@"type name" + 0x200000 0xPCMCCAddress
+
+
+;======================================================================
+;
+
+;TODO
+;Allow permissions to be created without adding a rule
+
+{
+	
+	;c3d compatibility structure
+	(def 'indicator 0x10)
+	(def 'dmpointer 0x11)
+	(def 'UIpointer 0x12)
+	(def 'blob 0x13)
+	(def 'parent 0x14)
+	(def 'owner 0x15)
+	(def 'creator 0x16)
+	(def 'time 0x17)
+	(def 'LLstart 0x18)
+
+	;General structure
+	(def 'headslot LLstart) ;This will keep LLstart at newest element
+	(def 'tailslot 0x20)
+	(def 'countslot 0x22)
+	(def 'prowslot 0x23)
+	(def 'pbitslot 0x24)
+
+	;Global Variables
+	(def 'GFzeros 0x1000000)
+	(def 'offset 0x100000)
+
+	;Linked list structure definitions
+	(def 'nextslot (addr) (+ addr 2))
+	(def 'nextlink (addr) @@(+ addr 2))
+	(def 'prevslot (addr) (+ addr 1))
+	(def 'prevlink (addr) @@(+ addr 1))
+
+	(def 'typeslot (addr) (+ addr 3))
+	(def 'behaviourslot (addr) (+ addr 4))
+	(def 'dataslot (addr) (+ addr 5))
+	(def 'modelslot (addr) (+ addr 6))
+	(def 'UIslot (addr) (+ addr 7))
+	(def 'timeslot (addr) (+ addr 8))
+
+	;(Register)
+	(def 'cmd () (calldataload 0x0))
+	(def 'name () (calldataload 0x20))
+	(def 'target () (calldataload 0x40))
+	(def 'type () (calldataload 0x60))
+	(def 'behaviour () (calldataload 0x80))
+	(def 'data () (calldataload 0xA0))
+	(def 'model () (calldataload 0xC0))
+	(def 'UI () (calldataload 0xE0))
+
+	;Permission
+	(def 'permname () (+ (calldataload 0x20) offset))
+	(def 'permnum () (calldataload 0x60))
+
+	;Helpful "Functions"
+	(def 'NEG (value) (- 0 value))
+	(def 'safeslot () @@(NEG 1))
+	(def 'safepoint () (NEG 1))
+	(def 'stack () (NEG 2))
+	[[(safepoint)]](NEG 3)
+
+	(def 'CHECKBYLAW () (seq
+		[[(safeslot)]]@0x0
+		[[(- (safeslot) 1)]]@0x20
+		[[(- (safeslot) 2)]]@0x40
+		[0x0]"checkperm"
+		[0x20] "doug"
+		[0x40](caller)
+		(call (- (GAS) 100) (ADDRESS) 0 0x0 0x60 0x0 0x20)
+		[[(stack)]](= @0x0 1)
+		[0x40]@@(- (safeslot) 2)
+		[0x20]@@(- (safeslot) 1)
+		[0x0]@@(safeslot)
+		[[(safeslot)]]0
+		[[(- (safeslot) 1)]]0
+		[[(- (safeslot) 2)]]0
+		@@(stack)
+	))
+
+	;INITIALIZATION
+	[[indicator]]0x88554646BA
+	[[dmpointer]] DOUGDATAMODEL
+	[[UIpointer]] DOUGUIPOINTER
+	[[blob]] DOUGBLOB
+	[[parent]] 0x0 ;DOUG IS SUPREME
+	[[owner]]"The People"
+	[[creator]]"Dennis Mckinnon" ; These feilds have no purpose in DOUG
+	[[time]](NUMBER)
+
+	[[countslot]] 0  			; Number of registered names
+
+	[[pbitslot]] 3 	;Next free bit location
+	[[prowslot]] 0 	;Permission row
+
+	;Name Linked list
+	[[tailslot]] 0x30 ;Tail
+	[[headslot]] 0x30 ;Head
+
+	[[0x30]] 0xDEADBEEF ;Filler NEVER EVER EVER! (I mean it) delete this entry
+	;Previous for this element is 0
+
+;	NAME REGISTRATION
+;	[0x0]"Doug - Revolution"
+;	(call (- (GAS) 100) namereg 0 0x0 0x11 0 0) ;Register the name DOUG
+
+	[[(+ "doug" offset)]]0 ;DOUG permissions located at 0th root start position 0
+	[[(CALLER)]]1 ;Give (CALLER) full DOUG permissions to start
+
+	(return 0 (lll {
+
+	;DOUG Functions
+	;=================================================================================
+
+		(when (= (cmd) "checkname")
+			{
+				(unless (= (MOD (name) GFzeros) 0) (STOP)) ;name must be of good form
+				[0x0]@@(name) ;Get address associated with "name"
+				(return 0x0 0x20) ; Return the Address
+			}
+		)
+
+		(when (= (cmd) "register")
+			{
+
+;				(unless (CHECKBYLAW) (STOP))
+				(unless (&& (> (name) 0x20) (> (target) 0x20) (= (MOD (name) GFzeros) 0)) (STOP)); Prevent out of bounds registrations			
+				(unless (= @@(target) 0) (STOP)) ;Ensure writing to target won't overwrite anything
+
+				(if (= @@(name) 0) ;name does not exist yet
+					{
+						;Perform appending to list
+						[[(name)]] (target) ;Store target at name
+						[[(prevslot (name))]] @@headslot 	;Set previous to value in head
+						[[(nextslot @@headslot)]] (name) 	;Set head's next to current name
+						[[headslot]](name) 			;Set Head to current name
+						[[countslot]](+ @@countslot 1) 	;Increment names counter
+
+						;Data Attached
+						[[(typeslot (name))]](type)
+						[[(behaviourslot (name))]](behaviour)
+						[[(dataslot (name))]](data)
+						[[(modelslot (name))]](model)
+						[[(UIslot (name))]](UI)
+						[[(timeslot (name))]](NUMBER)
+					}
+					{
+						;Don't append but push name history down
+						[[(target)]]@@(name) ;Copy previous contract to pointer of new contract
+						[[(name)]] (target) ;Store target at name	
+					}
+				)
+				[0x0]1
+				(return 0x0 0x20)
+			}
+		)
+
+
+	;Permissions Functions
+	;=========================================================================================
+
+		(when (= (cmd) "checkperm")
+			{
+				;Check what permission target has. If Target not provided defaults to CALLER
+;				(unless (= (MOD (name) GFzeros) 0) (STOP)) ;Permission name should be of good form (use permname after this name is raw supplied name)
+				(unless (|| @@(permname) (= (name) "doug")) (STOP)) ;Stop if permission does not exist
+
+				[0x0](MOD @@(permname) 256)		;Get start position (first 8 bits)
+				[0x20](DIV @@(permname) 256)	;Get Row permission located on. (whatever is left)
+
+				[0x0](MOD (DIV @@(+ (target) @0x20) (EXP 2 @0x0)) 8) 	;This is The permission value
+				(return 0x0 0x20) ;Return requested value
+			}
+		)
+
+		(when (= (cmd) "setperm")
+			{
+;				(unless (CHECKBYLAW) (STOP))
+				(unless (= (MOD (name) GFzeros) 0) (STOP)) ;Permission name must be of good form
+
+				;Set Permission. If Target not provided defaults to CALLER
+				[0x0](MOD @@(permname) 256)	;Get start position
+				[0x20](DIV @@(permname) 256)	;Get Row permission located on.
+				[0x40](MOD (permnum) 8)	;Get The permission number to set
+
+				[0x60](MOD (DIV @@(+ (target) @0x20) (EXP 2 @0x0)) 8) 	;This is The current permission value
+				[0x60](- @@(+ (target) @0x20) (* (EXP 2 @0x0) @0x60))	;Subtract out all permissions at this slot
+				[0x60](+ @0x60 (* (EXP 2 @0x0) @0x40))					;Add in the new permissions at this slot
+				[[(+ (target) @0x20)]]@0x60								;Set
+
+				[0x0]1
+				(return 0x0 0x20)
+			}
+		)
+
+		(when (= (cmd) "addperm")
+			{
+
+;				(unless (CHECKBYLAW) (STOP))
+				(unless (&& (> (name) 0x20) (= (MOD (name) GFzeros) 0)) (STOP)) ;name in range and name of "good form"
+
+				(when (|| @@(permname) (= (name) "doug")) (STOP)) ;Can't add a permission which already exists 
+
+				[[(permname)]] (+ (* @@prowslot 256) @@pbitslot) ;Encode where this permission lies in bitstrings
+				[[pbitslot]] (+ @@pbitslot 3) ;increment start postion
+				(when (> @@pbitslot 252) 
+					{
+						[[pbitslot]]0 ;New slot
+						[[prowslot]](+ @@prowslot 1) ;Increment row
+					}
+				)
+			}
+		)
+	} 0))
+}
+

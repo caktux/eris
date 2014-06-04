@@ -74,7 +74,7 @@
 						(def 'prevlink (addr) @@(+ addr 1))
 
 						(def 'typeslot (addr) (+ addr 3))
-						(def 'behaviour (addr) (+ addr 4))
+						(def 'behaviourslot (addr) (+ addr 4))
 						(def 'dataslot (addr) (+ addr 5))
 						(def 'modelslot (addr) (+ addr 6))
 						(def 'UIslot (addr) (+ addr 7))
