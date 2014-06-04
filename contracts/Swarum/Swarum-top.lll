@@ -83,11 +83,8 @@
 		@@(stack)
 	))
 
-	[[safepoint]](NEG 2)
+	[[safepoint]](NEG 3)
 
-	[[DOUG]] 0x0 ;DOUG's Address
-
-	[[LLstart]]headslot
 	[[creator]](CALLER) ;Creator of the contract (only they can initialize)
 	[[time]](NUMBER) ;block when this list was created
 

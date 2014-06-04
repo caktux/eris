@@ -45,7 +45,6 @@
 				;Create the code
 				[0x0](create 0 0 (lll {
 
-					[[0x0]]0xDEADBEEF
 					(return 0 (lll{
 
 						;c3d compatibility structure
@@ -73,6 +72,9 @@
 						(def 'initmodel () (calldataload 0x40))
 						(def 'initUI () (calldataload 0x60))
 						(def 'initowner () (calldataload 0x80))
+
+
+						[[(safepoint)]](NEG 3)
 
 					  	[[creator]](CALLER)
 					  	[[time]](NUMBER)
@@ -180,6 +182,13 @@
 				} 0))
 
 				[[@0x0]]1 ;note that this contract was made here
+
+				[0x20]"init"
+				[0x40](contentblob)
+				[0x60](initmodel)
+				[0x80](initUI)
+				[0xA0](initowner)
+				(call (gass) @0x0 0 0x20 0xA0 0x0 0x0)
 				
 				(return 0x0 0x20)
 			}

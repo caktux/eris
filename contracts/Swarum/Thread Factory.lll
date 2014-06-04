@@ -17,7 +17,6 @@
 	(def 'safeslot () @@(NEG 1))
 	(def 'safepoint () (NEG 1))
 	(def 'stack () (NEG 2))
-	[[(safepoint)]](NEG 3)
 
 	(def 'CHECKBYLAW () (seq
 		[[(safeslot)]]@0x0
@@ -47,14 +46,8 @@
 				;Create the code
 				[0x0](create 0 0 (lll {
 
-					[[0x0]]0xDEADBEEF
 					(return 0 (lll{
 											
-						;General structure
-						(def 'headslot 0x21)
-						(def 'tailslot 0x20)
-						(def 'status 0x22)
-
 						;c3d compatibility structure
 						(def 'indicator 0x10)
 						(def 'dmpointer 0x11)
@@ -66,6 +59,10 @@
 						(def 'time 0x17)
 						(def 'LLstart 0x18)
 
+						;General structure
+						(def 'headslot 0xLLstart)
+						(def 'tailslot 0x20)
+						(def 'status 0x22)
 
 						;Linked list structure definitions
 						(def 'nextslot (addr) (+ addr 2))
@@ -98,7 +95,8 @@
 						;(Bind)
 						(def 'parentaddr () (calldataload 0x20))
 
-						[[LLstart]]headslot
+						[[(safepoint)]](NEG 3)
+
 						[[creator]](CALLER) ;Creator of the contract (only they can initialize)
 						[[time]](NUMBER) ;block when this list was created
 
@@ -106,12 +104,10 @@
 						[[headslot]] 0x30 ;Head
 
 						[[0x30]] 0xDEADBEEF ;Filler NEVER EVER EVER! (I mean it) delete this entry
-						[[0x31]] 0xDEADBEEF ;Filler
-						[[0x32]] 0x0 ;This will be the pointer to the first real entry
 
 						(return 0 (lll {
 							;Body
-							(when (= (cmd) "init"); (= (CALLER) @@creator) (= @@indicator 0)) ;Creator is initializing an uninitialized Structural contract
+							(when (= (cmd) "init") ; (= (CALLER) @@creator) (= @@indicator 0)) ;Creator is initializing an uninitialized Structural contract
 								{
 									[[indicator]]0x88554646BA ;Structural
 									[[blob]](contentblob)
@@ -141,7 +137,7 @@
 								{
 									;Checks
 									(unless (&& (= @@(linkID) 0) (= @@(+ (linkID) 1) 0) (= @@(+ (linkID) 2) 0) (= @@(- (linkID) 1) 0) (= @@(- (linkID) 2) 0)) (STOP))
-									(unless (&& (= @@(+ (linkID) 3) 0) (= @@(+ (linkID) 4) 0) (= @@(+ (linkID) 5) 0) (= @@(+ (linkID) 6) 0) (= @@(+ (linkID) 7) 0)) (STOP))
+									(unless (&& (= @@(+ (linkID) 3) 0) (= @@(+ (linkID) 4) 0) (= @@(+ (linkID) 5) 0) (= @@(+ (linkID) 6) 0) (= @@(+ (linkID) 7) 0) (= @@(+ (linkID) 8) 0)) (STOP))
 									(unless (&& (> (linkID) 0x40) (< (linkID) (NEG 0x10))) (STOP))
 
 ;									(unless (CHECKBYLAW) (STOP)) ;only bylaws can call
@@ -149,7 +145,7 @@
 									;Add link
 									[[(linkID)]](main)
 									[[(prevslot (linkID))]]@@headslot
-									[[(nextslot @@(head))]](linkID)
+									[[(nextslot @@headslot)]](linkID)
 									[[headslot]](linkID)
 
 									;Data Attached
@@ -200,6 +196,13 @@
 				} 0))
 
 				[[@0x0]]1 ;note that this contract was made here
+
+				[0x20]"init"
+				[0x40](contentblob)
+				[0x60](initmodel)
+				[0x80](initUI)
+				[0xA0](initowner)
+				(call (gass) @0x0 0 0x20 0xA0 0x0 0x0)
 
 				(return 0x0 0x20)
 			}

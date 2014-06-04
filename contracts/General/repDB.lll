@@ -39,7 +39,7 @@
 				[0x40]@@(+ (target) 2)
 				[0x60]@@(+ (target) 3)
 				[0x80]@@(+ (target) 4)
-				(return 0x0 0x100)		
+				(return 0x0 0xA0)		
 			}
 		)
 
