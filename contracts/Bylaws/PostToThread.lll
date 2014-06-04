@@ -12,19 +12,19 @@
 
 	(def 'REP 0x1)
 	(def 'STF 0x2)
+	(def 'SWARUM 0x3)
 	(def 'topic 0x4)
 
 	;INSERT API HERE
-	;(SwarumAddr)(linkID)(blobinner)(modelinner)(UIinner)(blobouter)(modelouter)(UIouter)
+	;(linkID)(blobinner)(modelinner)(UIinner)(blobouter)(modelouter)(UIouter)
 
-	(def 'SWARUM () (calldataload 0x0))
-	(def 'linkID () (calldataload 0x20))
-	(def 'blobinner () (calldataload 0x40))
-	(def 'modelinner () (calldataload 0x60))
-	(def 'UIinner () (calldataload 0x80))
-	(def 'blobouter () (calldataload 0xA0))
-	(def 'modelouter () (calldataload 0xC0))
-	(def 'UIouter () (calldataload 0xE0))
+	(def 'linkID () (calldataload 0x0))
+	(def 'blobinner () (calldataload 0x20))
+	(def 'modelinner () (calldataload 0x40))
+	(def 'UIinner () (calldataload 0x60))
+	(def 'blobouter () (calldataload 0x80))
+	(def 'modelouter () (calldataload 0xA0))
+	(def 'UIouter () (calldataload 0xC0))
 
 
 	(return 0 (lll 
@@ -40,6 +40,12 @@
 			[0x40] 0
 			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
 			[[STF]]@0x40
+
+			[0x0]"get"
+			[0x20]"swarum"
+			[0x40] 0
+			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
+			[[SWARUM]]@0x40
 
 			;Get user info and check they have required rep and no more then 3 strikes
 			[0x0]"get"
@@ -59,7 +65,7 @@
 			[[topic]]@0x80
 
 			[0x0]"bind"
-			[0x20](SWARUM)
+			[0x20]@@SWARUM
 			(call (gass) @@topic 0 0x0 0x40 0x0 0x0) ;Bind to parent
 
 			[0x0]"addlink"
@@ -71,7 +77,7 @@
 			[0xA0](blobouter) ;data
 			[0xC0](modelouter) ;model
 			[0xE0](UIouter) ;UI
-			(call (gass) (SWARUM) 0 0x0 0x100 0x0 0x20)
+			(call (gass) @@SWARUM 0 0x0 0x100 0x0 0x20)
 		}
 	0 ))
 }
