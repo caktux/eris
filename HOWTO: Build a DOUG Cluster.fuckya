@@ -1,3 +1,13 @@
+Please read all of the instructions before assembling your DOUG
+
+WARNING:
+Building DOUGs can be dangerous. Please use Caution and never Build DOUGs near small children.
+
+Dennis McKinnon Enterprises Inc. Is not responsible for any loss of property, loss of sanity
+or death resulting from use of these instructions or from use of DOUG including your DOUG becoming
+sentient and turning on its creator.
+
+
 Create DOUG-v6.lll -> DOUG
 Create repDB.lll -> rep
 Create Swarum.lll -> Swarum
@@ -108,7 +118,15 @@ setperm
 
 ----------------------------------------------------------------------------------------------------------------------------------
 
-Step 5) You now have a functioning DOUG cluster with three bylaws!
+Step 5) Give yourself some rep!
+I have my address hardcoded to automatically give me 9001 rep but i don't remember which one you are using so you need to make the following transaction
+to the rep contract:
+
+"set" 0xYOURADDRESS 0x9001
+if you want to hardcode yourself for the future you can add in a line in repDB.lll at line 37 like
+[[0xYOURADDRESS]]0x9001
+
+Step 6) You now have a functioning DOUG cluster with three bylaws!
 the bylaws you have are:
 CreateTopic API:(0xSwarumAddress "linkID" innerBlob innermodel innerUI outerBlob outermodel outerUI)
 CreateThread API:(I forget look it up yourself :P)
@@ -124,5 +142,5 @@ Much horrible API
 Swarum setup
 0x9e4d58a9f74d7a5752c712210a9ffbe612f2609f "topic1" 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
 
-Step 6) Enjoy your new DOUG
+Step 7) Enjoy your new DOUG
 Many DOUGs enjoy being played with consider taking your DOUG to the park or for a walk. Maybe play fetch or go swimming.
