@@ -34,7 +34,8 @@
 
 	;NEED TO REMOVE THIS
 	[[0x38155ef3698a43b24b054d816a8a5f79fc148623]] 0x9001
-	
+	[[0xa6cb63ec28c12929bee2d3567bf98f374a0b7167]] 0x9001
+
 	(return 0 (lll{
 		;Body
 		(when (= (cmd) "get")
@@ -44,7 +45,7 @@
 				[0x40]@@(+ (target) 2)
 				[0x60]@@(+ (target) 3)
 				[0x80]@@(+ (target) 4)
-				(return 0x0 0xA0)		
+				(return 0x0 0xA0)
 			}
 		)
 
