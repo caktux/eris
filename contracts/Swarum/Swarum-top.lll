@@ -10,7 +10,7 @@
 
 {
 	;General structure
-	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE)
+	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE)
 
 	;c3d compatibility structure
 	(def 'indicator 0x10)
@@ -95,7 +95,7 @@
 
 	(return 0 (lll {
 		;Body
-		(when (= (cmd) "init"); (= (CALLER) @@creator) (= @@indicator 0)) ;Creator is initializing an uninitialized Structural contract
+		(when (&& (= (cmd) "init") (= @@indicator 0)) ;Creator is initializing an uninitialized Structural contract
 			{
 				[[indicator]]0x88554646BA ;Structural
 				[[blob]](contentblob)
@@ -108,7 +108,7 @@
 
 		(when (= (cmd) "bind")
 			{
-				;(unless (|| (= (CALLER) @@(owner)) (CHECKBYLAW))
+				(unless (CHECKBYLAW) (STOP))
 				[[parent]](parentaddr)
 				(STOP)
 			}
@@ -121,7 +121,7 @@
 				(unless (&& (= @@(+ (linkID) 3) 0) (= @@(+ (linkID) 4) 0) (= @@(+ (linkID) 5) 0) (= @@(+ (linkID) 6) 0) (= @@(+ (linkID) 7) 0) (= @@(+ (linkID) 8) 0)) (STOP))
 				(unless (&& (> (linkID) 0x40) (< (linkID) (NEG 0x10))) (STOP))
 
-				;(unless (CHECKBYLAW) (STOP)) ;only bylaws can call
+				(unless (CHECKBYLAW) (STOP)) ;only bylaws can call
 
 				;Add link
 				[[(linkID)]](main)
@@ -147,7 +147,7 @@
 				(unless (&& (> (linkID) 0x40) (< (linkID) (NEG 0x10))) (STOP)) ;TOO LOW or TOO HIGH
 				(unless (= (linkID) (nextlink (prevlink (linkID)))) (STOP)) ;Must line up with a link
 
-				;(unless (CHECKBYLAW) (STOP)) ;Only Bylaws can call
+				(unless (CHECKBYLAW) (STOP)) ;Only Bylaws can call
 
 				(when (= (linkID) @@headslot)
 					{

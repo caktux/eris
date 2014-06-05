@@ -10,7 +10,7 @@
 
 ;Factory template
 {
-	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE
+	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
 
 	;Helpful "Functions"
 	(def 'NEG (value) (- 0 value))
@@ -37,12 +37,13 @@
 		@@(stack)
 	))
 
+	[[(safepoint)]](NEG 3)
 
 	(return 0 (lll {
 
 		(when (= (calldataload 0x0) "create")
 			{
-;				(unless (CHECKBYLAW) (STOP))
+				(unless (CHECKBYLAW) (STOP))
 
 				;Create the code
 				[0x0](create 0 0 (lll {
@@ -119,7 +120,7 @@
 						(when (= (cmd) "bind")
 							{
 								;
-								;(unless (CHECKBYLAW) (STOP))
+								(unless (CHECKBYLAW) (STOP))
 								[[parent]](parentaddr)
 								(STOP)
 							}
@@ -132,7 +133,7 @@
 								(unless (&& (= @@(+ (linkID) 3) 0) (= @@(+ (linkID) 4) 0) (= @@(+ (linkID) 5) 0) (= @@(+ (linkID) 6) 0) (= @@(+ (linkID) 7) 0) (= @@(+ (linkID) 8) 0)) (STOP))
 								(unless (&& (> (linkID) 0x40) (< (linkID) (NEG 0x10))) (STOP))
 
-								;(unless (CHECKBYLAW) (STOP)) ;only bylaws can call
+								(unless (CHECKBYLAW) (STOP)) ;only bylaws can call
 
 								;Add link
 								[[(linkID)]](main)
@@ -158,7 +159,7 @@
 								(unless (&& (> (linkID) 0x40) (< (linkID) (NEG 0x10))) (STOP)) ;TOO LOW or TOO HIGH
 								(unless (= (linkID) (nextlink (prevlink (linkID)))) (STOP)) ;Must line up with a link
 
-								;(unless (CHECKBYLAW) (STOP)) ;Only Bylaws can call
+								(unless (CHECKBYLAW) (STOP)) ;Only Bylaws can call
 
 								(when (= (linkID) @@headslot)
 									{

@@ -11,7 +11,7 @@
 	(def 'downcap )
 	(def 'uprep 10)
 	(def 'downrep 2)
-	(def 'gass (- (GAS) 100))
+	(def 'gass () (- (GAS) 100))
 
 	(def 'REP 0x1)
 	(def 'SPF 0x2)

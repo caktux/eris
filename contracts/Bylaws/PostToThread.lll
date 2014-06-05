@@ -1,14 +1,14 @@
 ;Create Topic
 
 {
-	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE
+	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
 
 	(def 'repreq 20)
 	(def 'upcap 100)
 	(def 'downcap 100)
 	(def 'uprep 10)
 	(def 'downrep 2)
-	(def 'gass (- (GAS) 100))
+	(def 'gass () (- (GAS) 100))
 
 	(def 'REP 0x1)
 	(def 'SPF 0x2)
@@ -50,13 +50,14 @@
 
 			;Time to DO SHIT!
 			;Call Post Factory -> And init
-			[0x0](blob)
-			[0x20](model)
-			[0x40](UI)
-			[0x60](caller)
-			[0x80]0
-			(call (gass) @@SPF 0 0x0 0x60 0x80 0x20) ;Returns address of post
-			[[post]]@0x80
+			[0x0]"create"
+			[0x20](blob)
+			[0x40](model)
+			[0x60](UI)
+			[0x80](caller)
+			[0xA0]0
+			(call (gass) @@SPF 0 0x0 0x60 0xA0 0x20) ;Returns address of post
+			[[post]]@0xA0
 
 			[0x0]"bind"
 			[0x20](thread)
@@ -71,7 +72,7 @@
 			[0xA0](blobouter) ;data
 			[0xC0](modelouter) ;model
 			[0xE0](UIouter) ;UI
-			(call (gass) @@SWARUM 0 0x0 0x100 0x0 0x20)
+			(call (gass) @@(thread) 0 0x0 0x100 0x0 0x20)
 		}
 	0 ))
 }

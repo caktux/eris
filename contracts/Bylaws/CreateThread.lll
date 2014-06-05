@@ -1,14 +1,14 @@
 ;Create Topic
 
 {
-	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE
+	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
 
 	(def 'repreq 20)
 	(def 'upcap 100)
 	(def 'downcap 100)
 	(def 'uprep 10)
 	(def 'downrep 2)
-	(def 'gass (- (GAS) 100))
+	(def 'gass () (- (GAS) 100))
 
 	(def 'REP 0x1)
 	(def 'STF 0x2)
@@ -67,17 +67,18 @@
 			;Time to DO SHIT!
 
 			;Call Thread Factory -> And init
-			[0x0](threadblob)
-			[0x20](threadmodel)
-			[0x40](threadUI)
-			[0x60](caller)
-			[0x80]0
-			(call (gass) @@STF 0 0x0 0x60 0x80 0x20) ;Returns address of thread
-			[[thread]]@0x80
+			[0x0]"create"
+			[0x20](threadblob)
+			[0x40](threadmodel)
+			[0x60](threadUI)
+			[0x80](caller)
+			[0xA0]0
+			(call (gass) @@STF 0 0x0 0xA0 0xA0 0x20) ;Returns address of thread
+			[[thread]]@0xA0
 
 			[0x0]"bind"
 			[0x20](topic)
-			(call (gass) @0x80 0 0x0 0x40 0x0 0x0) ;Bind to parent
+			(call (gass) @@thread 0 0x0 0x40 0x0 0x0) ;Bind to parent
 
 			[0x0]"addlink"
 			[0x20](threadlinkID)
@@ -91,17 +92,18 @@
 			(call (gass) (topic) 0 0x0 0x100 0x0 0x20)
 
 			;Call post Factory -> And init
-			[0x0](postblob)
-			[0x20](postmodel)
-			[0x40](postUI)
-			[0x60](postcaller)
-			[0x80]0
-			(call (gass) @@SPF 0 0x0 0x60 0x80 0x20) ;Returns address of post
-			[[post]]@0x80
+			[0x0]"create"
+			[0x20](postblob)
+			[0x40](postmodel)
+			[0x60](postUI)
+			[0x80](postcaller)
+			[0xA0]0
+			(call (gass) @@SPF 0 0x0 0xA0 0xA0 0x20) ;Returns address of post
+			[[post]]@0xA0
 
 			[0x0]"bind"
 			[0x20]@@thread
-			(call (gass) @0x80 0 0x0 0x40 0x0 0x0) ;Bind to thread
+			(call (gass) @@post 0 0x0 0x40 0x0 0x0) ;Bind to thread
 
 			[0x0]"addlink"
 			[0x20](postlinkID)

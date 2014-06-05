@@ -1,14 +1,14 @@
 ;Create Topic
 
 {
-	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE
+	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
 
 	(def 'repreq 20)
 	(def 'upcap 100)
 	(def 'downcap 100)
 	(def 'uprep 10)
 	(def 'downrep 2)
-	(def 'gass (- (GAS) 100))
+	(def 'gass () (- (GAS) 100))
 
 	(def 'REP 0x1)
 	(def 'STF 0x2)
@@ -30,12 +30,12 @@
 	(return 0 (lll 
 		{
 			;Update the names
-			[0x0]"get"
+			[0x0]"checkname"
 			[0x20]"rep"
 			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
 			[[REP]]@0x40
 
-			[0x0]"get"
+			[0x0]"checkname"
 			[0x20]"swarumtopicfactory"
 			[0x40] 0
 			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
@@ -46,17 +46,18 @@
 			[0x20](caller)
 			[0x40]0
 			(call (gass) @@REP 0 0x0 0x40 0x40 0xA0)
-			(unless (&& (>= @0x40 (repreq)) (<= @0x60 3)) (STOP))
+			(unless (&& (>= @0x40 repreq) (<= @0x60 3)) (STOP))
 
 			;Time to DO SHIT!
 			;Call Topic Factory -> And init
-			[0x0](blob)
-			[0x20](model)
-			[0x40](UI)
-			[0x60](caller)
-			[0x80]0
-			(call (gass) @@STF 0 0x0 0x60 0x80 0x20) ;Returns address of topic
-			[[topic]]@0x80
+			[0x0]"create"
+			[0x20](blobinner)
+			[0x40](modelinner)
+			[0x60](UIinner)
+			[0x80](caller)
+			[0xA0]0
+			(call (gass) @@STF 0 0x0 0xA0 0xA0 0x20) ;Returns address of topic
+			[[topic]]@0xA0
 
 			[0x0]"bind"
 			[0x20](SWARUM)

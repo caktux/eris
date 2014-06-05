@@ -1,6 +1,6 @@
 {
 	;init
-	(def 'DOUG 0xBBBBBBBBBBB) ;INSERT DOUG'S Address HERE
+	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
 
 	(def 'cmd () (calldataload 0x0))
 	(def 'target () (calldataload 0x20))
@@ -30,6 +30,10 @@
 		[[(- (safeslot) 2)]]0
 		@@(stack)
 	))
+
+
+	;NEED TO REMOVE THIS
+	[[0x38155ef3698a43b24b054d816a8a5f79fc148623]] 0x9001
 	(return 0 (lll{
 		;Body
 		(when (= (cmd) "get")
@@ -45,21 +49,21 @@
 
 		(when (= (cmd) "set")
 			{
-				;(unless (CHECKBYLAW) (STOP))
+				(unless (CHECKBYLAW) (STOP))
 				[[(target)]](rep)
 			}
 		)
 
 		(when (= (cmd) "addstrike")
 			{
-				;(unless (CHECKBYLAW) (STOP))
+				(unless (CHECKBYLAW) (STOP))
 				[[(+ (target) 1)]](+ @@(+ (target) 1) 1)
 			}
 		)
 
 		(when (= (cmd) "rmstrike")
 			{
-				;(unless (CHECKBYLAW) (STOP))
+				(unless (CHECKBYLAW) (STOP))
 				[[(+ (target) 1)]](- @@(+ (target) 1) 1)
 			}
 		)
