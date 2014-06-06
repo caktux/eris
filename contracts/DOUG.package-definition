@@ -32,3 +32,9 @@ transact => {{DOUG}} => "register" "BLWPostTT" {{BLWPostTT}}
 transact => {{DOUG}} => "setperm" "doug" {{BLWCTopic}} 0x1
 transact => {{DOUG}} => "setperm" "doug" {{BLWCThread}} 0x1
 transact => {{DOUG}} => "setperm" "doug" {{BLWPostTT}} 0x1
+
+# Now. Create a couple of Topics
+transact => {{BLWCTopic}} => {{Swarum}} "topic1" 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
+transact => {{BLWCTopic}} => {{Swarum}} "topic2" 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
+transact => {{BLWCTopic}} => {{Swarum}} "topic3" 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
+transact => {{BLWCTopic}} => {{Swarum}} "topic4" 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
