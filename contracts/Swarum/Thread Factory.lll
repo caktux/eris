@@ -2,7 +2,7 @@
 ; Author: Dennis McKinnon <dennis@projectdouglas.org>
 ; Copyright: 2014 Project Douglas
 ; License: see => https://github.com/project-douglas/c3D-contracts/blob/master/LICENSE.md
-;
+; 
 ; Structure Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/Structure.md
 ; API Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/API.md
 
@@ -43,7 +43,7 @@
 
 		(when (= (calldataload 0x0) "create")
 			{
-				;(unless (CHECKBYLAW) (STOP))
+				(unless (CHECKBYLAW) (STOP))
 
 				;Create the code
 				[0x0](create 0 0 (lll {

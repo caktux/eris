@@ -1,4 +1,4 @@
-; Name: c3D Forum Post Contract
+; Name: c3D Forum Post Contract 
 ; Author: Dennis McKinnon <dennis@projectdouglas.org>
 ; Copyright: 2014 Project Douglas
 ; License: see => https://github.com/project-douglas/c3D-contracts/blob/master/LICENSE.md
@@ -9,6 +9,37 @@
 ;Factory template
 {
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
+
+
+;--------------------------------------------------------------
+	;c3d compatibility structure
+	(def 'indicator 0x10)
+	(def 'dmpointer 0x11)
+	(def 'UIpointer 0x12)
+	(def 'blob 0x13)
+	(def 'parent 0x14)
+	(def 'owner 0x15)
+	(def 'creator 0x16)
+	(def 'time 0x17)
+
+	(def 'score 0x20)
+	(def 'status 0x21)
+
+	(def 'cmd () (calldataload 0))
+	;(Link to parent)
+	(def 'parentlink () (calldataload 0x20))
+	;(Change Status)
+	(def 'newstatus () (calldataload 0x20))
+	;(Up/downvote)
+	(def 'voter () (calldataload 0x20))
+	;(Init)
+	(def 'contentblob () (calldataload 0x20))
+	(def 'initmodel () (calldataload 0x40))
+	(def 'initUI () (calldataload 0x60))
+	(def 'initowner () (calldataload 0x80))
+;---------------------------------------------------------------
+
+
 
 	;Helpful "Functions"
 	(def 'NEG (value) (- 0 value))
@@ -46,33 +77,6 @@
 
 				;Create the code
 				[0x0](create 0 0 (lll {
-
-					;c3d compatibility structure
-					(def 'indicator 0x10)
-					(def 'dmpointer 0x11)
-					(def 'UIpointer 0x12)
-					(def 'blob 0x13)
-					(def 'parent 0x14)
-					(def 'owner 0x15)
-					(def 'creator 0x16)
-					(def 'time 0x17)
-
-					(def 'score 0x20)
-					(def 'status 0x21)
-
-					(def 'cmd () (calldataload 0))
-					;(Link to parent)
-					(def 'parentlink () (calldataload 0x20))
-					;(Change Status)
-					(def 'newstatus () (calldataload 0x20))
-					;(Up/downvote)
-					(def 'voter () (calldataload 0x20))
-					;(Init)
-					(def 'contentblob () (calldataload 0x20))
-					(def 'initmodel () (calldataload 0x40))
-					(def 'initUI () (calldataload 0x60))
-					(def 'initowner () (calldataload 0x80))
-
 
 					[[(safepoint)]](NEG 3)
 
