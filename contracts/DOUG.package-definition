@@ -3,23 +3,32 @@
 # Package Email: dennis@projectdouglas.org
 # Package Repository: https://github.com/project-douglas/c3D-contracts
 
+# First We Deploy DOUG and the RepDB
 deploy => General/DOUG-v6.lll => {{DOUG}}
 modify-deploy => General/repDB.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{rep}}
+
+# Then We deploy the Swarum Factories
 modify-deploy => Swarum/Swarum-top.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{Swarum}}
-modify-deploy => Swarum/Thread Factory.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{Threadf}}
 modify-deploy => Swarum/Topic Factory.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{Topicf}}
+modify-deploy => Swarum/Thread Factory.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{Threadf}}
 modify-deploy => Swarum/Votable Post Factory.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{Postf}}
-modify-deploy => Bylaws/CreateThread.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{BLWCThread}}
+
+# Finally we deploy the APIs || Bylaws
 modify-deploy => Bylaws/CreateTopic.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{BLWCTopic}}
+modify-deploy => Bylaws/CreateThread.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{BLWCThread}}
 modify-deploy => Bylaws/PostToThread.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{BLWPostTT}}
-transact => {{DOUG}} => "register" "rep" {{rep}} "" "" "" "" ""
+
+# Now. We must register Everything
+transact => {{DOUG}} => "register" "rep" {{rep}}
 transact => {{DOUG}} => "register" "swarum" {{Swarum}}
-transact => {{DOUG}} => "register" "swarumthreadfactory" {{Threadf}}
 transact => {{DOUG}} => "register" "swarumtopicfactory" {{Topicf}}
+transact => {{DOUG}} => "register" "swarumthreadfactory" {{Threadf}}
 transact => {{DOUG}} => "register" "swarumpostfactory" {{Postf}}
-transact => {{DOUG}} => "register" "BLWCThread" {{BLWCThread}}
-transact => {{DOUG}} => "setperm" "doug" {{BLWCThread}} 0x1
 transact => {{DOUG}} => "register" "BLWCTopic" {{BLWCTopic}}
-transact => {{DOUG}} => "setperm" "doug" {{BLWCTopic}} 0x1
+transact => {{DOUG}} => "register" "BLWCThread" {{BLWCThread}}
 transact => {{DOUG}} => "register" "BLWPostTT" {{BLWPostTT}}
+
+# Finally. We set permissions for the Bylaws.
+transact => {{DOUG}} => "setperm" "doug" {{BLWCTopic}} 0x1
+transact => {{DOUG}} => "setperm" "doug" {{BLWCThread}} 0x1
 transact => {{DOUG}} => "setperm" "doug" {{BLWPostTT}} 0x1
