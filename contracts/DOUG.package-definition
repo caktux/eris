@@ -19,22 +19,41 @@ modify-deploy => Bylaws/CreateThread.lll => (def 'DOUG 0x9c0182658c9d57928b06d3e
 modify-deploy => Bylaws/PostToThread.lll => (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}}) => {{BLWPostTT}}
 
 # Now. We must register Everything
-transact => {{DOUG}} => "register" "rep" {{rep}}
-transact => {{DOUG}} => "register" "swarum" {{Swarum}}
-transact => {{DOUG}} => "register" "swarumtopicfactory" {{Topicf}}
-transact => {{DOUG}} => "register" "swarumthreadfactory" {{Threadf}}
-transact => {{DOUG}} => "register" "swarumpostfactory" {{Postf}}
-transact => {{DOUG}} => "register" "BLWCTopic" {{BLWCTopic}}
-transact => {{DOUG}} => "register" "BLWCThread" {{BLWCThread}}
-transact => {{DOUG}} => "register" "BLWPostTT" {{BLWPostTT}}
+transact => {{DOUG}} => register rep {{rep}}
+transact => {{DOUG}} => register swarum {{Swarum}}
+transact => {{DOUG}} => register swarumtopicfactory {{Topicf}}
+transact => {{DOUG}} => register swarumthreadfactory {{Threadf}}
+transact => {{DOUG}} => register swarumpostfactory {{Postf}}
+transact => {{DOUG}} => register BLWCTopic {{BLWCTopic}}
+transact => {{DOUG}} => register BLWCThread {{BLWCThread}}
+transact => {{DOUG}} => register BLWPostTT {{BLWPostTT}}
 
 # Finally. We set permissions for the Bylaws.
-transact => {{DOUG}} => "setperm" "doug" {{BLWCTopic}} 0x1
-transact => {{DOUG}} => "setperm" "doug" {{BLWCThread}} 0x1
-transact => {{DOUG}} => "setperm" "doug" {{BLWPostTT}} 0x1
+transact => {{DOUG}} => setperm doug {{BLWCTopic}} 0x1
+transact => {{DOUG}} => setperm doug {{BLWCThread}} 0x1
+transact => {{DOUG}} => setperm doug {{BLWPostTT}} 0x1
 
 # Now. Create a couple of Topics
-transact => {{BLWCTopic}} => {{Swarum}} "topic1" 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
-transact => {{BLWCTopic}} => {{Swarum}} "topic2" 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
-transact => {{BLWCTopic}} => {{Swarum}} "topic3" 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
-transact => {{BLWCTopic}} => {{Swarum}} "topic4" 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
+transact => {{BLWCTopic}} => {{Swarum}} topic1 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6
+
+# Get the addresses from Swarum Top
+query => {{Swarum}} => 0x18 => {{TopicMemAddy}}
+query => {{Swarum}} => {{TopicMemAddy}} => {{Topic1}}
+log => {{Topic1}} => Topic1
+
+# Now. Create a Thread
+transact => {{BLWCThread}} => {{Topic1}} thread1 0xA1A1 0xB2B2 0xC3C3 0xD4D4 0xE5E5 0xF6F6 blob2 0xa2a2 0xb3b3 0xc4c4 0xd5d5 0xe6e6 0xf7f7
+
+# Get the addresses from Thread
+query => {{Topic1}} => 0x18 => {{ThreadMemAddy}}
+query => {{Topic1}} => {{ThreadMemAddy}} => {{Thread1}}
+log => {{Thread1}} => Thread1
+query => {{Thread1}} => 0x18 => {{Post1MemAddy}}
+query => {{Thread1}} => {{Post1MemAddy}} => {{Post1}}
+log => {{Post1}} => Post1
+
+# Not. Create a New Post
+transact => {{BLWPostTT}} => {{Thread1}} thislinkisnotnew 0xa1a1 0xb2b2 0xc3c3 0xd4d4 0xe5e5 0xf6f6
+query => {{Thread1}} => 0x18 => {{Post2MemAddy}}
+query => {{Thread1}} => {{Post2MemAddy}} => {{Post2}}
+log => {{Post2}} => Post2
