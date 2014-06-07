@@ -28,7 +28,7 @@
 	(def 'UIouter () (calldataload 0xE0))
 
 
-	(return 0 (lll 
+	(return 0 (lll
 		{
 			;Update the names
 			[0x0]"checkname"
