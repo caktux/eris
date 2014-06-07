@@ -156,7 +156,8 @@
 								[[(UIslot (linkID))]](UI)
 								[[(timeslot (linkID))]](NUMBER)
 
-								(STOP)
+								[0x0]0xDEADBEEF
+								(return 0x0 0x20)
 							}
 						)
 
