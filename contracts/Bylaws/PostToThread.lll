@@ -52,9 +52,9 @@
 			;Time to DO SHIT!
 			;Call Post Factory -> And init
 			[0x0]"create"
-			[0x20](blob)
-			[0x40](model)
-			[0x60](UI)
+			[0x20](blobinner)
+			[0x40](modelinner)
+			[0x60](UIinner)
 			[0x80](caller)
 			[0xA0]0
 			(call (gass) @@SPF 0 0x0 0x60 0xA0 0x20) ;Returns address of post

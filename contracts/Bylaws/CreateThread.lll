@@ -23,7 +23,7 @@
 
 	(def 'threadlinkID () (calldataload 0x20))
 	(def 'threadblob () (calldataload 0x40))
-	(def 'threadmode () (calldataload 0x60))
+	(def 'threadmodel () (calldataload 0x60))
 	(def 'threadUI () (calldataload 0x80))
 	(def 'threadblobouter () (calldataload 0xA0))
 	(def 'threadmodelouter () (calldataload 0xC0))
@@ -31,7 +31,7 @@
 
 	(def 'postlinkID () (calldataload 0x100))
 	(def 'postblob () (calldataload 0x120))
-	(def 'postmode () (calldataload 0x140))
+	(def 'postmodel () (calldataload 0x140))
 	(def 'postUI () (calldataload 0x160))
 	(def 'postblobouter () (calldataload 0x180))
 	(def 'postmodelouter () (calldataload 0x1A0))
@@ -96,7 +96,7 @@
 			[0x20](postblob)
 			[0x40](postmodel)
 			[0x60](postUI)
-			[0x80](postcaller)
+			[0x80](caller)
 			[0xA0]0
 			(call (gass) @@SPF 0 0x0 0xA0 0xA0 0x20) ;Returns address of post
 			[[post]]@0xA0
