@@ -53,6 +53,8 @@ transact:
   {{DOUG}} => register BLWCThread {{BLWCThread}}
 transact:
   {{DOUG}} => register BLWPostTT {{BLWPostTT}}
+transact:
+  {{Swarum}} => init '' '' '' {{DOUG}}
 
 # Next we set permissions for the Bylaws.
 transact:
