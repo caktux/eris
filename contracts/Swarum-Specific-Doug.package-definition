@@ -1,0 +1,126 @@
+# Package Name: SWARUM
+# Package Author: Dennis McKinnon
+# Package Email: dennis@projectdouglas.org
+# Package Repository: https://github.com/project-douglas/c3D-contracts
+
+# Precursor, set some variables.
+set:
+  {{swarum_link_id}} => 0x4c3f8c678b2afc169e00339262402ca41f4f3a8e44ff60b64519655e03a3bb00
+set:
+  {{swarum_blob_id}} => 0x62402ca41f4f3a8e44ff60b64519655e03a3bbcc4c3f8c678b2afc169e003392
+set:
+  {{topic_link_id}} => 0xa636ad3aa52317cac4ef631648cd6e75f6d5079ba610e8c44d6002d046a34b00
+set:
+  {{topic_blob_id}} => 0x48cd6e75f6d5079ba610e8c44d6002d046a34b36a636ad3aa52317cac4ef6316
+set:
+  {{post_link_id}} => 0xd9e0c8c2de8fd2fae2319a9ce9e113f317a1f7f18ddee3cde120e2b99e710a4c
+set:
+  {{post_blob_id}} => 0xe9e113f317a1f7f18ddee3cde120e2b99e710a4cd9e0c8c2de8fd2fae2319a9c
+
+# First We Deploy DOUG and the RepDB
+deploy:
+  General/DOUG-v6.lll => {{DOUG}}
+
+modify-deploy:
+  General/repDB.lll => {{rep}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+
+# Then We deploy the Swarum Factories
+modify-deploy:
+  Swarum/Swarum-top.lll => {{Swarum}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Swarum/Swarum-top.lll => {{Blacklist}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Swarum/Topic Factory.lll => {{Topicf}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Swarum/Thread Factory.lll => {{Threadf}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Swarum/Votable Post Factory.lll => {{Postf}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+
+# Finally we deploy the APIs || Bylaws
+modify-deploy:
+  Bylaws/CreateTopic.lll => {{BLWCTopic}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/CreateThread.lll => {{BLWCThread}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/PostToThread.lll => {{BLWPostTT}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+
+# Now. We must register Everything
+transact:
+  {{DOUG}} => register rep {{rep}}
+transact:
+  {{DOUG}} => register swarum {{Swarum}}
+transact:
+  {{DOUG}} => register blacklist {{Blacklist}}
+transact:
+  {{DOUG}} => register swarumtopicfactory {{Topicf}}
+transact:
+  {{DOUG}} => register swarumthreadfactory {{Threadf}}
+transact:
+  {{DOUG}} => register swarumpostfactory {{Postf}}
+transact:
+  {{DOUG}} => register BLWCTopic {{BLWCTopic}}
+transact:
+  {{DOUG}} => register BLWCThread {{BLWCThread}}
+transact:
+  {{DOUG}} => register BLWPostTT {{BLWPostTT}}
+transact:
+  {{Swarum}} => init '' '' '' {{DOUG}}
+transact:
+  {{Blacklist}} => init '' '' '' {{DOUG}}
+
+# Next we set permissions for the Bylaws.
+transact:
+  {{DOUG}} => setperm doug {{BLWCTopic}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWCThread}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWPostTT}} 0x1
+
+# Now. Create a couple of Topics
+transact:
+  {{BLWCTopic}} => {{Swarum}} {{swarum_link_id}} {{swarum_blob_id}} '' '' {{swarum_blob_id}} '' ''
+
+# Get the addresses from Swarum Top
+query:
+  {{Swarum}} => 0x18 => {{TopicMemAddy}}
+query:
+  {{Swarum}} => {{TopicMemAddy}} => {{Topic1}}
+log:
+  {{Topic1}} => Topic1
+
+# Now. Create a Thread
+transact:
+  {{BLWCThread}} => {{Topic1}} {{topic_link_id}} {{topic_blob_id}} '' '' {{topic_blob_id}} '' '' {{topic_link_id}} {{topic_blob_id}} '' '' {{topic_blob_id}} '' ''
+
+# Get the addresses from Thread
+query:
+  {{Topic1}} => 0x18 => {{ThreadMemAddy}}
+query:
+  {{Topic1}} => {{ThreadMemAddy}} => {{Thread1}}
+log:
+  {{Thread1}} => Thread1
+query:
+  {{Thread1}} => 0x18 => {{Post1MemAddy}}
+query:
+  {{Thread1}} => {{Post1MemAddy}} => {{Post1}}
+log:
+  {{Post1}} => Post1
+
+# Not. Create a New Post
+transact:
+  {{BLWPostTT}} => {{Thread1}} {{post_link_id}} {{post_blob_id}} '' '' {{post_blob_id}} '' ''
+query:
+  {{Thread1}} => 0x18 => {{Post2MemAddy}}
+query:
+  {{Thread1}} => {{Post2MemAddy}} => {{Post2}}
+log:
+  {{Post2}} => Post2
