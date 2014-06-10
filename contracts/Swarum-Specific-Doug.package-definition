@@ -5,17 +5,17 @@
 
 # Precursor, set some variables.
 set:
-  {{swarum_link_id}} => 0x4c3f8c678b2afc169e00339262402ca41f4f3a8e44ff60b64519655e03a3bb00
+  {{swarum_link_id}} => 0x03f6014dc8df659c2f0f94c3b5e0478618d5e91682efc0e2a95b3d32cdae546c
 set:
-  {{swarum_blob_id}} => 0x62402ca41f4f3a8e44ff60b64519655e03a3bbcc4c3f8c678b2afc169e003392
+  {{swarum_blob_id}} => 0xb5e0478618d5e91682efc0e2a95b3d32cdae546c03f6014dc8df659c2f0f94c3
 set:
-  {{topic_link_id}} => 0xa636ad3aa52317cac4ef631648cd6e75f6d5079ba610e8c44d6002d046a34b00
+  {{topic_link_id}} => 0xe634ba7f32659632c24da04cd396a0bb5c8fbb1594dbfc726fd25fd354c8271f
 set:
-  {{topic_blob_id}} => 0x48cd6e75f6d5079ba610e8c44d6002d046a34b36a636ad3aa52317cac4ef6316
+  {{topic_blob_id}} => 0xd396a0bb5c8fbb1594dbfc726fd25fd354c8271fe634ba7f32659632c24da04c
 set:
-  {{post_link_id}} => 0xd9e0c8c2de8fd2fae2319a9ce9e113f317a1f7f18ddee3cde120e2b99e710a4c
+  {{post_link_id}} => 0x125b185d0e3bd2dec8051b4b7b8c070369bc9499f6e5c763c5e9f0da4502cf04
 set:
-  {{post_blob_id}} => 0xe9e113f317a1f7f18ddee3cde120e2b99e710a4cd9e0c8c2de8fd2fae2319a9c
+  {{post_blob_id}} => 0x7b8c070369bc9499f6e5c763c5e9f0da4502cf04125b185d0e3bd2dec8051b4b
 
 # First We Deploy DOUG and the RepDB
 deploy:
@@ -44,9 +44,9 @@ modify-deploy:
 modify-deploy:
   Swarum/Thread Factory.lll => {{Threadf}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
-#modify-deploy:
-#  Swarum/Votable Post Factory.lll => {{Postf}}
-#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Swarum/Votable Post Factory.lll => {{Postf}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 
 # Finally we deploy the APIs || Bylaws
 modify-deploy:
@@ -58,18 +58,18 @@ modify-deploy:
 modify-deploy:
   Bylaws/PostToThread.lll => {{BLWPostTT}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
-#modify-deploy:
-#  Bylaws/BlacklistPost.lll => {{BLWBlacklist}}
-#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
-#modify-deploy:
-#  Bylaws/UpDownvote.lll => {{BLWVoteUpDown}}
-#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
-#modify-deploy:
-#  Bylaws/flapost.lll => {{BLWFlagPost}}
-#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
-#modify-deploy:
-#  Bylaws/promotepost.lll => {{BLWPromotePost}}
-#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/UpDownvote.lll => {{BLWVoteUpDown}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/BlacklistPost.lll => {{BLWBlacklist}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/flapost.lll => {{BLWFlagPost}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/promotepost.lll => {{BLWPromotePost}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 
 # Now. We must register Everything
 transact:
@@ -92,14 +92,14 @@ transact:
   {{DOUG}} => register BLWCThread {{BLWCThread}}
 transact:
   {{DOUG}} => register BLWPostTT {{BLWPostTT}}
-#transact:
-#  {{DOUG}} => register BLWBlacklist {{BLWBlacklist}}
-#transact:
-#  {{DOUG}} => register BLWVoteUpDown {{BLWVoteUpDown}}
-#transact:
-#  {{DOUG}} => register BLWFlagPost {{BLWFlagPost}}
-#transact:
-#  {{DOUG}} => register BLWPromotePost {{BLWPromotePost}}
+transact:
+  {{DOUG}} => register BLWVoteUpDown {{BLWVoteUpDown}}
+transact:
+  {{DOUG}} => register BLWBlacklist {{BLWBlacklist}}
+transact:
+  {{DOUG}} => register BLWFlagPost {{BLWFlagPost}}
+transact:
+  {{DOUG}} => register BLWPromotePost {{BLWPromotePost}}
 
 # Initalize the Swarum Tops
 transact:
@@ -116,14 +116,14 @@ transact:
   {{DOUG}} => setperm doug {{BLWCThread}} 0x1
 transact:
   {{DOUG}} => setperm doug {{BLWPostTT}} 0x1
-#transact:
-#  {{DOUG}} => setperm doug {{BLWBlacklist}} 0x1
-#transact:
-#  {{DOUG}} => setperm doug {{BLWVoteUpDown}} 0x1
-#transact:
-#  {{DOUG}} => setperm doug {{BLWFlagPost}} 0x1
-#transact:
-#  {{DOUG}} => setperm doug {{BLWPromotePost}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWVoteUpDown}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWBlacklist}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWFlagPost}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWPromotePost}} 0x1
 
 # Now. Create a couple of Topics
 transact:
