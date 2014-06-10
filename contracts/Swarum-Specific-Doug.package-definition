@@ -5,17 +5,13 @@
 
 # Precursor, set some variables.
 set:
-  {{swarum_link_id}} => 0x03f6014dc8df659c2f0f94c3b5e0478618d5e91682efc0e2a95b3d32cdae546c
-set:
   {{swarum_blob_id}} => 0xb5e0478618d5e91682efc0e2a95b3d32cdae546c03f6014dc8df659c2f0f94c3
-set:
-  {{topic_link_id}} => 0xe634ba7f32659632c24da04cd396a0bb5c8fbb1594dbfc726fd25fd354c8271f
 set:
   {{topic_blob_id}} => 0xd396a0bb5c8fbb1594dbfc726fd25fd354c8271fe634ba7f32659632c24da04c
 set:
-  {{post_link_id}} => 0x125b185d0e3bd2dec8051b4b7b8c070369bc9499f6e5c763c5e9f0da4502cf04
+  {{post1_blob_id}} => 0x7b8c070369bc9499f6e5c763c5e9f0da4502cf04125b185d0e3bd2dec8051b4b
 set:
-  {{post_blob_id}} => 0x7b8c070369bc9499f6e5c763c5e9f0da4502cf04125b185d0e3bd2dec8051b4b
+  {{post2_blob_id}} => 0x0e050a89270e1e0470f77e9830114beb74b83bf19a4d8110878015b7d5eee6ea
 
 # First We Deploy DOUG and the RepDB
 deploy:
@@ -28,16 +24,25 @@ modify-deploy:
   General/modrepDB.lll => {{modrep}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 
-# Then We deploy the Swarum Factories
+# Then We deploy the Swarum Tops
 modify-deploy:
   Swarum/Swarum-top.lll => {{Swarum}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 modify-deploy:
   Swarum/Swarum-top.lll => {{Blacklist}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+  [[BAbehaviour]]1 => [[BAbehaviour]]5
 modify-deploy:
-  Swarum/Swarum-top.lll => {{FlashNotice}}
+  Swarum/Swarum-top.lll => {{flaggedlist}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Swarum/Swarum-top.lll => {{promotedList}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Swarum/Swarum-top.lll => {{flashnoticeList}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+
+# Then we Deploy the Factories
 modify-deploy:
   Swarum/Topic Factory.lll => {{Topicf}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
@@ -65,7 +70,7 @@ modify-deploy:
   Bylaws/BlacklistPost.lll => {{BLWBlacklist}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 modify-deploy:
-  Bylaws/flapost.lll => {{BLWFlagPost}}
+  Bylaws/flagpost.lll => {{BLWFlagPost}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 modify-deploy:
   Bylaws/promotepost.lll => {{BLWPromotePost}}
@@ -79,7 +84,11 @@ transact:
 transact:
   {{DOUG}} => register blacklist {{Blacklist}}
 transact:
-  {{DOUG}} => register flashlist {{FlashNotice}}
+  {{DOUG}} => register flaggedlist {{flaggedlist}}
+transact:
+  {{DOUG}} => register promotedlist {{promotedList}}
+transact:
+  {{DOUG}} => register flashnoticelist {{flashnoticeList}}
 transact:
   {{DOUG}} => register swarumtopicfactory {{Topicf}}
 transact:
@@ -107,7 +116,11 @@ transact:
 transact:
   {{Blacklist}} => init '' '' '' {{DOUG}}
 transact:
-  {{FlashNotice}} => init '' '' '' {{DOUG}}
+  {{flaggedlist}} => init '' '' '' {{DOUG}}
+transact:
+  {{promotedList}} => init '' '' '' {{DOUG}}
+transact:
+  {{flashnoticeList}} => init '' '' '' {{DOUG}}
 
 # Next we set permissions for the Bylaws.
 transact:
@@ -127,11 +140,11 @@ transact:
 
 # Now. Create a couple of Topics
 transact:
-  {{BLWCTopic}} => {{Swarum}} {{swarum_link_id}} {{swarum_blob_id}} '' '' {{swarum_blob_id}} '' ''
+  {{BLWCTopic}} => {{Swarum}} {{swarum_blob_id}} '' '' {{swarum_blob_id}} '' ''
 
 # Get the addresses from Swarum Top
 query:
-  {{Swarum}} => 0x18 => {{TopicMemAddy}}
+  {{Swarum}} => 0x19 => {{TopicMemAddy}}
 query:
   {{Swarum}} => {{TopicMemAddy}} => {{Topic1}}
 log:
@@ -139,17 +152,17 @@ log:
 
 # Now. Create a Thread
 transact:
-  {{BLWCThread}} => {{Topic1}} {{topic_link_id}} {{topic_blob_id}} '' '' {{topic_blob_id}} '' '' {{topic_link_id}} {{topic_blob_id}} '' '' {{topic_blob_id}} '' ''
+  {{BLWCThread}} => {{Topic1}} {{topic_blob_id}} '' '' {{topic_blob_id}} '' '' {{post1_blob_id}} '' '' {{post1_blob_id}} '' ''
 
 # Get the addresses from Thread
 query:
-  {{Topic1}} => 0x18 => {{ThreadMemAddy}}
+  {{Topic1}} => 0x19 => {{ThreadMemAddy}}
 query:
   {{Topic1}} => {{ThreadMemAddy}} => {{Thread1}}
 log:
   {{Thread1}} => Thread1
 query:
-  {{Thread1}} => 0x18 => {{Post1MemAddy}}
+  {{Thread1}} => 0x19 => {{Post1MemAddy}}
 query:
   {{Thread1}} => {{Post1MemAddy}} => {{Post1}}
 log:
@@ -157,9 +170,9 @@ log:
 
 # Not. Create a New Post
 transact:
-  {{BLWPostTT}} => {{Thread1}} {{post_link_id}} {{post_blob_id}} '' '' {{post_blob_id}} '' ''
+  {{BLWPostTT}} => {{Thread1}} {{post2_blob_id}} '' '' {{post2_blob_id}} '' ''
 query:
-  {{Thread1}} => 0x18 => {{Post2MemAddy}}
+  {{Thread1}} => 0x19 => {{Post2MemAddy}}
 query:
   {{Thread1}} => {{Post2MemAddy}} => {{Post2}}
 log:
