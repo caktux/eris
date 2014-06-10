@@ -1,7 +1,7 @@
-# Package Name: SWARUM
-# Package Author: Dennis McKinnon
-# Package Email: dennis@projectdouglas.org
-# Package Repository: https://github.com/project-douglas/c3D-contracts
+# Package Name:       SWARUM
+# Package Author:     Dennis McKinnon
+# Package Email:      dennis@projectdouglas.org
+# Package Repository: https://github.com/project-douglas/swarum
 
 # Precursor, set some variables.
 set:
@@ -24,6 +24,9 @@ deploy:
 modify-deploy:
   General/repDB.lll => {{rep}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  General/modrepDB.lll => {{modrep}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 
 # Then We deploy the Swarum Factories
 modify-deploy:
@@ -33,14 +36,17 @@ modify-deploy:
   Swarum/Swarum-top.lll => {{Blacklist}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 modify-deploy:
+  Swarum/Swarum-top.lll => {{FlashNotice}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
   Swarum/Topic Factory.lll => {{Topicf}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 modify-deploy:
   Swarum/Thread Factory.lll => {{Threadf}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
-modify-deploy:
-  Swarum/Votable Post Factory.lll => {{Postf}}
-  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+#modify-deploy:
+#  Swarum/Votable Post Factory.lll => {{Postf}}
+#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 
 # Finally we deploy the APIs || Bylaws
 modify-deploy:
@@ -52,6 +58,18 @@ modify-deploy:
 modify-deploy:
   Bylaws/PostToThread.lll => {{BLWPostTT}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+#modify-deploy:
+#  Bylaws/BlacklistPost.lll => {{BLWBlacklist}}
+#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+#modify-deploy:
+#  Bylaws/UpDownvote.lll => {{BLWVoteUpDown}}
+#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+#modify-deploy:
+#  Bylaws/flapost.lll => {{BLWFlagPost}}
+#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+#modify-deploy:
+#  Bylaws/promotepost.lll => {{BLWPromotePost}}
+#  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 
 # Now. We must register Everything
 transact:
@@ -60,6 +78,8 @@ transact:
   {{DOUG}} => register swarum {{Swarum}}
 transact:
   {{DOUG}} => register blacklist {{Blacklist}}
+transact:
+  {{DOUG}} => register flashlist {{FlashNotice}}
 transact:
   {{DOUG}} => register swarumtopicfactory {{Topicf}}
 transact:
@@ -72,10 +92,22 @@ transact:
   {{DOUG}} => register BLWCThread {{BLWCThread}}
 transact:
   {{DOUG}} => register BLWPostTT {{BLWPostTT}}
+#transact:
+#  {{DOUG}} => register BLWBlacklist {{BLWBlacklist}}
+#transact:
+#  {{DOUG}} => register BLWVoteUpDown {{BLWVoteUpDown}}
+#transact:
+#  {{DOUG}} => register BLWFlagPost {{BLWFlagPost}}
+#transact:
+#  {{DOUG}} => register BLWPromotePost {{BLWPromotePost}}
+
+# Initalize the Swarum Tops
 transact:
   {{Swarum}} => init '' '' '' {{DOUG}}
 transact:
   {{Blacklist}} => init '' '' '' {{DOUG}}
+transact:
+  {{FlashNotice}} => init '' '' '' {{DOUG}}
 
 # Next we set permissions for the Bylaws.
 transact:
@@ -84,6 +116,14 @@ transact:
   {{DOUG}} => setperm doug {{BLWCThread}} 0x1
 transact:
   {{DOUG}} => setperm doug {{BLWPostTT}} 0x1
+#transact:
+#  {{DOUG}} => setperm doug {{BLWBlacklist}} 0x1
+#transact:
+#  {{DOUG}} => setperm doug {{BLWVoteUpDown}} 0x1
+#transact:
+#  {{DOUG}} => setperm doug {{BLWFlagPost}} 0x1
+#transact:
+#  {{DOUG}} => setperm doug {{BLWPromotePost}} 0x1
 
 # Now. Create a couple of Topics
 transact:

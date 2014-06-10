@@ -1,7 +1,7 @@
-# Package Name: DOUG
-# Package Author: Dennis McKinnon
-# Package Email: dennis@projectdouglas.org
-# Package Repository: https://github.com/project-douglas/c3D-contracts
+# Package Name:       DOUG
+# Package Author:     Dennis McKinnon
+# Package Email:      dennis@projectdouglas.org
+# Package Repository: https://github.com/project-douglas/swarum
 
 # First We Deploy DOUG and the RepDB
 deploy:
