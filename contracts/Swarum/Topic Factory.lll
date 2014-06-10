@@ -10,109 +10,63 @@
 
 ;Factory template
 {
+	(include "/home/tyler/Documents/ETHEREUM/Projects/projectdouglas/swarum/contracts/Enviromental_Definitions.lll")
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
+	
+	;API definitions
+	;(ADD)
+	(def 'cmd () (calldataload 0x0))
+	(def 'linkID () (calldataload 0x20))
+	(def 'main () (calldataload 0x40))
+	(def 'type () (calldataload 0x60))
+	(def 'behaviour () (calldataload 0x80))
+	(def 'data () (calldataload 0xA0))
+	(def 'model () (calldataload 0xC0))
+	(def 'UI () (calldataload 0xE0))
+	;(Init)
+	(def 'contentblob () (calldataload 0x20))
+	(def 'initmodel () (calldataload 0x40))
+	(def 'initUI () (calldataload 0x60))
+	(def 'initowner () (calldataload 0x80))
+	;(Bind)
+	(def 'parentaddr () (calldataload 0x20))
 
-	;Helpful "Functions"
-	(def 'NEG (value) (- 0 value))
-	(def 'safeslot () @@(NEG 1))
-	(def 'safepoint () (NEG 1))
-	(def 'stack () (NEG 2))
-	(def 'gass () (- (GAS) 100))
 
-	(def 'CHECKBYLAW () (seq
-		[[(safeslot)]]@0x0
-		[[(- (safeslot) 1)]]@0x20
-		[[(- (safeslot) 2)]]@0x40
-		[0x0]"checkperm"
-		[0x20] "doug"
-		[0x40](caller)
-		(call (gass) DOUG 0 0x0 0x60 0x0 0x20)
-		[[(stack)]](= @0x0 1)
-		[0x40]@@(- (safeslot) 2)
-		[0x20]@@(- (safeslot) 1)
-		[0x0]@@(safeslot)
-		[[(safeslot)]]0
-		[[(- (safeslot) 1)]]0
-		[[(- (safeslot) 2)]]0
-		@@(stack)
-	))
-
-	[[(safepoint)]](NEG 3)
+	(initsafemem)
 
 	(return 0 (lll {
 
-		(when (= (calldataload 0x0) "create")
+		(when (= (cmd) "create")
 			{
 				(unless (CHECKBYLAW) (STOP))
 
 				;Create the code
 				[0x0](create 0 0 (lll {
 						
-					;c3d compatibility structure
-					(def 'indicator 0x10)
-					(def 'dmpointer 0x11)
-					(def 'UIpointer 0x12)
-					(def 'blob 0x13)
-					(def 'parent 0x14)
-					(def 'owner 0x15)
-					(def 'creator 0x16)
-					(def 'time 0x17)
-					(def 'LLstart 0x18)
-
 					;General structure
 					(def 'headslot LLstart)
 					(def 'tailslot 0x20)
 
-					;Linked list structure definitions
-					(def 'nextslot (addr) (+ addr 2))
-					(def 'nextlink (addr) @@(+ addr 2))
-					(def 'prevslot (addr) (+ addr 1))
-					(def 'prevlink (addr) @@(+ addr 1))
+					(initsafemem)
 
-					(def 'typeslot (addr) (+ addr 3))
-					(def 'behaviourslot (addr) (+ addr 4))
-					(def 'dataslot (addr) (+ addr 5))
-					(def 'modelslot (addr) (+ addr 6))
-					(def 'UIslot (addr) (+ addr 7))
-					(def 'timeslot (addr) (+ addr 8))
-
-					;API definitions
-					;(ADD)
-					(def 'cmd () (calldataload 0x0))
-					(def 'linkID () (calldataload 0x20))
-					(def 'main () (calldataload 0x40))
-					(def 'type () (calldataload 0x60))
-					(def 'behaviour () (calldataload 0x80))
-					(def 'data () (calldataload 0xA0))
-					(def 'model () (calldataload 0xC0))
-					(def 'UI () (calldataload 0xE0))
-					;(Init)
-					(def 'contentblob () (calldataload 0x20))
-					(def 'initmodel () (calldataload 0x40))
-					(def 'initUI () (calldataload 0x60))
-					(def 'initowner () (calldataload 0x80))
-					;(Bind)
-					(def 'parentaddr () (calldataload 0x20))
-
-					[[(safepoint)]](NEG 3)
-
-					[[creator]](CALLER) ;Creator of the contract (only they can initialize)
-					[[time]](NUMBER) ;block when this list was created
+					[[BAcreator]](CALLER) ;Creator of the contract (only they can initialize)
+					[[BAtime]](NUMBER) ;block when this list was created
 
 					[[tailslot]] 0x30 ;Tail
 					[[headslot]] 0x30 ;Head
+					[[BAbehaviour]]1
 
 					[[0x30]] 0xDEADBEEF ;Filler NEVER EVER EVER! (I mean it) delete this entry
 
 					(return 0 (lll {
 						;Body
-						(when (&& (= (CALLER) @@creator) (= @@indicator 0)) ;Creator is initializing an uninitialized Structural contract
+						(when (&& (= (CALLER) @@creator) (= @@BAindicator 0)) ;Creator is initializing an uninitialized Structural contract
 							{
-								[[indicator]]0x88554646BA ;Structural
-								[[blob]](contentblob)
-								[[dmpointer]](initmodel)
-								[[UIpointer]](initUI)
-								[[owner]](initowner)
+								[[BAindicator]]0x88554646BA ;Structural
+								[[BAblob]](contentblob)
+								[[BAdmpointer]](initmodel)
+								[[BAUIpointer]](initUI)
+								[[BAowner]](initowner)
 								(STOP)
 							}
 						)
@@ -121,7 +75,7 @@
 							{
 								;
 								(unless (CHECKBYLAW) (STOP))
-								[[parent]](parentaddr)
+								[[BAparent]](parentaddr)
 								(STOP)
 							}
 						)
@@ -199,7 +153,7 @@
 				(return 0x0 0x20)
 			}
 		)
-		(when (= (calldataload 0x0) "check")
+		(when (= (cmd) "check")
 			{
 				[0x0]@@(calldataload 0x20)
 				(return 0x0 0x20)

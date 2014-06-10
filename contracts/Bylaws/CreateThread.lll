@@ -1,14 +1,8 @@
 ;Create Topic
 
 {
+	(include "/home/tyler/Documents/ETHEREUM/Projects/projectdouglas/swarum/contracts/Enviromental_Definitions.lll")
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
-
-	(def 'repreq 20)
-	(def 'upcap 100)
-	(def 'downcap 100)
-	(def 'uprep 10)
-	(def 'downrep 2)
-	(def 'gass () (- (GAS) 100))
 
 	(def 'REP 0x1)
 	(def 'STF 0x2)
@@ -18,24 +12,23 @@
 
 	;INSERT API HERE
 	;Fuckit read it from below :P
+	[[repreq]]BLCThreadrep
 
 	(def 'topic () (calldataload 0x0))
 
-	(def 'threadlinkID () (calldataload 0x20))
-	(def 'threadblob () (calldataload 0x40))
-	(def 'threadmodel () (calldataload 0x60))
-	(def 'threadUI () (calldataload 0x80))
-	(def 'threadblobouter () (calldataload 0xA0))
-	(def 'threadmodelouter () (calldataload 0xC0))
-	(def 'threadUIouter () (calldataload 0xE0))
+	(def 'threadblob () (calldataload 0x20))
+	(def 'threadmodel () (calldataload 0x40))
+	(def 'threadUI () (calldataload 0x60))
+	(def 'threadblobouter () (calldataload 0x80))
+	(def 'threadmodelouter () (calldataload 0xA0))
+	(def 'threadUIouter () (calldataload 0xC0))
 
-	(def 'postlinkID () (calldataload 0x100))
-	(def 'postblob () (calldataload 0x120))
-	(def 'postmodel () (calldataload 0x140))
-	(def 'postUI () (calldataload 0x160))
-	(def 'postblobouter () (calldataload 0x180))
-	(def 'postmodelouter () (calldataload 0x1A0))
-	(def 'postUIouter () (calldataload 0x1C0))
+	(def 'postblob () (calldataload 0xE0))
+	(def 'postmodel () (calldataload 0x100))
+	(def 'postUI () (calldataload 0x120))
+	(def 'postblobouter () (calldataload 0x140))
+	(def 'postmodelouter () (calldataload 0x160))
+	(def 'postUIouter () (calldataload 0x180))
 
 	(return 0 (lll 
 		{
@@ -62,7 +55,7 @@
 			[0x20](caller)
 			[0x40]0
 			(call (gass) @@REP 0 0x0 0x40 0x40 0xA0)
-			(unless (&& (>= @0x40 (repreq)) (<= @0x60 3)) (STOP))
+			(unless (&& (>= @0x40 @@repreq) (<= @0x60 maxstrikes)) (STOP))
 
 			;Time to DO SHIT!
 
@@ -81,9 +74,9 @@
 			(call (gass) @@thread 0 0x0 0x40 0x0 0x0) ;Bind to parent
 
 			[0x0]"addlink"
-			[0x20](threadlinkID)
-			[0x40]@@thread ;main
-			[0x60]1 ;type
+			[0x20]@@thread
+			[0x40]@@thread
+			[0x60]0 ;type
 			[0x80]1 ;Treat normally
 			;NOT SURE WHAT YOU WANT TO DO WITH THESE
 			[0xA0](threadblobouter) ;data
@@ -97,18 +90,19 @@
 			[0x40](postmodel)
 			[0x60](postUI)
 			[0x80](caller)
-			[0xA0]0
-			(call (gass) @@SPF 0 0x0 0xA0 0xA0 0x20) ;Returns address of post
-			[[post]]@0xA0
+			[0xA0]1 ;Set this as first post
+			[0xC0]0
+			(call (gass) @@SPF 0 0x0 0xA0 0xC0 0x20) ;Returns address of post
+			[[post]]@0xC0
 
 			[0x0]"bind"
 			[0x20]@@thread
 			(call (gass) @@post 0 0x0 0x40 0x0 0x0) ;Bind to thread
 
 			[0x0]"addlink"
-			[0x20](postlinkID)
+			[0x20]@@post
 			[0x40]@@post ;main
-			[0x60]1 ;type
+			[0x60]0 ;type
 			[0x80]1 ;Treat normally
 			;NOT SURE WHAT YOU WANT TO DO WITH THESE
 			[0xA0](postblobouter) ;data

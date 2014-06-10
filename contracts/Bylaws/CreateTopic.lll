@@ -1,14 +1,10 @@
 ;Create Topic
 
 {
+	(include "/home/tyler/Documents/ETHEREUM/Projects/projectdouglas/swarum/contracts/Enviromental_Definitions.lll")
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
 
-	(def 'repreq 20)
-	(def 'upcap 100)
-	(def 'downcap 100)
-	(def 'uprep 10)
-	(def 'downrep 2)
-	(def 'gass () (- (GAS) 100))
+	[[repreq]]BLTopicrep
 
 	(def 'REP 0x1)
 	(def 'STF 0x2)
@@ -18,13 +14,12 @@
 	;(SwarumAddr)(linkID)(blobinner)(modelinner)(UIinner)(blobouter)(modelouter)(UIouter)
 
 	(def 'SWARUM () (calldataload 0x0))
-	(def 'linkID () (calldataload 0x20))
-	(def 'blobinner () (calldataload 0x40))
-	(def 'modelinner () (calldataload 0x60))
-	(def 'UIinner () (calldataload 0x80))
-	(def 'blobouter () (calldataload 0xA0))
-	(def 'modelouter () (calldataload 0xC0))
-	(def 'UIouter () (calldataload 0xE0))
+	(def 'blobinner () (calldataload 0x20))
+	(def 'modelinner () (calldataload 0x40))
+	(def 'UIinner () (calldataload 0x60))
+	(def 'blobouter () (calldataload 0x80))
+	(def 'modelouter () (calldataload 0xA0))
+	(def 'UIouter () (calldataload 0xC0))
 
 
 	(return 0 (lll 
@@ -46,7 +41,7 @@
 			[0x20](caller)
 			[0x40]0
 			(call (gass) @@REP 0 0x0 0x40 0x40 0xA0)
-			(unless (&& (>= @0x40 repreq) (<= @0x60 3)) (STOP))
+			(unless (&& (>= @0x40 @@repreq) (<= @0x60 maxstrikes)) (STOP))
 
 			;Time to DO SHIT!
 			;Call Topic Factory -> And init
@@ -64,11 +59,10 @@
 			(call (gass) @@topic 0 0x0 0x40 0x0 0x0) ;Bind to parent
 
 			[0x0]"addlink"
-			[0x20](linkID)
+			[0x20]@@topic
 			[0x40]@@topic ;main
 			[0x60]0 ;type contract
 			[0x80]1 ;Treat normally
-			;NOT SURE WHAT YOU WANT TO DO WITH THESE
 			[0xA0](blobouter) ;data
 			[0xC0](modelouter) ;model
 			[0xE0](UIouter) ;UI

@@ -3,22 +3,11 @@
 ;Default Behaviour: Bylaw status is required to edit the DOUG table
 
 {
-
+	(include "/home/tyler/Documents/ETHEREUM/Projects/projectdouglas/swarum/contracts/Enviromental_Definitions.lll")
 	(def 'DOUGDATAMODEL 0x0) ;Fill these in if you want
 	(def 'DOUGUIPOINTER 0x0)
 	(def 'DOUGBLOB 0x0)
 	
-	;c3d compatibility structure
-	(def 'indicator 0x10)
-	(def 'dmpointer 0x11)
-	(def 'UIpointer 0x12)
-	(def 'blob 0x13)
-	(def 'parent 0x14)
-	(def 'owner 0x15)
-	(def 'creator 0x16)
-	(def 'time 0x17)
-	(def 'LLstart 0x18)
-
 	;General structure
 	(def 'headslot LLstart) ;This will keep LLstart at newest element
 	(def 'tailslot 0x20)
@@ -30,18 +19,9 @@
 	(def 'GFzeros 0x1000000)
 	(def 'offset 0x100000)
 
-	;Linked list structure definitions
-	(def 'nextslot (addr) (+ addr 2))
-	(def 'nextlink (addr) @@(+ addr 2))
-	(def 'prevslot (addr) (+ addr 1))
-	(def 'prevlink (addr) @@(+ addr 1))
-
-	(def 'typeslot (addr) (+ addr 3))
-	(def 'behaviourslot (addr) (+ addr 4))
-	(def 'dataslot (addr) (+ addr 5))
-	(def 'modelslot (addr) (+ addr 6))
-	(def 'UIslot (addr) (+ addr 7))
-	(def 'timeslot (addr) (+ addr 8))
+	(def 'BLcheck (addr) {
+		(= (MOD @@addr 8) 1)
+		})
 
 	;(Register)
 	(def 'cmd () (calldataload 0x0))
@@ -57,40 +37,15 @@
 	(def 'permname () (+ (calldataload 0x20) offset))
 	(def 'permnum () (calldataload 0x60))
 
-	;Helpful "Functions"
-	(def 'NEG (value) (- 0 value))
-	(def 'safeslot () @@(NEG 1))
-	(def 'safepoint () (NEG 1))
-	(def 'stack () (NEG 2))
-	[[(safepoint)]](NEG 3)
-
-	(def 'CHECKBYLAW () (seq
-		[[(safeslot)]]@0x0
-		[[(- (safeslot) 1)]]@0x20
-		[[(- (safeslot) 2)]]@0x40
-		[0x0]"checkperm"
-		[0x20] "doug"
-		[0x40](caller)
-		(call (- (GAS) 100) (ADDRESS) 0 0x0 0x60 0x0 0x20)
-		[[(stack)]](= @0x0 1)
-		[0x40]@@(- (safeslot) 2)
-		[0x20]@@(- (safeslot) 1)
-		[0x0]@@(safeslot)
-		[[(safeslot)]]0
-		[[(- (safeslot) 1)]]0
-		[[(- (safeslot) 2)]]0
-		@@(stack)
-	))
-
 	;INITIALIZATION
-	[[indicator]]0x88554646BA
-	[[dmpointer]] DOUGDATAMODEL
-	[[UIpointer]] DOUGUIPOINTER
-	[[blob]] DOUGBLOB
-	[[parent]] 0x0 ;DOUG IS SUPREME
-	[[owner]]"The People"
-	[[creator]]"Dennis Mckinnon" ; These feilds have no purpose in DOUG
-	[[time]](NUMBER)
+	[[BAindicator]]0x88554646BA
+	[[BAdmpointer]] DOUGDATAMODEL
+	[[BAUIpointer]] DOUGUIPOINTER
+	[[BAblob]] DOUGBLOB
+	[[BAparent]] 0x0 ;DOUG IS SUPREME
+	[[BAowner]]"The People"
+	[[BAcreator]]"Dennis Mckinnon" ; These feilds have no purpose in DOUG
+	[[BAtime]](NUMBER)
 
 	[[countslot]] 0  			; Number of registered names
 
@@ -129,7 +84,7 @@
 		(when (= (cmd) "register")
 			{
 
-				(unless (CHECKBYLAW) (STOP))
+				(unless (BLcheck (CALLER)) (STOP))
 				(unless (&& (> (name) 0x20) (> (target) 0x20) (= (MOD (name) GFzeros) 0)) (STOP)); Prevent out of bounds registrations
 
 				
@@ -176,7 +131,7 @@
 
 		(when (= (cmd) "setperm")
 			{
-				(unless (CHECKBYLAW) (STOP))
+				(unless (BLcheck (CALLER)) (STOP))
 				(unless (= (MOD (name) GFzeros) 0) (STOP)) ;Permission name must be of good form
 
 				;Set Permission. If Target not provided defaults to CALLER
@@ -197,7 +152,7 @@
 		(when (= (cmd) "addperm")
 			{
 
-				(unless (CHECKBYLAW) (STOP))
+				(unless (BLcheck (CALLER)) (STOP))
 				(unless (&& (> (name) 0x20) (= (MOD (name) GFzeros) 0)) (STOP)) ;name in range and name of "good form"
 
 				(when (|| @@(permname) (= (name) "doug")) (STOP)) ;Can't add a permission which already exists 

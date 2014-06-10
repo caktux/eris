@@ -9,36 +9,12 @@
 ;Note: This contract should only be used for testing purposes
 
 {
+	(include "/home/tyler/Documents/ETHEREUM/Projects/projectdouglas/swarum/contracts/Enviromental_Definitions.lll")
 	;General structure
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE)
 
-	;c3d compatibility structure
-	(def 'indicator 0x10)
-	(def 'dmpointer 0x11)
-	(def 'UIpointer 0x12)
-	(def 'blob 0x13)
-	(def 'parent 0x14)
-	(def 'owner 0x15)
-	(def 'creator 0x16)
-	(def 'time 0x17)
-	(def 'LLstart 0x18)
-
 	(def 'headslot LLstart)
 	(def 'tailslot 0x20)
-
-
-	;Linked list structure definition
-	(def 'nextslot (addr) (+ addr 2))
-	(def 'nextlink (addr) @@(+ addr 2))
-	(def 'prevslot (addr) (+ addr 1))
-	(def 'prevlink (addr) @@(+ addr 1))
-
-	(def 'typeslot (addr) (+ addr 3))
-	(def 'behaviourslot (addr) (+ addr 4))
-	(def 'dataslot (addr) (+ addr 5))
-	(def 'modelslot (addr) (+ addr 6))
-	(def 'UIslot (addr) (+ addr 7))
-	(def 'timeslot (addr) (+ addr 8))
 
 	;API definitions
 	;(ADD)
@@ -58,50 +34,26 @@
 	;(Bind)
 	(def 'parentaddr () (calldataload 0x20))
 
-	;Helpful "Functions"
-	(def 'NEG (value) (- 0 value))
-	(def 'safeslot () @@(NEG 1))
-	(def 'safepoint () (NEG 1))
-	(def 'stack () (NEG 2))
-	[[(safepoint)]](NEG 3)
+	(initsafemem)
 
-	(def 'CHECKBYLAW () (seq
-		[[(safeslot)]]@0x0
-		[[(- (safeslot) 1)]]@0x20
-		[[(- (safeslot) 2)]]@0x40
-		[0x0]"checkperm"
-		[0x20] "doug"
-		[0x40](caller)
-		(call (- (GAS) 100) DOUG 0 0x0 0x60 0x0 0x20)
-		[[(stack)]](= @0x0 1)
-		[0x40]@@(- (safeslot) 2)
-		[0x20]@@(- (safeslot) 1)
-		[0x0]@@(safeslot)
-		[[(safeslot)]]0
-		[[(- (safeslot) 1)]]0
-		[[(- (safeslot) 2)]]0
-		@@(stack)
-	))
-
-	[[safepoint]](NEG 3)
-
-	[[creator]](CALLER) ;Creator of the contract (only they can initialize)
-	[[time]](NUMBER) ;block when this list was created
+	[[BAcreator]](CALLER) ;Creator of the contract (only they can initialize)
+	[[BAtime]](NUMBER) ;block when this list was created
 
 	[[tailslot]] 0x30 ;Tail
 	[[headslot]] 0x30 ;Head
+	[[BAbehaviour]]1 ;####NOTE: FOR BLACKLIST SET THIS AS 5
 
 	[[0x30]] 0xDEADBEEF ;Filler NEVER EVER EVER! (I mean it) delete this entry
 
 	(return 0 (lll {
 		;Body
-		(when (&& (= (cmd) "init") (= @@indicator 0)) ;Creator is initializing an uninitialized Structural contract
+		(when (&& (= (cmd) "init") (= @@BAindicator 0)) ;Creator is initializing an uninitialized Structural contract
 			{
-				[[indicator]]0x88554646BA ;Structural
-				[[blob]](contentblob)
-				[[dmpointer]](initmodel)
-				[[UIpointer]](initUI)
-				[[owner]](initowner)
+				[[BAindicator]]0x88554646BA ;Structural
+				[[BAblob]](contentblob)
+				[[BAdmpointer]](initmodel)
+				[[BAUIpointer]](initUI)
+				[[BAowner]](initowner)
 				(STOP)
 			}
 		)

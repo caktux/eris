@@ -17,10 +17,6 @@
 		(when (= (cmd) "get")
 			{
 				[0x0]@@(target)
-				[0x20]@@(+ (target) 1)
-				[0x40]@@(+ (target) 2)
-				[0x60]@@(+ (target) 3)
-				[0x80]@@(+ (target) 4)
 				(return 0x0 0xA0)
 			}
 		)
@@ -31,22 +27,5 @@
 				[[(target)]](rep)
 			}
 		)
-
-		(when (= (cmd) "addstrike")
-			{
-				(unless (CHECKBYLAW) (STOP))
-				[0x0](calldataload 0x20)
-				(unless @0x0 [0x0]1) ;Default 1 strike
-				[[(+ (target) 1)]](+ @@(+ (target) 1) @0x0)
-			}
-		)
-
-		(when (= (cmd) "rmstrike")
-			{
-				(unless (CHECKBYLAW) (STOP))
-				[[(+ (target) 1)]](- @@(+ (target) 1) 1)
-			}
-		)
-
 	} 0))
 }
