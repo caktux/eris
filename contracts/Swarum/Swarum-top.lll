@@ -13,7 +13,7 @@
 	;General structure
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE)
 
-	(def 'headslot LLstart)
+	(def 'headslot BALLstart)
 	(def 'tailslot 0x20)
 
 	;API definitions

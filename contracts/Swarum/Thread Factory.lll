@@ -43,7 +43,7 @@
 				[0x0](create 0 0 (lll {
 
 					;General structure
-					(def 'headslot LLstart)
+					(def 'headslot BALLstart)
 					(def 'tailslot 0x20)
 					(def 'status 0x22)
 
