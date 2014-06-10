@@ -138,6 +138,44 @@ transact:
 transact:
   {{DOUG}} => setperm doug {{BLWPromotePost}} 0x1
 
+# Log those deploys.
+log:
+  {{DOUG}} => Doug
+log:
+  {{rep}} => CitizenRep
+log:
+  {{modrep}} => ModRep
+log:
+  {{Swarum}} => Swarum
+log:
+  {{Blacklist}} => Blacklist
+log:
+  {{flaggedlist}} => Flaglist
+log:
+  {{promotedList}} => PromoteList
+log:
+  {{flashnoticeList}} => FlashNoticeList
+log:
+  {{Topicf}} => TopicFactory
+log:
+  {{Threadf}} => ThreadFactory
+log:
+  {{Postf}} => PostFactory
+log:
+  {{BLWCTopic}} => CreateTopicByLaw
+log:
+  {{BLWCThread}} => CreateThreadByLaw
+log:
+  {{BLWPostTT}} => CreatePostByLaw
+log:
+  {{BLWVoteUpDown}} => VoteUpDownByLaw
+log:
+  {{BLWBlacklist}} => BlackListByLaw
+log:
+  {{BLWFlagPost}} => FlagPostByLaw
+log:
+  {{BLWPromotePost}} => PromotePostByLaw
+
 # Now. Create a couple of Topics
 transact:
   {{BLWCTopic}} => {{Swarum}} {{swarum_blob_id}} '' '' {{swarum_blob_id}} '' ''
@@ -177,3 +215,6 @@ query:
   {{Thread1}} => {{Post2MemAddy}} => {{Post2}}
 log:
   {{Post2}} => Post2
+
+log:
+  All => Done
