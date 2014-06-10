@@ -87,8 +87,11 @@
 						)
 
 						(when (= (cmd) "changebehaviour")
-							(unless (CHECKBYLAW) (STOP))
-							[[BAbehaviour]](calldataload 0x20)
+							{
+								(unless (CHECKBYLAW) (STOP))
+								[[BAbehaviour]](calldataload 0x20)
+								(STOP)
+							}
 						)
 
 						(when (= (cmd) "changestatus")
