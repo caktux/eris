@@ -3,11 +3,11 @@
 ;Default Behaviour: Bylaw status is required to edit the DOUG table
 
 {
-	(include "/home/tyler/Documents/ETHEREUM/Projects/projectdouglas/swarum/contracts/Enviromental_Definitions.lll")
+	(include "../Enviromental_Definitions.lll")
 	(def 'DOUGDATAMODEL 0x0) ;Fill these in if you want
 	(def 'DOUGUIPOINTER 0x0)
 	(def 'DOUGBLOB 0x0)
-	
+
 	;General structure
 	(def 'headslot LLstart) ;This will keep LLstart at newest element
 	(def 'tailslot 0x20)
@@ -87,7 +87,7 @@
 				(unless (BLcheck (CALLER)) (STOP))
 				(unless (&& (> (name) 0x20) (> (target) 0x20) (= (MOD (name) GFzeros) 0)) (STOP)); Prevent out of bounds registrations
 
-				
+
 				(when (= @@(name) 0) ;name does not exist yet
 					{
 						;Perform appending to list
@@ -155,11 +155,11 @@
 				(unless (BLcheck (CALLER)) (STOP))
 				(unless (&& (> (name) 0x20) (= (MOD (name) GFzeros) 0)) (STOP)) ;name in range and name of "good form"
 
-				(when (|| @@(permname) (= (name) "doug")) (STOP)) ;Can't add a permission which already exists 
+				(when (|| @@(permname) (= (name) "doug")) (STOP)) ;Can't add a permission which already exists
 
 				[[(permname)]] (+ (* @@prowslot 256) @@pbitslot) ;Encode where this permission lies in bitstrings
 				[[pbitslot]] (+ @@pbitslot 3) ;increment start postion
-				(when (> @@pbitslot 252) 
+				(when (> @@pbitslot 252)
 					{
 						[[pbitslot]]0 ;New slot
 						[[prowslot]](+ @@prowslot 1) ;Increment row

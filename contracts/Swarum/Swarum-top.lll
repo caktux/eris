@@ -9,7 +9,7 @@
 ;Note: This contract should only be used for testing purposes
 
 {
-	(include "/home/tyler/Documents/ETHEREUM/Projects/projectdouglas/swarum/contracts/Enviromental_Definitions.lll")
+	(include "../Enviromental_Definitions.lll")
 	;General structure
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE)
 

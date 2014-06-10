@@ -4,7 +4,7 @@
 ;upvote/downvote 0xtargetpost
 
 {
-	(include "/home/tyler/Documents/ETHEREUM/Projects/projectdouglas/swarum/contracts/Enviromental_Definitions.lll")
+	(include "../Enviromental_Definitions.lll")
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
 
 	[[reprep]]BLUpdownvote
@@ -12,7 +12,7 @@
 	(def 'REP 0x1)
 	(def 'SPF 0x2)
 
-	(return 0 (lll 
+	(return 0 (lll
 		{
 			;Update the names
 			[0x0]"get"
@@ -118,7 +118,7 @@
 					;0x60: Post current rating
 					;0x80: Author's address
 
-					(when (= @0x40 2) ;can't downvote twice-> un-downvote 
+					(when (= @0x40 2) ;can't downvote twice-> un-downvote
 						{
 							;Addrep no need to cancel previous
 							[0x0]"get"

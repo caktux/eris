@@ -2,7 +2,7 @@
 ; Author: Dennis McKinnon <dennis@projectdouglas.org>
 ; Copyright: 2014 Project Douglas
 ; License: see => https://github.com/project-douglas/c3D-contracts/blob/master/LICENSE.md
-; 
+;
 ; Structure Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/Structure.md
 ; API Overview: https://github.com/project-douglas/c3D-contracts/blob/master/docs/API.md
 
@@ -10,9 +10,9 @@
 
 ;Factory template
 {
-	(include "/home/tyler/Documents/ETHEREUM/Projects/projectdouglas/swarum/contracts/Enviromental_Definitions.lll")
+	(include "../Enviromental_Definitions.lll")
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
-	
+
 	;API definitions
 	;(ADD)
 	(def 'cmd () (calldataload 0x0))
@@ -74,7 +74,7 @@
 						(when (= (cmd) "getparent")
 							{
 								[0x0]@@BAparent
-								(return 0x0 0x20)		
+								(return 0x0 0x20)
 							}
 						)
 
