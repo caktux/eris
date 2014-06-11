@@ -60,7 +60,7 @@
 
 					(return 0 (lll {
 						;Body
-						(when (&& (= (CALLER) @@creator) (= @@BAindicator 0)) ;Creator is initializing an uninitialized Structural contract
+						(when (&& (= (cmd) "init") (= @@BAindicator 0)) ;Creator is initializing an uninitialized Structural contract
 							{
 								[[BAindicator]]0x88554646BA ;Structural
 								[[BAblob]](contentblob)
