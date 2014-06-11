@@ -108,7 +108,7 @@
 			}
 		)
 
-		(when (= (cmd) "bind")
+		(when (= (cmd) "setparent")
 			{
 				;
 				;(unless (|| (= (CALLER) @@(owner)) (CHECKBYLAW))

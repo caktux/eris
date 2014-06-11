@@ -18,19 +18,24 @@
 	(def 'maxupvote 200)
 	(def 'maxdownvote 200)
 
-	(def 'PLrepreq 300)
-	(def 'BLrepreq 500)
+	(def 'minpunish 300) ;Minimum punishment for being blacklisted
 
 	;max number of strikes tolerated
 	(def 'maxstrikes 3)
 	(def 'maxmodstrikes 20)
 	(def 'BLrepfrac 3)
 	;BL Rep required
+	(def 'BLUpdownvote 0)
+
 	(def 'BLCThreadrep 0)
 	(def 'BLP2Threadrep 0)
 	(def 'BLCTopicrep 500)
 
-	(def 'BLFlagpostrep 0)
+	(def 'BLFlagpost 0)
+	(def 'BLPrompost 300)
+	(def 'BLBlacklist 1000)
+
+	(def 'BLMovethread 1000)
 
 
 	(def 'repreq 0xF)

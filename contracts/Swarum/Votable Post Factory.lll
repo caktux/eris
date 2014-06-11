@@ -37,6 +37,8 @@
 	(def 'initUI () (calldataload 0x60))
 	(def 'initowner () (calldataload 0x80))
 	(def 'initfirstind () (calldataload 0xA0))
+	;changebehaviour
+	(def 'newbehaviour () (calldataload 0x20))
 ;---------------------------------------------------------------
 	(initsafemem)
 
@@ -68,7 +70,7 @@
 							}
 						)
 
-						(when (= (cmd) "bind")
+						(when (= (cmd) "setparent")
 							{
 								[[ABparent]](parentlink)
 								(STOP)
@@ -80,12 +82,6 @@
 								(unless (CHECKBYLAW) (STOP)) ;If not a bylaw stop
 								[[status]](newstatus)
 								[[statchanger]](changer)
-								(when (= (newstatus) 3)
-									{
-										;Been blacklisted obscure the btih
-										[[ABblob]](Mod @@ABblob (EXP 16 36))
-									}
-								)
 								(STOP)
 							}
 						)
@@ -106,7 +102,7 @@
 								[0x60]@@ABowner
 								[0x80]@@FirstIndicate
 								[0xA0]@@ABparent
-								(return 0x0 0x60)
+								(return 0x0 0xC0)
 							}
 						)
 
@@ -120,7 +116,13 @@
 						(when (= (cmd) "changebehaviour")
 							{
 								(unless (CHECKBYLAW) (STOP))
-								[[ABbehaviour]](calldataload 0x20)
+								[[ABbehaviour]](newbehaviour)
+								(when (= (newbehaviour) 5)
+									{
+										;Been blacklisted obscure the btih
+										[[ABblob]](Mod @@ABblob (EXP 16 36))
+									}
+								)
 								(STOP)
 							}
 						)
