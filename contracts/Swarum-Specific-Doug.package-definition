@@ -140,41 +140,41 @@ transact:
 
 # Log those deploys.
 log:
-  {{DOUG}} => Doug
+  Doug => {{DOUG}}
 log:
-  {{rep}} => CitizenRep
+  CitizenRep => {{rep}}
 log:
-  {{modrep}} => ModRep
+  ModRep => {{modrep}}
 log:
-  {{Swarum}} => Swarum
+  Swarum => {{Swarum}}
 log:
-  {{Blacklist}} => Blacklist
+  Blacklist => {{Blacklist}}
 log:
-  {{flaggedlist}} => Flaglist
+  Flaglist => {{flaggedlist}}
 log:
-  {{promotedList}} => PromoteList
+  PromoteList => {{promotedList}}
 log:
-  {{flashnoticeList}} => FlashNoticeList
+  FlashNoticeList => {{flashnoticeList}}
 log:
-  {{Topicf}} => TopicFactory
+  TopicFactory => {{Topicf}}
 log:
-  {{Threadf}} => ThreadFactory
+  ThreadFactory => {{Threadf}}
 log:
-  {{Postf}} => PostFactory
+  PostFactory => {{Postf}}
 log:
-  {{BLWCTopic}} => CreateTopicByLaw
+  CreateTopicByLaw => {{BLWCTopic}}
 log:
-  {{BLWCThread}} => CreateThreadByLaw
+  CreateThreadByLaw => {{BLWCThread}}
 log:
-  {{BLWPostTT}} => CreatePostByLaw
+  CreatePostByLaw => {{BLWPostTT}}
 log:
-  {{BLWVoteUpDown}} => VoteUpDownByLaw
+  VoteUpDownByLaw => {{BLWVoteUpDown}}
 log:
-  {{BLWBlacklist}} => BlackListByLaw
+  BlackListByLaw => {{BLWBlacklist}}
 log:
-  {{BLWFlagPost}} => FlagPostByLaw
+  FlagPostByLaw => {{BLWFlagPost}}
 log:
-  {{BLWPromotePost}} => PromotePostByLaw
+  PromotePostByLaw => {{BLWPromotePost}}
 
 # Now. Create a couple of Topics
 transact:
@@ -186,7 +186,7 @@ query:
 query:
   {{Swarum}} => {{TopicMemAddy}} => {{Topic1}}
 log:
-  {{Topic1}} => Topic1
+  Topic1 => {{Topic1}}
 
 # Now. Create a Thread
 transact:
@@ -198,13 +198,13 @@ query:
 query:
   {{Topic1}} => {{ThreadMemAddy}} => {{Thread1}}
 log:
-  {{Thread1}} => Thread1
+  Thread1 => {{Thread1}}
 query:
   {{Thread1}} => 0x19 => {{Post1MemAddy}}
 query:
   {{Thread1}} => {{Post1MemAddy}} => {{Post1}}
 log:
-  {{Post1}} => Post1
+  Post1 => {{Post1}}
 
 # Not. Create a New Post
 transact:
@@ -214,7 +214,7 @@ query:
 query:
   {{Thread1}} => {{Post2MemAddy}} => {{Post2}}
 log:
-  {{Post2}} => Post2
+  Post2 => {{Post2}}
 
 log:
   All => Done

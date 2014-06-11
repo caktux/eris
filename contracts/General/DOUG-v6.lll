@@ -3,7 +3,7 @@
 ;Default Behaviour: Bylaw status is required to edit the DOUG table
 
 {
-	(include "/home/coda/sites/ether/swarum/contracts/Enviromental_Definitions.lll")
+	(include "../Enviromental_Definitions.lll")
 	(def 'DOUGDATAMODEL 0x0) ;Fill these in if you want
 	(def 'DOUGUIPOINTER 0x0)
 	(def 'DOUGBLOB 0x0)
