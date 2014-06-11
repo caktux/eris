@@ -58,7 +58,47 @@
 			}
 		)
 
-		(when (= (cmd) "bind")
+		(when (= (cmd) "getparent")
+			{
+				[0x0]@@BAparent
+				(return 0x0 0x20)
+			}
+		)
+
+		(when (= (cmd) "getdata")
+			{
+				(if (targetlink)
+					{
+						;If a target link is provided then returns link info
+						[0x0]@@(typeslot (targetlink))
+						[0x20]@@(behaviourslot (targetlink))
+						[0x40]@@(dataslot (targetlink))
+						[0x60]@@(modelslot (targetlink))
+						[0x80]@@(UIslot (targetlink))
+						(return 0x0 0xA0)
+					}
+					{
+						;Otherwise returns base information
+						[0x0]@@BAblob
+						[0x20]@@BAdmpointer
+						[0x40]@@BAUIpointer
+						[0x60]@@BAowner
+						[0x80]@@BAparent
+						(return 0x0 0xA0)
+					}
+				)
+			}
+		)
+
+		(when (= (cmd) "changebehaviour")
+			{
+				(unless (CHECKBYLAW) (STOP))
+				[[BAbehaviour]](calldataload 0x20)
+				(STOP)
+			}
+		)
+
+		(when (= (cmd) "setparent")
 			{
 				(unless (CHECKBYLAW) (STOP))
 				[[parent]](parentaddr)

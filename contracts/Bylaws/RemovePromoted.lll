@@ -33,7 +33,7 @@
 			(unless (&& (>= @0x40 @@repreq) (<= @0x60 maxmodstrikes)) (STOP))
 
 			;Check that this is a valid post
-			[0x0]"get"
+			[0x0]"checkname"
 			[0x20]"swarumpostfactory"
 			[0x40] 0
 			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
