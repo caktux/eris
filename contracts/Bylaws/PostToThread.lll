@@ -15,12 +15,12 @@
 
 	(def 'thread () (calldataload 0x0)) ;Note this is the thread contract address
 
-	(def 'blobinner () (calldataload 0x40))
-	(def 'modelinner () (calldataload 0x60))
-	(def 'UIinner () (calldataload 0x80))
-	(def 'blobouter () (calldataload 0xA0))
-	(def 'modelouter () (calldataload 0xC0))
-	(def 'UIouter () (calldataload 0xE0))
+	(def 'blobinner () (calldataload 0x20))
+	(def 'modelinner () (calldataload 0x40))
+	(def 'UIinner () (calldataload 0x60))
+	(def 'blobouter () (calldataload 0x80))
+	(def 'modelouter () (calldataload 0xA0))
+	(def 'UIouter () (calldataload 0xC0))
 
 
 	(return 0 (lll
@@ -51,9 +51,10 @@
 			[0x40](modelinner)
 			[0x60](UIinner)
 			[0x80](caller)
-			[0xA0]0
-			(call (gass) @@SPF 0 0x0 0x60 0xA0 0x20) ;Returns address of post
-			[[post]]@0xA0
+			[0xA0]0 ;Not first post
+			[0xC0]0
+			(call (gass) @@SPF 0 0x0 0x60 0xC0 0x20) ;Returns address of post
+			[[post]]@0xC0
 
 			[0x0]"bind"
 			[0x20](thread)

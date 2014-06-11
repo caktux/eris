@@ -36,7 +36,7 @@
 	(def 'initmodel () (calldataload 0x40))
 	(def 'initUI () (calldataload 0x60))
 	(def 'initowner () (calldataload 0x80))
-	(def 'initfirstind () (calldataload 0x120))
+	(def 'initfirstind () (calldataload 0xA0))
 ;---------------------------------------------------------------
 	(initsafemem)
 
