@@ -162,7 +162,8 @@
 				[[(UIslot (linkID))]]0
 				[[(timeslot (linkID))]]0
 
-				(STOP)
+				[0x0]1
+				(return 0x0 0x20)
 			}
 		)
 	} 0))
