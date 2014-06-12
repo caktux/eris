@@ -80,6 +80,8 @@ modify-deploy:
 transact:
   {{DOUG}} => register rep {{rep}}
 transact:
+  {{DOUG}} => register modrep6gc {{modrep}}
+transact:
   {{DOUG}} => register swarum {{Swarum}}
 transact:
   {{DOUG}} => register blacklist {{Blacklist}}
