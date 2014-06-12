@@ -83,7 +83,7 @@ modify-deploy:
 transact:
   {{DOUG}} => register rep {{rep}}
 transact:
-  {{DOUG}} => register modrep6gc {{modrep}}
+  {{DOUG}} => register modrep {{modrep}}
 transact:
   {{DOUG}} => register swarum {{Swarum}}
 transact:
