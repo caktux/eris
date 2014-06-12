@@ -18,10 +18,7 @@
 			{
 				[0x0]@@(target)
 				[0x20]@@(+ (target) 1)
-				[0x40]@@(+ (target) 2)
-				[0x60]@@(+ (target) 3)
-				[0x80]@@(+ (target) 4)
-				(return 0x0 0xA0)
+				(return 0x0 0x40)
 			}
 		)
 
@@ -29,6 +26,7 @@
 			{
 				(unless (CHECKBYLAW) (STOP))
 				[[(target)]](rep)
+				(STOP)
 			}
 		)
 

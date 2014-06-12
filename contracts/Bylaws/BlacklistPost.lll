@@ -57,7 +57,7 @@
 			(call (gass) @@SPF 0 0x0 0x40 0x40 0x20)
 			(unless (= @0x40 1) (STOP))
 
-			;Check if its status is 2 so it is flagable
+			;Check if its status is 2 so it is blacklistable
 			[0x0]"checkstatus"
 			[0x20]42 ;set to a non-zero value to avoid false positives
 			[0x40]0
