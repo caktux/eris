@@ -14,7 +14,11 @@
 	(return 0 (lll {
 		;Body
 
-		;Include Expiration time modification ability
+		;The usage of this is:
+		;-1)Register all the votefactories for various temp permissions
+		;1)Issue requests the required active permission
+		;2)You get the vote passed vote -> vote sets active permission
+		;3)You are then able to run the Issue.
 
 		(when (= (cmd) "set")
 			{

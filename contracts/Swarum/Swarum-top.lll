@@ -129,7 +129,8 @@
 				[[(UIslot (linkID))]](UI)
 				[[(timeslot (linkID))]](NUMBER)
 
-				(STOP)
+				[0x0]1
+				(return 0x0 0x20)
 			}
 		)
 
