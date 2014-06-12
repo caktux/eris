@@ -75,6 +75,9 @@ modify-deploy:
 modify-deploy:
   Bylaws/PromotePost.lll => {{BLWPromotePost}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/RemoveFlag.lll => {{BLWRemoveFlag}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 
 # Now. We must register Everything
 transact:
@@ -111,6 +114,9 @@ transact:
   {{DOUG}} => register BLWFlagPost {{BLWFlagPost}}
 transact:
   {{DOUG}} => register BLWPromotePost {{BLWPromotePost}}
+transact:
+  {{DOUG}} => register BLWRemoveFlag {{BLWRemoveFlag}}
+
 
 # Initalize the Swarum Tops
 transact:
@@ -139,6 +145,8 @@ transact:
   {{DOUG}} => setperm doug {{BLWFlagPost}} 0x1
 transact:
   {{DOUG}} => setperm doug {{BLWPromotePost}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWRemoveFlag}} 0x1
 
 # Log those deploys.
 log:
@@ -177,6 +185,8 @@ log:
   FlagPostByLaw => {{BLWFlagPost}}
 log:
   PromotePostByLaw => {{BLWPromotePost}}
+log:
+  RemoveFlagByLaw => {{BLWRemoveFlag}}
 
 # Now. Create a couple of Topics
 transact:
