@@ -1,0 +1,11 @@
+;Ordinary
+{
+	;init
+
+	(return 0 (lll{
+		;Body
+		
+		
+
+	} 0))
+}
