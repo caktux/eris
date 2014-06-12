@@ -158,6 +158,7 @@
 				;Data Attached
 				[[(typeslot (linkID))]]0
 				[[(dataslot (linkID))]]0
+				[[(behaviourslot (linkID))]]0
 				[[(modelslot (linkID))]]0
 				[[(UIslot (linkID))]]0
 				[[(timeslot (linkID))]]0

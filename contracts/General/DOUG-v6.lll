@@ -9,7 +9,7 @@
 	(def 'DOUGBLOB 0x0)
 
 	;General structure
-	(def 'headslot LLstart) ;This will keep LLstart at newest element
+	(def 'headslot BALLstart) ;This will keep LLstart at newest element
 	(def 'tailslot 0x20)
 	(def 'countslot 0x22)
 	(def 'prowslot 0x23)
@@ -46,6 +46,7 @@
 	[[BAowner]]"The People"
 	[[BAcreator]]"Dennis Mckinnon" ; These feilds have no purpose in DOUG
 	[[BAtime]](NUMBER)
+	[[BAbehaviour]]1
 
 	[[countslot]] 0  			; Number of registered names
 
