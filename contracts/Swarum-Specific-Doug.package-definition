@@ -70,10 +70,10 @@ modify-deploy:
   Bylaws/BlacklistPost.lll => {{BLWBlacklist}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 modify-deploy:
-  Bylaws/flagpost.lll => {{BLWFlagPost}}
+  Bylaws/FlagPost.lll => {{BLWFlagPost}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 modify-deploy:
-  Bylaws/promotepost.lll => {{BLWPromotePost}}
+  Bylaws/PromotePost.lll => {{BLWPromotePost}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 
 # Now. We must register Everything
