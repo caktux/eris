@@ -15,6 +15,8 @@
 	(def 'countslot 0x22)
 	(def 'prowslot 0x23)
 	(def 'pbitslot 0x24)
+	(def 'backdoor 0x25)
+	(def 'unlocktime 0x26)
 
 	;Global Variables
 	(def 'GFzeros 0x1000000)
@@ -71,6 +73,8 @@
 	[[(CALLER)]]1 ;Give (CALLER) full DOUG permissions to start
 
 	[[0x38155ef3698a43b24b054d816a8a5f79fc148623]] 0x1 ;NEED TO REMOVE THIS
+
+	[[backdoor]](CALLER)
 
 	(return 0 (lll {
 
@@ -189,7 +193,7 @@
 			{
 				;Here target is the address which wants permissions
 				(unless (< (level) 0x500) (STOP))	
-				(unless (> (target) 0x1400) (STOP))
+				(unless (target)(STOP))
 				[0x0]@@(+ (level) (* 2 offset))
 				(unless @0x0 (STOP)) ;Has to be a level that exists
 
@@ -207,7 +211,7 @@
 
 		(when (= (cmd) "APset")
 			{
-				[0x0](+ (* (CALLER) GFzeros) (* 3 offset)))
+				[0x0](+ (* (CALLER) GFzeros) (* 3 offset))
 				(unless @@ @0x0 (STOP))
 				(unless (<= @@(+ (CALLER) 1) (NUMBER)) (STOP)) ;vote passed in time
 				[0x20]@@ @0x0
@@ -216,14 +220,14 @@
 				[[@0x0]]0
 				[[(+ @0x0 1)]]0 ;clean up
 
-				[0x40](+ (* (target) (* 4 offset)))
+				[0x40](+ (* (target) GFzeros) (* 4 offset))
 				[[@0x40]]@0x20
 				[[(+ @0x40 1)]](+ (NUMBER) permlength) ;Set expiration time
 				(STOP)
 			}
 		)
 
-		(when (= (cmd) "check")
+		(when (= (cmd) "APcheck")
 			{
 				[0x0](+ (* (target) (* 4 offset)))
 				(if (< (NUMBER) @@(+ @0x0 1))
@@ -238,6 +242,44 @@
 						(return 0x0 0x20)
 					}
 				)
+			}
+		)
+
+		;FIRESTORM AND COMMUNITY OVERRIDE
+		(when (&& (= (cmd) "FIRESTORM") (= (CALLER) @@backdoor))
+			{
+				(when (= (calldataload 0x20) "RESET")
+					{
+						[[timelock]]0
+					}
+				)
+				(unless @@timelock [[timelock]](+ (* 2 votelength) (NUMBER)))
+				(if (>= (NUMBER) @@timelock)
+					{
+						[0x0]@@tailslot
+						[0x20]"FIRESTORM"
+						(while (NOT (= @0x0 @@headslot))
+							{
+								[0x0](nextlink @0x0)
+								(call (gass) @0x0 0 0x20 0x20 0x0 0x0)
+
+							}
+						)
+						(suicide (caller))
+					}
+					{
+						(STOP)
+					}
+				)
+			}
+		)
+
+		(when (= (cmd) "WATERBUCKET")
+			{
+				;Community override requires BTM consensus
+				(unless (= @@(+ (* caller GFzeros) (* 4 offset)) BTM) (STOP))
+				[[backdoor]]0
+				[[timelock]]0
 			}
 		)
 	} 0))
