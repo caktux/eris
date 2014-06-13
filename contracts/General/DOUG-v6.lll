@@ -19,9 +19,7 @@
 	(def 'GFzeros 0x1000000)
 	(def 'offset 0x100000)
 
-	(def 'BLcheck (addr) {
-		(= (MOD @@addr 8) 1)
-		})
+	(def 'BLcheck (addr) (= (MOD @@addr 8) 1))
 
 	;(Register)
 	(def 'cmd () (calldataload 0x0))
