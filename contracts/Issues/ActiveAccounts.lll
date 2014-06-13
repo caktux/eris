@@ -3,6 +3,7 @@
 
 	(def 'marker 0x1)
 	(def 'Acount 0x2)
+	(def 'target () @0x60)
 
 	;init
 	[[tailslot]] 0x30 ;Tail
@@ -15,7 +16,10 @@
 
 		(when (= (cmd) "activate")
 			{
-				(unless (CHECKBYLAW) (STOP))
+				;Perform citizen check
+				;Check they are "full citizen"
+				(unless (CHECKCITIZEN) (STOP))
+
 				;First step update the count by subtracting people since last marker
 				[0x0]@@marker
 				[0x20]0
@@ -47,6 +51,8 @@
 						[[headslot]](target)
 					}
 				)
+				[0x0]@@Acount
+				(return 0x0 0x20)
 			}
 		)
 

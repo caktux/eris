@@ -37,6 +37,23 @@
 
 	(def 'BLMovethread 1000)
 
+	(def 'citizen 9000)
+
+	;Active Permissions settings
+	(def 'votelength 14400)
+	(def 'permlength 14400)
+
+	;Various Important APs
+	(def 'BTM 0x300)
+	(def 'DSM 0x350)
+	(def 'DSA 0x250)
+	(def 'XORD 0x200)
+	(def 'ORD 0x100)
+
+	(def 'ORDCON (total) 
+		(/ (* (/ (* total 1) 2) 1) 2) ;50 of 50 
+	)
+
 
 	(def 'repreq 0xF)
 ;C3D - BA compatibility
@@ -85,6 +102,7 @@
 	(def 'initsafemem () [[(safepoint)]](NEG 3))
 
 	(def 'CHECKBYLAW () (seq
+		(unless @@safepoint (initsafemem)) ;if safemem not initialized... do it
 		[[(safeslot)]]@0x0
 		[[(- (safeslot) 1)]]@0x20
 		[[(- (safeslot) 2)]]@0x40
@@ -96,9 +114,48 @@
 		[0x40]@@(- (safeslot) 2)
 		[0x20]@@(- (safeslot) 1)
 		[0x0]@@(safeslot)
-		[[(safeslot)]]0
-		[[(- (safeslot) 1)]]0
-		[[(- (safeslot) 2)]]0
+		@@(stack)
+	))
+
+	(def 'CHECKCITIZEN (seq
+		(unless @@safepoint (initsafemem)) ;if safemem not initialized... do it
+		[[(safeslot)]]@0x0
+		[[(- (safeslot) 1)]]@0x20
+		[[(- (safeslot) 2)]]@0x40
+		[[(- (safeslot) 3)]]@0x60
+		[[(- (safeslot) 4)]]@0x80
+		[[(- (safeslot) 5)]]@0xA0
+
+		;Check they are "full citizen"
+		[0x0]"checkname"
+		[0x20]"rep"
+		(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
+		[[REP]]@0x40
+
+		[0x0]"checkname"
+		[0x20]"modrep"
+		(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
+		[[MODREP]]@0x40
+
+		[0x0]"get"
+		[0x20](ORIGIN)
+		[0x40]0
+		[0x60]0
+		(call (gass) @@REP 0 0x0 0x40 0x40 0x40)
+
+		[0x80]0
+		[0xA0]0
+		(call (gass) @@MODREP 0 0x0 0x40 0x80 0x40)
+		[[(stack)]]0
+		(when (&& (|| (>= @0x40 citizen) (>= @0x80 citizen))
+					(<= @0x60 maxstrikes) (<= @0xA0 maxstrikes)) [[(stack)]]1)
+
+		[0xA0]@@(- (safeslot) 5)
+		[0x80]@@(- (safeslot) 4)
+		[0x60]@@(- (safeslot) 3)
+		[0x40]@@(- (safeslot) 2)
+		[0x20]@@(- (safeslot) 1)
+		[0x0]@@(safeslot)
 		@@(stack)
 	))
 
