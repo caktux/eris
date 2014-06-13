@@ -14,8 +14,10 @@ set:
   {{post2_blob_id}} => 0x0e050a89270e1e0470f77e9830114beb74b83bf19a4d8110878015b7d5eee6ea
 
 # First We Deploy DOUG and the RepDB
-deploy:
+modify-deploy:
   General/DOUG-v6.lll => {{DOUG}}
+#  (def 'DOUGDATAMODEL 0x0) =>
+#  (def 'DOUGUIPOINTER 0x0) =>
 modify-deploy:
   General/repDB.lll => {{rep}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
@@ -90,15 +92,15 @@ transact:
 transact:
   {{DOUG}} => register modrep {{modrep}}
 transact:
-  {{DOUG}} => register swarum {{Swarum}}
+  {{DOUG}} => register swarum {{Swarum}} '' 0x1
 transact:
-  {{DOUG}} => register blacklist {{Blacklist}}
+  {{DOUG}} => register flaggedlist {{flaggedlist}} '' 0x1
 transact:
-  {{DOUG}} => register flaggedlist {{flaggedlist}}
+  {{DOUG}} => register promotedlist {{promotedList}} '' 0x1
 transact:
-  {{DOUG}} => register promotedlist {{promotedList}}
+  {{DOUG}} => register blacklist {{Blacklist}} '' 0x5
 transact:
-  {{DOUG}} => register flashnoticelist {{flashnoticeList}}
+  {{DOUG}} => register flashnoticelist {{flashnoticeList}} '' 0x1
 transact:
   {{DOUG}} => register swarumtopicfactory {{Topicf}}
 transact:
