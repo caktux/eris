@@ -5,7 +5,7 @@ require 'c3d'
 require 'epm'
 require File.join(File.dirname(__FILE__), '..', 'eris')
 
-SWARUM_REPO = 'https://github.com/project-douglas/swarum.git'
+SWARUM_REPO = 'https://github.com/project-douglas/eris.git'
 
 RSpec.configure do |config|
   config.mock_with :rspec
