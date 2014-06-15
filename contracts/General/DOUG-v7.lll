@@ -17,6 +17,7 @@
 	(def 'pbitslot 0x24)
 	(def 'backdoor 0x25)
 	(def 'unlocktime 0x26)
+	(def 'repmul 0x27)
 
 	;Global Variables
 	(def 'GFzeros 0x1000000)
@@ -290,6 +291,19 @@
 				[[timelock]]0
 			}
 		)
+
+		(when (= (cmd) "getrepmul")
+			{
+				[0x0]@@repmul
+				(return 0x0 0x20)
+			}
+		)
+
+		(when (= (cmd) "setrepmul")
+			{
+				(unless (BLcheck (CALLER)) (STOP))
+				[[repmul]](calldataload 0x20)
+			}
 	} 0))
 }
 
