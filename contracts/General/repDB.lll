@@ -18,6 +18,7 @@
 			{
 				[0x0]@@(target)
 				[0x20]@@(+ (target) 1)
+				[0x40]@@(+ (target) 2)
 				(return 0x0 0x40)
 			}
 		)
@@ -36,6 +37,7 @@
 				[0x0](calldataload 0x20)
 				(unless @0x0 [0x0]1) ;Default 1 strike
 				[[(+ (target) 1)]](+ @@(+ (target) 1) @0x0)
+				(STOP)
 			}
 		)
 
@@ -43,8 +45,24 @@
 			{
 				(unless (CHECKBYLAW) (STOP))
 				[[(+ (target) 1)]](- @@(+ (target) 1) 1)
+				(STOP)
 			}
 		)
 
+		(when (= (cmd) "makemem")
+			{
+				(unless (CHECKBYLAW) (STOP))
+				[[(+ (target) 2)]]1
+				(STOP)
+			}
+		)
+
+		(when (= (cmd) "rmmem")
+			{
+				(unless (CHECKBYLAW) (STOP))
+				[[(+ (target) 2)]]0
+				(STOP)
+			}
+		)
 	} 0))
 }
