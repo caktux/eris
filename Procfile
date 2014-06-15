@@ -1,0 +1,1 @@
+web: bundle exec ruby eris.rb -p $PORT
