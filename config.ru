@@ -22,9 +22,8 @@ $key = $eth.get_key
 
 map '/assets' do
   environment = Sprockets::Environment.new
-  environment.append_path 'bower_components/'
   # necessary so bootstrap glyphicons will properly load
-  environment.append_path 'bower_components/bootstrap/dist'
+  environment.append_path 'assets/scripts/bootstrap/dist'
   environment.append_path 'assets'
   run environment
 end

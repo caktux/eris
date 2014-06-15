@@ -11,5 +11,5 @@ require 'haml'
 Dir[File.dirname(__FILE__) + '/bylaws/*.rb'].each {|file| require file }
 
 get '/' do
-  "Hello, world " + $key
+  haml :index, layout: :index
 end
