@@ -1,6 +1,8 @@
 # Startup
 require 'c3d'
 require './eris'
+require 'bundler'
+require 'sprockets'
 
 C3D::SetupC3D.new
 
@@ -18,4 +20,14 @@ C3D::Utility.save_key
 
 $key = $eth.get_key
 
+map '/assets' do
+  environment = Sprockets::Environment.new
+  environment.append_path 'bower_components/'
+  # necessary so bootstrap glyphicons will properly load
+  environment.append_path 'bower_components/bootstrap/dist'
+  environment.append_path 'assets'
+  run environment
+end
+
+use Rack::ShowExceptions
 run Sinatra::Application
