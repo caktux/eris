@@ -109,8 +109,8 @@
 		(when (= (cmd) "addlink")
 			{
 				;Checks
-				(unless (&& (= @@(linkID) 0) (= @@(+ (linkID) 1) 0) (= @@(+ (linkID) 2) 0) (= @@(- (linkID) 1) 0) (= @@(- (linkID) 2) 0)) (STOP))
-				(unless (&& (= @@(+ (linkID) 3) 0) (= @@(+ (linkID) 4) 0) (= @@(+ (linkID) 5) 0) (= @@(+ (linkID) 6) 0) (= @@(+ (linkID) 7) 0) (= @@(+ (linkID) 8) 0)) (STOP))
+;				(unless (&& (= @@(linkID) 0) (= @@(+ (linkID) 1) 0) (= @@(+ (linkID) 2) 0) (= @@(- (linkID) 1) 0) (= @@(- (linkID) 2) 0)) (STOP))
+;				(unless (&& (= @@(+ (linkID) 3) 0) (= @@(+ (linkID) 4) 0) (= @@(+ (linkID) 5) 0) (= @@(+ (linkID) 6) 0) (= @@(+ (linkID) 7) 0) (= @@(+ (linkID) 8) 0)) (STOP))
 				(unless (&& (> (linkID) 0x40) (< (linkID) (NEG 0x10))) (STOP))
 
 				(unless (CHECKBYLAW) (STOP)) ;only bylaws can call

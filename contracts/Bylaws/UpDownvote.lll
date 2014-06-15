@@ -34,17 +34,17 @@
 			(unless (&& (>= @0x40 (repreq)) (<= @0x60 3)) (STOP))
 
 			[0x0]"check"
-			[0x20](calldataload 0) ;Targetpost
+			[0x20](calldataload 0x0) ;Targetpost
 			[0x40]0
 			(call (gass) @@SPF 0 0x0 0x40 0x40 0x20)
 			(unless (= @0x40 1) (STOP))
 
-			(when (= (calldataload 0) "upvote")
+			(when (= (calldataload 0x0) "upvote")
 				{
 					[0x0]"upvote"
 					[0x20](caller)
 					[0x40]0
-					(call (gass) (calldataload 0) 0 0x0 0x40 0x40 0x60)
+					(call (gass) (calldataload 0x20) 0 0x0 0x40 0x40 0x60)
 					;Return values:
 					;0x40:
 					;0 have not voted
@@ -104,12 +104,12 @@
 			)
 
 
-			(when (= (calldataload 0) "downvote")
+			(when (= (calldataload 0x0) "downvote")
 				{
 					[0x0]"downvote"
 					[0x20](caller)
 					[0x40]0
-					(call (gass) (calldataload 0) 0 0x0 0x40 0x40 0x60)
+					(call (gass) (calldataload 0x20) 0 0x0 0x40 0x40 0x60)
 					;Return values:
 					;0x40:
 					;0 have not voted

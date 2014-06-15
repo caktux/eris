@@ -7,7 +7,7 @@
 
 	(def 'MODREP 0x1)
 	(def 'SPF 0x2)
-	(def 'FL 0x3)
+	(def 'PL 0x3)
 
 	(def 'targetpost () (calldataload 0x0))
 
@@ -20,9 +20,9 @@
 			[[MODREP]]@0x40
 
 			[0x0]"checkname"
-			[0x20]"flaggedlist"
+			[0x20]"promotedlist"
 			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
-			[[FL]]@0x40
+			[[PL]]@0x40
 
 			;Check if they have the required permission
 			[0x0]"get"
@@ -53,7 +53,7 @@
 
 			[0x0]"rmlink"
 			[0x20](targetpost)
-			(call (gass) @@FL 0 0x0 0x20 0x0 0x0)
+			(call (gass) @@PL 0 0x0 0x40 0x0 0x0)
 
 			[0x0]"changestatus"
 			[0x20]0

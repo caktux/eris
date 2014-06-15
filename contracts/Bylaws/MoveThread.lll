@@ -1,7 +1,7 @@
 ;move thread to new topic
 ;Remove from flaggedlist
 {
-	(include "/home/coda/sites/ether/swarum/contracts/Enviromental_Definitions.lll")
+	(include "../Enviromental_Definitions.lll")
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
 
 	[[repreq]]BLMovethread
@@ -9,6 +9,7 @@
 	(def 'REP 0x1)
 	(def 'STF 0x2)
 	(def 'THD1 0x3)
+	(def 'STF2 0x4)
 
 	(def 'targetthread () (calldataload 0x0))
 	(def 'movetotopic () (calldataload 0x20))
@@ -19,14 +20,14 @@
 			[0x0]"checkname"
 			[0x20]"rep"
 			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
-			[[MODREP]]@0x40
+			[[REP]]@0x40
 
 			;Check if they have the required permission
 			[0x0]"get"
 			[0x20](caller)
 			[0x40]0
 			[0x60]0
-			(call (gass) @REP 0 0x0 0x40 0x40 0x40)
+			(call (gass) @@REP 0 0x0 0x40 0x40 0x40)
 			(unless (&& (>= @0x40 @@repreq) (<= @0x60 maxstrikes)) (STOP))
 
 			;Check that this is a valid thread
@@ -47,12 +48,12 @@
 			[0x20]"swarumtopicfactory"
 			[0x40] 0
 			(call (gass) DOUG 0 0x0 0x40 0x40 0x20)
-			[[STF]]@0x40
+			[[STF2]]@0x40
 
 			[0x0]"check"
-			[0x20](targetthread)
+			[0x20](movetotopic)
 			[0x40]0
-			(call (gass) @@STF 0 0x0 0x40 0x40 0x20)
+			(call (gass) @@STF2 0 0x0 0x40 0x40 0x20)
 			(unless (= @0x40 1) (STOP))
 
 			[0x0]"getparent"
@@ -71,15 +72,15 @@
 			(call (gass) @@THD1 0 0x0 0x40 0x60 0xA0)
 
 			[0x0]"addlink"
-			[0x20]@@thread
-			[0x40]@@thread
+			[0x20](targetthread)
+			[0x40](targetthread)
 			[0x100]0
 			(call (gass) (movetotopic) 0 0x0 0x100 0x100 0x20)
 			(unless @0x100 (STOP)) ;Addlink must have been sucessful
 
 			[0x0]"rmlink"
 			[0x20](targetthread)
-			(call (gass) @@THD1 0 0x0 0x20 0x0 0x0)
+			(call (gass) @@THD1 0 0x0 0x40 0x0 0x0)
 
 			[0x0]"setparent"
 			[0x20](movetotopic)
