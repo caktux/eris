@@ -1,0 +1,38 @@
+!!!
+%html
+  %head
+    %title EPM
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "Front End for Ethereum Package Manager", :name => "description"}/
+    %meta{:content => "Casey Kuhlman", :name => "author"}/
+    %link{:href => "/assets/styles/application", :rel => "stylesheet"}/
+  %body
+    .container-fluid.col-xs-12
+      %nav.navbar.navbar-default{role: "navigation"}
+        %ul.nav.navbar-nav.navbar-index
+          %li.col-xs-1.col-xs-offset-3
+            %a{href: '/library'}
+              %button.btn.btn-default.btn-lg.glyphicon.glyphicon-th-large
+            %h4 Browse
+          %li.col-xs-1
+            %a{href: '/contract/new'}
+              %button.btn.btn-default.btn-lg.glyphicon.glyphicon-road
+            %h4 Contract
+          %li.col-xs-1
+            %a{href: '/listen'}
+              %button.btn.btn-default.btn-lg.glyphicon.glyphicon-play-circle
+            %h4 Listen
+          %li.col-xs-1
+            %a{href: '/transactions'}
+              %button.btn.btn-default.btn-lg.glyphicon.glyphicon-inbox
+            %h4 Transact
+          %li.col-xs-1
+            %a{href: '/queries'}
+              %button.btn.btn-default.btn-lg.glyphicon.glyphicon-tasks
+            %h4 Query
+          %li.col-xs-1
+            %a{href: '/settings'}
+              %button.btn.btn-default.btn-lg.glyphicon.glyphicon-cog
+            %h4 Configure
+
+  %script{:src => "/assets/scripts/application"}
