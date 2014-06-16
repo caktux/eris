@@ -4,7 +4,7 @@
 
 Using Eris is just as easy as using a web application!
 
-![Eris Screenshot](https://raw.githubusercontent.com/project-douglas/eris/master/docs/Eris-Screenshot.png)
+![Eris Screenshot](https://raw.githubusercontent.com/project-douglas/eris/master/docs/Sample-Screenshot.png)
 
 ### Huh?
 
