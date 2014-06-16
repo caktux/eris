@@ -1,8 +1,18 @@
 # Startup
+# std lib
+require 'json'
+
+# gems
 require 'bundler'
+require 'sinatra'
 require 'sprockets'
 require 'c3d'
-require './eris'
+require 'epm'
+require 'haml'
+require './app/eris'
+
+# this app
+Dir[File.dirname(__FILE__) + '/bylaws/*.rb'].each {|file| require file }
 
 ERIS_REPO = 'https://github.com/project-douglas/eris.git'
 
@@ -47,8 +57,8 @@ $doug = get_latest_doug
 
 map '/assets' do
   environment = Sprockets::Environment.new
-  environment.append_path 'assets/scripts/bootstrap/dist'
-  environment.append_path 'assets'
+  environment.append_path 'app/assets/scripts/bootstrap/dist'
+  environment.append_path 'app/assets'
   run environment
 end
 
