@@ -5,7 +5,7 @@ require 'c3d'
 require 'epm'
 require File.join(File.dirname(__FILE__), '..', 'eris')
 
-SWARUM_REPO = 'https://github.com/project-douglas/eris.git'
+ERIS_REPO = 'https://github.com/project-douglas/eris.git'
 
 RSpec.configure do |config|
   config.mock_with :rspec
@@ -40,7 +40,7 @@ def check_for_doug
     log  = File.read log_file
     doug = log.split("\n").map{|l| l.split(',')}.select{|l| l[0] == ("Doug" || "DOUG" || "doug")}[-1][-1]
   rescue
-    EPM::Deploy.new(SWARUM_REPO).deploy_package
+    EPM::Deploy.new(ERIS_REPO).deploy_package
     log  = File.read log_file
     doug = log.split("\n").map{|l| l.split(',')}.select{|l| l[0] == ("Doug" || "DOUG" || "doug")}[-1][-1]
   end

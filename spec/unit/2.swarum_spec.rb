@@ -145,7 +145,6 @@ def original_push
   before_orig_push_helper
   @topic    = CreateTopic.new  make_test_file, @c_top_bl, @swarum
   @thread   = CreateThread.new make_test_file, @c_thr_bl, @topic.topic_id
-  p @thread.thread_id
   @post     = PostToThread.new make_test_file, @c_pos_bl, @thread.thread_id
   after_orig_push_helper
 end
