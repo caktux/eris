@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+
 require File.join(File.dirname(__FILE__), 'eris_helpers.rb')
 
 set :views, File.join(File.dirname(__FILE__), 'views')
@@ -12,7 +13,7 @@ before do
 end
 
 get '/' do
-  haml :index, layout: :index
+  redirect to("/view")
 end
 
 get '/view' do
@@ -32,12 +33,6 @@ get '/promotedlist' do
   redirect to("/view/#{promotedlist}")
 end
 
-get '/blacklist' do
-  @moderate_this = 'blacklist'
-  blacklist = get_dougs_storage 'blacklist'
-  redirect to("/view/#{blacklist}")
-end
-
 get '/issueslist' do
   #todo
 end
@@ -52,47 +47,36 @@ get '/view/:contract' do
 end
 
 post '/view/:contract/new_topic' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
-  topic = CreateTopic.new request_from_ui['content'], get_dougs_storage('BLWCTopic'), params[:contract]
+  topic = CreateTopic.new params[:content], get_dougs_storage('BLWCTopic'), params[:contract]
   if topic.topic_id != ('0x' || nil )
     result = true
   else
     result = false
   end
-  content_type :json
-  response = { 'success' => result, 'result' => topic.topic_id }.to_json
+  redirect to("/view/#{params[:contract]}")
 end
 
 post '/view/:contract/new_thread' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
-  thread = CreateThread.new request_from_ui['content'], get_dougs_storage('BLWCThread'), params[:contract]
+  thread = CreateThread.new params[:content], get_dougs_storage('BLWCThread'), params[:contract]
   if thread.thread_id != ('0x' || nil )
     result = true
   else
     result = false
   end
-  content_type :json
-  response = { 'success' => result, 'result' => thread.thread_id }.to_json
+  redirect to("/view/#{params[:contract]}")
 end
 
 post '/view/:contract/new_post' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
-  post = PostToThread.new request_from_ui['content'], get_dougs_storage('BLWPostTT'), params[:contract]
+  post = PostToThread.new params[:content], get_dougs_storage('BLWPostTT'), params[:contract]
   if post.post_id != ('0x' || nil )
     result = true
   else
     result = false
   end
-  content_type :json
-  response = { 'success' => result, 'result' => post.post_id }.to_json
+  redirect to("/view/#{params[:contract]}")
 end
 
 post '/view/:contract/upvote' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
   post = VotePost.new params[:contract], 'upvote', get_dougs_storage('BLWVoteUpDown')
   if post.vote_count != ('0x' || nil )
     result = true
@@ -100,12 +84,10 @@ post '/view/:contract/upvote' do
     result = false
   end
   content_type :json
-  response = { 'success' => result, 'result' => post.vote_count }.to_json
+  redirect to("/view/#{params[:contract]}")
 end
 
 post '/view/:contract/downvote' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
   post = VotePost.new params[:contract], 'downvote', get_dougs_storage('BLWVoteUpDown')
   if post.vote_count != ('0x' || nil )
     result = true
@@ -113,72 +95,62 @@ post '/view/:contract/downvote' do
     result = false
   end
   content_type :json
-  response = { 'success' => result, 'result' => post.vote_count }.to_json
+  redirect to("/view/#{params[:contract]}")
 end
 
 post '/moderate/:contract/flag' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
-  post = FlagPost.new request_from_ui['contract'], get_dougs_storage('BLWFlagPost'), params[:contract]
+  post = FlagPost.new params[:contract], get_dougs_storage('BLWFlagPost'), get_dougs_storage('flaggedlist')
   if post.added == true
     result = true
   else
     result = false
   end
   content_type :json
-  response = { 'success' => result, 'result' => post.added }.to_json
+  redirect to("/flaggedlist")
 end
 
 post '/moderate/:contract/remove_flag' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
-  post = RemoveFlag.new request_from_ui['contract'], get_dougs_storage('BLWRemoveFlag'), params[:contract]
+  post = RemoveFlag.new params[:contract], get_dougs_storage('BLWRemoveFlag'), get_dougs_storage('flaggedlist')
   if post.removed == true
     result = true
   else
     result = false
   end
   content_type :json
-  response = { 'success' => result, 'result' => post.removed }.to_json
+  redirect to("/flaggedlist")
 end
 
 post '/moderate/:contract/promote' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
-  post = PromotePost.new request_from_ui['contract'], get_dougs_storage('BLWPromotePost'), params[:contract]
+  post = PromotePost.new params[:contract], get_dougs_storage('BLWPromotePost'), get_dougs_storage('promotedlist')
   if post.added == true
     result = true
   else
     result = false
   end
   content_type :json
-  response = { 'success' => result, 'result' => post.added }.to_json
+  redirect to("/promotedlist")
 end
 
 post '/moderate/:contract/remove_promotion' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
-  post = RemovePromoted.new request_from_ui['contract'], get_dougs_storage('BLWRemovePromoted'), params[:contract]
+  post = RemovePromoted.new params[:contract], get_dougs_storage('BLWRemovePromoted'), get_dougs_storage('promotedlist')
   if post.removed == true
     result = true
   else
     result = false
   end
   content_type :json
-  response = { 'success' => result, 'result' => post.removed }.to_json
+  redirect to("/promotedlist")
 end
 
 post '/moderate/:contract/blacklist' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
-  post = BlacklistPost.new request_from_ui['contract'], get_dougs_storage('BLWBlacklist'), params[:contract]
+  post = BlacklistPost.new params[:contract], get_dougs_storage('BLWBlacklist'), get_dougs_storage('blacklist')
   if post.added == true
     result = true
   else
     result = false
   end
   content_type :json
-  response = { 'success' => result, 'result' => post.added }.to_json
+  redirect to("/promotedlist")
 end
 
 post '/vote/:contract/endorse' do
