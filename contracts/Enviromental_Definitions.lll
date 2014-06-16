@@ -2,7 +2,7 @@
 {
 	;Constants
 	;Upvote/Downvote
-	(def 'upvoterew 20)
+	(def 'upvoterew 5)
 	(def 'downvotepun 5)
 
 	;These need to be balanced so that if
@@ -10,13 +10,13 @@
 	;performing both flag and promote ends up at
 	;a net loss
 	;promrew>promrepatstake>flagrew>flagrepatstake
-	(def 'flagrepatstake 20)
-	(def 'flagrew 60)
+	(def 'flagrepatstake 4)
+	(def 'flagrew 14)
 	(def 'promrepatstake 20)
-	(def 'promrew 100)
+	(def 'promrew 30)
 
-	(def 'maxupvote 200)
-	(def 'maxdownvote 200)
+	(def 'maxupvote 50)
+	(def 'maxdownvote 25)
 
 	(def 'minpunish 300) ;Minimum punishment for being blacklisted
 
@@ -29,13 +29,13 @@
 
 	(def 'BLCThreadrep 0)
 	(def 'BLP2Threadrep 0)
-	(def 'BLCTopicrep 500)
+	(def 'BLCTopicrep 27000)
 
 	(def 'BLFlagpost 0)
-	(def 'BLPrompost 300)
-	(def 'BLBlacklist 1000)
+	(def 'BLPrompost 2250)
+	(def 'BLBlacklist 9000)
 
-	(def 'BLMovethread 1000)
+	(def 'BLMovethread 27000)
 
 	(def 'citizen 9000)
 

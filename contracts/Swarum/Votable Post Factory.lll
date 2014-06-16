@@ -12,7 +12,8 @@
 	(def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) ;INSERT DOUG'S Address HERE
 ;--------------------------------------------------------------
 
-	(def 'score 0x20)
+	(def 'scoreU 0x19)
+	(def 'scoreD 0x20)
 	(def 'status 0x21)
 	(def 'statchanger 0x22)
 	(def 'FirstIndicate 0x23)
@@ -127,6 +128,8 @@
 							}
 						)
 
+
+
 						(when (= (cmd) "upvote")
 							{
 								(unless (CHECKBYLAW) (STOP)) ;If not a bylaw stop
@@ -134,7 +137,7 @@
 								(when (= @0x0 0)
 									{
 										;When this person hasn't voted before
-										[[score]](+ @@score 1)
+										[[scoreU]](+ @@scoreU 1)
 										[[(voter)]]1
 									}
 								)
@@ -142,7 +145,7 @@
 								(when (= @0x0 1)
 									{
 										;When this person has upvoted before (un-upvote)
-										[[score]](- @@score 1)
+										[[scoreU]](- @@scoreU 1)
 										[[(voter)]]0
 									}
 								)
@@ -150,12 +153,13 @@
 								(when (= @0x0 2)
 									{
 										;When this person has downvoted before
-										[[score]](+ @@score 2)
+										[[scoreU]](+ @@scoreU 1)
+										[[scoreD]](- @@scoreD 1)
 										[[(voter)]]1
 									}
 								)
 
-								[0x20]@@score
+								[0x20](- @@scoreU @@scoreD)
 								[0x40]@@author
 								(return 0x0 0x60)
 							}
@@ -168,7 +172,7 @@
 								(when (= @0x0 0)
 									{
 										;When this person hasn't voted before
-										[[score]](- @@score 1)
+										[[scoreD]](+ @@scoreD 1)
 										[[(voter)]]2
 									}
 								)
@@ -176,7 +180,8 @@
 								(when (= @0x0 1)
 									{
 										;When this person has upvoted before
-										[[score]](- @@score 2)
+										[[scoreU]](- @@scoreU 1)
+										[[scoreD]](+ @@scoreD 1)
 										[[(voter)]]2
 									}
 								)
@@ -184,12 +189,12 @@
 								(when (= @0x0 2)
 									{
 										;When this person has downvoted before (un-downvote)
-										[[score]](+ @@score 1)
+										[[scoreD]](- @@scoreD 1)
 										[[(voter)]]0
 									}
 								)
 
-								[0x20]@@score
+								[0x20](- @@scoreU @@scoreD)
 								[0x40]@@author
 								(return 0x0 0x60)
 							}

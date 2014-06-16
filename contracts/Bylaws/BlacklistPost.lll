@@ -10,6 +10,7 @@
 	(def 'PL 0x3)
 	(def 'BL 0x4)
 	(def 'MODREP 0x5)
+	(def 'repmul 0x6)
 
 	(def 'targetpost () (calldataload 0x0))
 
@@ -41,8 +42,18 @@
 			[0x20](caller)
 			[0x40]0
 			[0x60]0
-			(call (gass) @@MODREP 0 0x0 0x40 0x40 0x40)
-			(unless (&& (>= @0x40 @@repreq) (<= @0x60 maxmodstrikes)) (STOP))
+			[0x80]0
+			(call (gass) @@MODREP 0 0x0 0x40 0x40 0x60)
+			(unless (&& (>= @0x40 @@repreq) (<= @0x60 maxmodstrikes) (= @0x80 1)) (STOP))
+
+			[0x0]"getrepmul"
+			[0x20]0
+			(call (gass) DOUG 0 0x0 0x20 0x20 0x20)
+			[[repmul]]@0x20
+
+			[0x0]"set"
+			[0x20](caller)
+			[0x40](+ @0x40 (* @@repmul blacklistrew))
 
 			;Check that this is a valid post
 			[0x0]"checkname"
