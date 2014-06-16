@@ -5,6 +5,7 @@ require 'json'
 # gems
 require 'sinatra'
 require 'c3d'
+require 'epm'
 require 'haml'
 
 # this app
@@ -15,12 +16,25 @@ def address_guard contract
   contract
 end
 
+def address_unguard contract
+  if contract.class == String
+    contract = contract[2..-1] if contract[0..1] == '0x'
+  elsif contract.class == Array
+    tmp = []
+    until contract.empty?
+      c = contract.shift
+      c = c[2..-1] if c[0..1] == '0x'
+      tmp.push c
+    end
+    contract = tmp
+  end
+  contract
+end
+
 def find_the_peak contract
   lineage  = []
   parent   = $eth.get_storage_at contract, '0x14'
-  p "parent: " + parent
   until parent == '0x'
-    p "parent: " + parent
     lineage << parent
     child  = parent
     parent = $eth.get_storage_at parent, '0x14'
@@ -36,6 +50,23 @@ def get_dougs_storage position
   return $eth.get_storage_at $doug, position
 end
 
+def contract_type this_contract, contents, lineage
+  # type 0 is a post||individual blob
+  # type 1 is a thread||middle group level
+  # type 2 is a topic||high group level
+  # type 3 is a swarum_top||top level AB
+  begin
+    if contents.count == 1 && this_contract == contents.first.first[0]
+      return 0
+    elsif lineage.count == 0
+      return 3
+    elsif lineage.count == 1
+      return 2
+    end
+  end
+  return 1
+end
+
 before do
   print "[ERIS::#{Time.now.strftime( "%F %T" )}] Params Recieved >>\t" + params.inspect + "\n"
   print "[ERIS::#{Time.now.strftime( "%F %T" )}] Request >>\t\t" + request.body.read + "\n"
@@ -48,21 +79,40 @@ get '/' do
   haml :index, layout: :index
 end
 
-get '/discuss' do
-  # display swarum top LL
-  @swarum = get_dougs_storage 'swarum'
-  haml :discuss
+get '/view' do
+  swarum = get_dougs_storage 'swarum'
+  redirect to("/view/#{swarum}")
 end
 
-get '/discuss/:contract' do
-  contract = params[:contract]
-  contract = address_guard contract
-  contents = C3D::Assemble.new contract
-  lineage = find_the_peak contract
-  response = { 'lineage' => lineage, 'content' => contents.content }.to_json
+get '/flaggedlist' do
+  flaggedlist = get_dougs_storage 'flaggedlist'
+  redirect to("/view/#{flaggedlist}")
 end
 
-post '/discuss/:contract/new_topic' do
+get '/promotedlist' do
+  promotedlist = get_dougs_storage 'promotedlist'
+  redirect to("/view/#{promotedlist}")
+end
+
+get '/blacklist' do
+  blacklist = get_dougs_storage 'blacklist'
+  redirect to("/view/#{blacklist}")
+end
+
+get '/issueslist' do
+  #todo
+end
+
+get '/view/:contract' do
+  @this_contract = params[:contract]
+  @this_contract = address_guard @this_contract
+  @contents = C3D::Assemble.new(@this_contract).content
+  @lineage  = find_the_peak @this_contract
+  @type     = contract_type @this_contract, @contents, @lineage
+  haml :display_tree
+end
+
+post '/view/:contract/new_topic' do
   request.body.rewind
   request_from_ui = JSON.parse request.body.read
   topic = CreateTopic.new request_from_ui['content'], get_dougs_storage('BLWCTopic'), params[:contract]
@@ -75,7 +125,7 @@ post '/discuss/:contract/new_topic' do
   response = { 'success' => result, 'result' => topic.topic_id }.to_json
 end
 
-post '/discuss/:contract/new_thread' do
+post '/view/:contract/new_thread' do
   request.body.rewind
   request_from_ui = JSON.parse request.body.read
   thread = CreateThread.new request_from_ui['content'], get_dougs_storage('BLWCThread'), params[:contract]
@@ -88,7 +138,7 @@ post '/discuss/:contract/new_thread' do
   response = { 'success' => result, 'result' => thread.thread_id }.to_json
 end
 
-post '/discuss/:contract/new_post' do
+post '/view/:contract/new_post' do
   request.body.rewind
   request_from_ui = JSON.parse request.body.read
   post = PostToThread.new request_from_ui['content'], get_dougs_storage('BLWPostTT'), params[:contract]
@@ -101,7 +151,7 @@ post '/discuss/:contract/new_post' do
   response = { 'success' => result, 'result' => post.post_id }.to_json
 end
 
-post '/discuss/:contract/upvote' do
+post '/view/:contract/upvote' do
   request.body.rewind
   request_from_ui = JSON.parse request.body.read
   post = VotePost.new params[:contract], 'upvote', get_dougs_storage('BLWVoteUpDown')
@@ -114,7 +164,7 @@ post '/discuss/:contract/upvote' do
   response = { 'success' => result, 'result' => post.vote_count }.to_json
 end
 
-post '/discuss/:contract/downvote' do
+post '/view/:contract/downvote' do
   request.body.rewind
   request_from_ui = JSON.parse request.body.read
   post = VotePost.new params[:contract], 'downvote', get_dougs_storage('BLWVoteUpDown')
@@ -125,19 +175,6 @@ post '/discuss/:contract/downvote' do
   end
   content_type :json
   response = { 'success' => result, 'result' => post.vote_count }.to_json
-end
-
-get '/moderate' do
-  haml :moderate
-end
-
-get '/moderate/:contract' do
-  contract = params[:contract]
-  contract = address_guard contract
-  contents = C3D::Assemble.new contract
-  lineage  = find_the_peak contract
-  content_type :json
-  response = { 'lineage' => lineage, 'content' => contents.content }.to_json
 end
 
 post '/moderate/:contract/flag' do
@@ -203,18 +240,6 @@ post '/moderate/:contract/blacklist' do
   end
   content_type :json
   response = { 'success' => result, 'result' => post.added }.to_json
-end
-
-get '/vote' do
-  haml :vote
-end
-
-get '/vote/:contract' do
-  contract = params[:contract]
-  contract = address_guard contract
-  contents = C3D::Assemble.new contract
-  lineage = find_the_peak contract
-  response = { 'lineage' => lineage, 'content' => contents.content }.to_json
 end
 
 post '/vote/:contract/endorse' do
