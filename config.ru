@@ -1,8 +1,10 @@
 # Startup
-require 'c3d'
-require './eris'
 require 'bundler'
 require 'sprockets'
+require 'c3d'
+require './eris'
+
+ERIS_REPO = 'https://github.com/project-douglas/eris.git'
 
 C3D::SetupC3D.new
 
@@ -20,9 +22,31 @@ C3D::Utility.save_key
 
 $key = $eth.get_key
 
+
+def get_latest_doug
+  log_file = File.join(ENV['HOME'], '.epm', 'deployed-log.csv')
+  begin
+    log  = File.read log_file
+    doug = log.split("\n").map{|l| l.split(',')}.select{|l| l[0] == ("Doug" || "DOUG" || "doug")}[-1][-1]
+  rescue
+    EPM::Deploy.new(ERIS_REPO).deploy_package
+    log  = File.read log_file
+    doug = log.split("\n").map{|l| l.split(',')}.select{|l| l[0] == ("Doug" || "DOUG" || "doug")}[-1][-1]
+  end
+  doug_check = $eth.get_storage_at doug, '0x10'
+  if doug_check != '0x'
+    return doug
+  else
+    return nil
+  end
+end
+
+$doug = get_latest_doug
+
+# C3D.start
+
 map '/assets' do
   environment = Sprockets::Environment.new
-  # necessary so bootstrap glyphicons will properly load
   environment.append_path 'assets/scripts/bootstrap/dist'
   environment.append_path 'assets'
   run environment
