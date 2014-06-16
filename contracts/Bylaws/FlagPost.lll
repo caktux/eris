@@ -43,7 +43,7 @@
 			;rep at stake for making a flag
 			[0x0]"set"
 			[0x20](caller)
-			(if (> repatstake @0x40)
+			(if (> (* @@repmul flagrepatstake) @0x40)
 				{
 					[0x40]0
 				}

@@ -9,8 +9,10 @@
 
 	(initsafemem)
 	;NEED TO REMOVE THIS
-	[[0x38155ef3698a43b24b054d816a8a5f79fc148623]] 0x9001
-	[[0xa6cb63ec28c12929bee2d3567bf98f374a0b7167]] 0x9001
+	[[0x38155ef3698a43b24b054d816a8a5f79fc148623]] 0x900001
+	[[(+ 0x38155ef3698a43b24b054d816a8a5f79fc148623 2)]] 1
+	[[0xa6cb63ec28c12929bee2d3567bf98f374a0b7167]] 0x900001
+	[[(+ 0xa6cb63ec28c12929bee2d3567bf98f374a0b7167 2)]] 1
 
 	(return 0 (lll{
 		;Body
@@ -19,7 +21,7 @@
 				[0x0]@@(target)
 				[0x20]@@(+ (target) 1)
 				[0x40]@@(+ (target) 2)
-				(return 0x0 0x40)
+				(return 0x0 0x60)
 			}
 		)
 
