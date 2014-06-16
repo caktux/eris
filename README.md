@@ -42,7 +42,7 @@ First you will need an ethereum client. Eris has been tested on the cpp client, 
 Second, you will need a torrent client. Eris has been tested using transmission-daemon and is known to work well. If you were to use another torrent client, you would need to modify the c3D component of Eris before using. Transmission daemon can be installed (depending on your platform) using:
 
 * `sudo apt-get install transmission-daemon`
-* `brew install transmission-daemon`
+* `brew install transmission`
 
 Third, you will need to clone this repo and run the install sequence:
 
