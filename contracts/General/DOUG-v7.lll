@@ -304,6 +304,7 @@
 				(unless (BLcheck (CALLER)) (STOP))
 				[[repmul]](calldataload 0x20)
 			}
+		)
 	} 0))
 }
 
