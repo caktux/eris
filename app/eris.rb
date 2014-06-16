@@ -170,7 +170,7 @@ post '/vote/:contract/vote' do
 end
 
 get '/configure' do
-  @settings = C3D::Settings.get_settings
+  @settings = JSON.parse(File.join(ENV['HOME'], '.epm', 'c3d-config.json'))
   haml :configure
 end
 
@@ -180,11 +180,6 @@ post '/configure' do
   result = C3D::Settings.set_settings request_from_ui
   content_type :json
   response = { 'success' => result }.to_json
-end
-
-get '/set_doug' do
-  content_type :json
-  response = { 'success' => result, 'result' => $doug }.to_json
 end
 
 post '/set_doug' do
