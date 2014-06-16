@@ -1,0 +1,15 @@
+- breads = address_unguard @lineage
+- breads = breads.reverse
+%ol.breadcrumb
+  - breads.each do |contr|
+    %li
+      %a{href:"../view/#{contr}"}= contr[0..8]
+  %li.active= address_unguard @this_contract.downcase
+
+- @contents.each do |group|
+  - group.each do |contr, conte|
+    - if @type != 0
+      %h4
+        %a{href:"../view/#{contr}"}= address_unguard contr
+    %p= conte
+

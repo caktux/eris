@@ -5,10 +5,10 @@
     %meta{:charset => "utf-8"}/
     %meta{:content => "Eris: Reclaiming the Interwebs", :name => "description"}/
     %meta{:content => "Project Douglas", :name => "author"}/
-    %link{:href => "assets/styles/application.css", :rel => "stylesheet"}/
+    %link{:href => "/assets/styles/application.css", :rel => "stylesheet"}/
   %body
-    %div{ data: { bind: "foreach: alerts" } }
-      %div{ data: { bind: "alert: $data" } }
+    -# %div{ data: { bind: "foreach: alerts" } }
+    -#   %div{ data: { bind: "alert: $data" } }
     %nav.navbar.navbar-default{role: "navigation"}
       .container-fluid
         .navbar-header
@@ -25,21 +25,22 @@
                 %button.btn.btn-default.btn-lg.glyphicon.glyphicon-inbox
               %h4 My DAO
             %li
-              %a{href: '/vote'}
+              %a{href: '/issueslist'}
                 %button.btn.btn-default.btn-lg.glyphicon.glyphicon-th-large
               %h4 Vote
             %li
-              %a{href: '/discuss'}
+              %a{href: '/view'}
                 %button.btn.btn-default.btn-lg.glyphicon.glyphicon-road
               %h4 Discuss
             %li
-              %a{href: '/moderate'}
+              %a{href: '/flaggedlist'}
                 %button.btn.btn-default.btn-lg.glyphicon.glyphicon-play-circle
               %h4 Moderate
             %li
               %a{href: '/configure'}
                 %button.btn.btn-default.btn-lg.glyphicon.glyphicon-cog
               %h4 Configure
+
     .container.col-xs-12.col-sm-8.col-md-8.col-sm-offset-2.col-md-offset-2
       .row
         %br

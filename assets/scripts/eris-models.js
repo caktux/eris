@@ -1,4 +1,0 @@
-var Topics = function () {
-  return [
-  ];
-};
