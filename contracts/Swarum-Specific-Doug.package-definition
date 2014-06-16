@@ -4,14 +4,8 @@
 # Package Repository: https://github.com/project-douglas/swarum
 
 # Precursor, set some variables.
-set:
-  {{swarum_blob_id}} => 0xb5e0478618d5e91682efc0e2a95b3d32cdae546c03f6014dc8df659c2f0f94c3
-set:
-  {{topic_blob_id}} => 0xd396a0bb5c8fbb1594dbfc726fd25fd354c8271fe634ba7f32659632c24da04c
-set:
-  {{post1_blob_id}} => 0x7b8c070369bc9499f6e5c763c5e9f0da4502cf04125b185d0e3bd2dec8051b4b
-set:
-  {{post2_blob_id}} => 0x0e050a89270e1e0470f77e9830114beb74b83bf19a4d8110878015b7d5eee6ea
+#set:
+#  {{swarum_blob_id}} => 0xb5e0478618d5e91682efc0e2a95b3d32cdae546c03f6014dc8df659c2f0f94c3
 
 # First We Deploy DOUG and the RepDB
 modify-deploy:
@@ -210,46 +204,5 @@ log:
   RemovePromoted => {{BLWRemovePromoted}}
 log:
   MoveThread => {{BLWMoveThread}}
-
-# Now. Create a couple of Topics
-transact:
-  {{BLWCTopic}} => {{Swarum}} {{swarum_blob_id}} '' '' {{swarum_blob_id}} '' ''
-
-# Get the addresses from Swarum Top
-query:
-  {{Swarum}} => 0x19 => {{TopicMemAddy}}
-query:
-  {{Swarum}} => {{TopicMemAddy}} => {{Topic1}}
-log:
-  Topic1 => {{Topic1}}
-
-# Now. Create a Thread
-transact:
-  {{BLWCThread}} => {{Topic1}} {{topic_blob_id}} '' '' {{topic_blob_id}} '' '' {{post1_blob_id}} '' '' {{post1_blob_id}} '' ''
-
-# Get the addresses from Thread
-query:
-  {{Topic1}} => 0x19 => {{ThreadMemAddy}}
-query:
-  {{Topic1}} => {{ThreadMemAddy}} => {{Thread1}}
-log:
-  Thread1 => {{Thread1}}
-query:
-  {{Thread1}} => 0x19 => {{Post1MemAddy}}
-query:
-  {{Thread1}} => {{Post1MemAddy}} => {{Post1}}
-log:
-  Post1 => {{Post1}}
-
-# Not. Create a New Post
-transact:
-  {{BLWPostTT}} => {{Thread1}} {{post2_blob_id}} '' '' {{post2_blob_id}} '' ''
-query:
-  {{Thread1}} => 0x19 => {{Post2MemAddy}}
-query:
-  {{Thread1}} => {{Post2MemAddy}} => {{Post2}}
-log:
-  Post2 => {{Post2}}
-
 log:
   All => Done
