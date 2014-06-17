@@ -49,13 +49,13 @@ Third, you will need to clone this repo and run the install sequence:
 * `git clone https://github.com/project-douglas/eris.git`
 * `bundle install`
 
-After that you are ready to go. Start the server with `foreman install` and you are ready to interact with your own DAO.
+After that you are ready to go. Start the server with `foreman start` and you are ready to interact with your own DAO.
 
 ### But Wait, I Don't Have a DAO.
 
 Funny you should say that, because we have that part also under control. Before starting the server with the above command, you will want to Deploy your very own DAO. Eris depends on the `EPM` gem (Ethereum Package Manager). EPM is built to provide a very simple interface for deploying series of contracts. So just type `bundle exec epm deploy ./contract/ERIS.package-definition` and your DOUG will deploy. If you run a headed client (which is advised -- just use a different port in your config file) then you can watch your very own DAO deploy before your eyes. **Note Aleth** does not work with JSON RPC which EPM relies upon to deploy so if you wish to use the CPP client then you will need to run both a headed and headless client. Just make sure to change in your `~/.epm/epm-rpc.json` and `~/.epm/c3d-config.json` config files the directory and peer ports which the headless server runs on.
 
-Once you have a DAO, then run `foreman install`. After that in any web browser go to localhost:5000 and enjoy playing with your DAO!!!!
+Once you have a DAO, then run `foreman start`. After that in any web browser go to localhost:5000 and enjoy playing with your DAO!!!!
 
 ## Contributing
 
