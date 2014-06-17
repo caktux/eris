@@ -65,6 +65,12 @@ Pull Request.
 
 ## License
 
+Decentralised Autonomous Organisations, or DAOs, are new and legally untested platforms. Their use may give rise to criminal liability in certain jurisdictions where, e.g., data encryption is banned. In more liberal jurisdictions, the use of such software in applications which are tightly regulated by consumer protection legislation - for example, platforms aimed at offerings of debt, equity, or other forms of investment contract, consumer credit, or money transfer - may apply. Finally, structuring the relationship between an Eris userbase and an entity which deploys the Eris platform will give rise to significant liabilities on the part of the platform operator/owner and its directors and may expose its userbase to economic or other types of harm.
+
+**It is imperative that prior to deploying the software proper and thorough independent legal advice and specialist coding advice is obtained from qualified professionals.**
+
+Eris is provided "as is", without warranty or representation of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall Project Ðouglas and each and any member of the Project Ðouglas Dev Team be liable to you or any other person for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
+
 See `LICENSE.md`.
 
 In other words, don't be a jerk.
