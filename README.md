@@ -34,7 +34,7 @@ In the very near future, we hope to have this process greatly simplified, but fo
 
 As a precursor, you will need Ruby. On linux platforms, you can simply install ruby 2.0 from your friendly package manager. On OSX it comes preinstalled so there's nothing to install.
 
-First you will need an ethereum client. Eris has been tested on the cpp client, but there is no reason to think that it will not work on the go client. These clients can be found:
+First you will need an ethereum client. Eris has been tested on the cpp client, but there is no reason to think that it will not work on the go client. You will, however, need the LLL compiler if you wish to deploy your own version of Eris. These clients can be found:
 
 * [Ethereum Go Client](https://github.com/ethereum/go-ethereum)
 * [Ethereum CPP Client](https://github.com/ethereum/cpp-ethereum)

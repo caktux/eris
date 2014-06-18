@@ -23,13 +23,13 @@ end
 
 get '/flaggedlist' do
   @moderate_this = 'flaggedlist'
-  flaggedlist = get_dougs_storage 'flaggedlist'
+  flaggedlist    = get_dougs_storage 'flaggedlist'
   redirect to("/view/#{flaggedlist}")
 end
 
 get '/promotedlist' do
   @moderate_this = 'promotedlist'
-  promotedlist = get_dougs_storage 'promotedlist'
+  promotedlist   = get_dougs_storage 'promotedlist'
   redirect to("/view/#{promotedlist}")
 end
 
@@ -40,9 +40,9 @@ end
 get '/view/:contract' do
   @this_contract = params[:contract]
   @this_contract = address_guard @this_contract
-  @contents = C3D::Assemble.new(@this_contract).content
-  @lineage  = find_the_peak @this_contract
-  @type     = contract_type @this_contract, @contents, @lineage
+  @contents      = C3D::Assemble.new(@this_contract).content
+  @lineage       = find_the_peak @this_contract
+  @type          = contract_type @this_contract, @contents, @lineage
   haml :display_tree
 end
 
