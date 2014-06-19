@@ -53,8 +53,8 @@ describe "Publishing Content from c3D to Ethereum" do
   end
 
   it "should be able to publish multiple blobs to ethereum." do
-    expect( @multiple_post_ids.length ).to eq(3)
-    expect( @multiple_post_blb.length).to eq(3)
+    expect( @multiple_post_ids.length ).to eq(4)
+    expect( @multiple_post_blb.length).to eq(4)
   end
 
   it "should be able to flag posts." do
@@ -121,24 +121,15 @@ describe "Publishing Content from c3D to Ethereum" do
     print "\n\nSubmitting an Upvote.\n\n"
     uvp     = VotePost.new @post.post_id, 'upvote', @vote_bl
     print "\n"
-    # for now I'm not sure which position to check.
-    expect( false ).to be_truthy
+    expect( uvp.voted ).to be_truthy
   end
 
   it "should be able to down vote posts." do
     print "\n\nSubmitting a Downvote.\n\n"
-    dvp     = VotePost.new @post.post_id, 'downvote', @vote_bl
+    dvp     = VotePost.new @multiple_post_ids[3], 'downvote', @vote_bl
     print "\n"
-    # for now I'm not sure which position to check.
-    expect( false ).to be_truthy
+    expect( dvp.voted ).to be_truthy
   end
-
-  # if ARGV[0] == 'third'
-  #   TreeBuilder.new [doug], [], true
-  # end
-
-  # EyeOfZorax.subscribe doug
-
 end
 
 def original_push
@@ -152,8 +143,9 @@ end
 def multiples_push
   @multiple_post_ids = []
   @multiple_post_blb = []
-  3.times do
+  4.times do
     post               = PostToThread.new make_test_file, @c_pos_bl, @thread.thread_id
+    p post.post_id
     @multiple_post_ids << post.post_id
     @multiple_post_blb << post.post_blob[42..-1]
   end
