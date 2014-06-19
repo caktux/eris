@@ -1,1 +1,84 @@
-%p configure
+%h2 Configure Your Eris and C3D client
+%form.form.form-horizontal{ role: 'form', action:"/configure", method: 'post'}
+  .form-group
+    %label.col-sm-2.control-label{ for: 'swarmDir' } Directory for Swarum Posts
+    .col-sm-10
+      %input.form-control{ name: 'swarmDir', value: "#{@settings['swarm_dir']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'torrentsDir' } Directory for Your Data Torrents
+    .col-sm-10
+      %input.form-control{ name: 'torrentsDir', value: "#{@settings['torrents_dir']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'blobsDir' } Directory for Your Blobs
+    .col-sm-10
+      %input.form-control{ name: 'blobsDir', value: "#{@settings['blobs_dir']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'watchFile' } Watchers File (tells C3D to Download Content) Location
+    .col-sm-10
+      %input.form-control{ name: 'watchFile', value: "#{@settings['watch_file']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'ignoreFile' } Ignore File (tells C3D not to Download Content) Location
+    .col-sm-10
+      %input.form-control{ name: 'ignoreFile', value: "#{@settings['ignore_file']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'torrentRPCadd' } Torrent RPC Address
+    .col-sm-10
+      %input.form-control{ name: 'torrentRPCadd', value: "#{@settings['torrent_rpc']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'torrentUserName' } Torrent User (usually turned off)
+    .col-sm-10
+      %input.form-control{ name: 'torrentUserName', value: "#{@settings['torrent_user']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'torrentPassword' } Torrent Password (usually turned off)
+    .col-sm-10
+      %input.form-control{ name: 'torrentPassword', value: "#{@settings['torrent_pass']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'pathtoEth' } Path to Ethereum Executable
+    .col-sm-10
+      %input.form-control{ name: 'pathtoEth', value: "#{@settings['path-to-eth']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'pathtoLLLC' } Path to LLL Compiler
+    .col-sm-10
+      %input.form-control{ name: 'pathtoLLLC', value: "#{@settings['path-to-lllc']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'ethRPCPort'} Ethereum RPC Port
+    .col-sm-10
+      %input.form-control{ name: 'ethRPCPort', value: "#{@settings['eth_rpc_port']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'ethPeerServer' } Ethereum Peer Server
+    .col-sm-10
+      %input.form-control{ name: 'ethPeerServer', value: "#{@settings['eth_remote']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'ethPeerPort' } Ethereum Peer Port
+    .col-sm-10
+      %input.form-control{ name: 'ethPeerPort', value: "#{@settings['eth_peer_port']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'blockchainDir' } Directory to Store the Blockchain Database
+    .col-sm-10
+      %input.form-control{ name: 'blockchainDir', value: "#{@settings['blockchain_dir']}"}
+  .form-group
+    %label.col-sm-2.control-label{ for: 'downloadingDir'} Directory for Storing Blobs which are Being Downloaded
+    .col-sm-10
+      %input.form-control{ name: 'downloadingDir', value: "#{@settings['download_dir']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'downloadQueueSize' } Download Queue Size (passed to Transmission Client)
+    .col-sm-10
+      %input.form-control{ name: 'downloadQueueSize', value: "#{@settings['download-queue-size']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'queueStallMins' } Download Queue Stall Limit (passed to Transmission Client)
+    .col-sm-10
+      %input.form-control{ name: 'queueStallMins', value: "#{@settings['queue-stalled-minutes']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'primaryAccountPub' } Primary Ethereum Account (public address)
+    .col-sm-10
+      %input.form-control{ name: 'primaryAccountPub', value: "#{@settings['primary_account']}" }
+  .form-group
+    %label.col-sm-2.control-label{ for: 'primaryAccountPriv' } Primary Ethereum Account (private key, this is not broadcasted but need to send transactions)
+    .col-sm-10
+      %input.form-control{ name: 'primaryAccountPriv', value: "#{@settings['primary_account_key']}" }
+  .form-group
+    .col-sm-12
+      .checkbox
+        %input{ name: 'epmAndC3d', type: 'checkbox', value: nil }
+          %b Update Your EPM Settings Also?
+  %input.button.btn.btn-primary{type:'submit', value: 'Submit Configuration'}

@@ -32,7 +32,6 @@ C3D::Utility.save_key
 
 $key = $eth.get_key
 
-
 def get_latest_doug
   log_file = File.join(ENV['HOME'], '.epm', 'deployed-log.csv')
   begin
