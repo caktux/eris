@@ -3,7 +3,7 @@ require 'securerandom'
 require 'fileutils'
 require 'c3d'
 require 'epm'
-require File.join(File.dirname(__FILE__), '..', 'eris')
+Dir[File.dirname(__FILE__) + '/../bylaws/*.rb'].each {|file| require file }
 
 ERIS_REPO = 'https://github.com/project-douglas/eris.git'
 
