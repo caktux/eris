@@ -55,9 +55,19 @@ After that you are ready to go. Start the server with `foreman start` and you ar
 
 ### But Wait, I Don't Have a DAO.
 
-Funny you should say that, because we have that part also under control. Before starting the server with the above command, you will want to Deploy your very own DAO. Eris depends on the `EPM` gem (Ethereum Package Manager). EPM is built to provide a very simple interface for deploying series of contracts. So just type `bundle exec epm deploy ./contracts/ERIS.package-definition` and your DOUG will deploy. If you run a headed client (which is advised -- just use a different port in your config file) then you can watch your very own DAO deploy before your eyes. **Note Aleth** does not work with JSON RPC which EPM relies upon to deploy so if you wish to use the CPP client then you will need to run both a headed and headless client. Just make sure to change in your `~/.epm/epm-rpc.json` and `~/.epm/c3d-config.json` config files the directory and peer ports which the headless server runs on.
+Funny you should say that, because we have that part also under control. Before starting the server with the above command, you will want to Deploy your very own DAO. Eris depends on the `EPM` gem (Ethereum Package Manager). EPM is built to provide a very simple interface for deploying series of contracts. So just type `bundle exec epm deploy ./contracts/ERIS.package-definition` and your DOUG will deploy. If you run a headed client (which is advised -- just use a different port in your config file) then you can watch your very own DAO deploy before your eyes.
+
+**Note Aleth** does not work with JSON RPC which EPM relies upon to deploy so if you wish to use the CPP client then you will need to run both a headed and headless client. Just make sure to change in your `~/.epm/epm-rpc.json` and `~/.epm/c3d-config.json` config files the directory and peer ports which the headless server runs on.
 
 Once you have a DAO, then run `foreman start`. After that in any web browser go to localhost:5000 and enjoy playing with your DAO!!!!
+
+### Some Commonly Encountered Problems
+
+As of this writing you will not be able to run Eris on the main Ethereum Test Net. The way the Ethereum Virtual Machine has been designed allows for a dynamic amount of gas to be used within each block. Slowly this expands and reduces as prior blocks are heavily used or are not used. Because the current test net is mostly being used (right now) for working on the mining algorithm there are many unused blocks. The result of this is that the gas limit per block has been reduced so low that DOUG the very first contract, and almost all of the rest of the contracts required to run Eris cannot be deployed. As of this writing, DOUG needs about 14000 gas to deploy and the current minimum gas amount per block is around 10000 so even using the entire gas in a block will not allow you to deploy one contract per block.
+
+> Solution 1. This is a known issue for the Ethereum team, and we are sure they have a fix in mind so one solution is to wait until that is fixed.
+
+> Solution 2. If you want, you can use your own test net which will not present you with such an error. Alternatively, you can build our [reference client](https://github.com/project-douglas/cpp-ethereum) or simply join the PD testnet on 173.246.105.207:30303. Since we do a lot of deploys and transactions per block you should not face that error on our net. Be advised our test net gets reverted a lot. So be wary.
 
 ## Contributing
 
