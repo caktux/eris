@@ -7,8 +7,6 @@
     %meta{:content => "Project Douglas", :name => "author"}/
     %link{:href => "/assets/styles/application.css", :rel => "stylesheet"}/
   %body
-    -# %div{ data: { bind: "foreach: alerts" } }
-    -#   %div{ data: { bind: "alert: $data" } }
     %nav.navbar.navbar-default{role: "navigation"}
       .container-fluid
         .navbar-header
@@ -55,6 +53,9 @@
                   %label{ for: 'newDoug' } New Doug
                   %input.form-control{ id: 'newDoug', name: 'newDoug'}
                 %input.button.btn.btn-primary{ type:'submit', value: 'Change My Doug!' }
+              %hr
+              %form{ action:"/deployDoug", method: 'post'}
+                %input.button.btn.btn-success{type:'submit', value: 'Deploy a New Doug! (be patient, this will take some time)'}
       .row
         %br
       =yield

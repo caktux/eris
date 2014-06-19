@@ -38,9 +38,7 @@ def get_latest_doug
     log  = File.read log_file
     doug = log.split("\n").map{|l| l.split(',')}.select{|l| l[0] == ("Doug" || "DOUG" || "doug")}[-1][-1]
   rescue
-    EPM::Deploy.new(ERIS_REPO).deploy_package
-    log  = File.read log_file
-    doug = log.split("\n").map{|l| l.split(',')}.select{|l| l[0] == ("Doug" || "DOUG" || "doug")}[-1][-1]
+    doug = '0x'
   end
   doug_check = $eth.get_storage_at doug, '0x10'
   if doug_check != '0x'

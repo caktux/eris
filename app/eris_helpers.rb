@@ -37,7 +37,10 @@ helpers do
     unless position[0..1] == '0x'
       position = EPM::HexData.construct_data [position]
     end
-    return $eth.get_storage_at $doug, position
+    begin
+      return $eth.get_storage_at $doug, position
+    rescue
+    end
   end
 
   def contract_type this_contract, contents, lineage
@@ -115,5 +118,21 @@ helpers do
     C3D::Utility.save_key
 
     $key = $eth.get_key
+  end
+
+  def get_latest_doug
+    log_file = File.join(ENV['HOME'], '.epm', 'deployed-log.csv')
+    begin
+      log  = File.read log_file
+      doug = log.split("\n").map{|l| l.split(',')}.select{|l| l[0] == ("Doug" || "DOUG" || "doug")}[-1][-1]
+    rescue
+      doug = '0x'
+    end
+    doug_check = $eth.get_storage_at doug, '0x10'
+    if doug_check != '0x'
+      return doug
+    else
+      return nil
+    end
   end
 end
