@@ -7,13 +7,15 @@ set :views, File.join(File.dirname(__FILE__), 'views')
 before do
   print "[ERIS::#{Time.now.strftime( "%F %T" )}] Params Recieved >>\t" + params.inspect + "\n"
   print "[ERIS::#{Time.now.strftime( "%F %T" )}] Request >>\t\t" + request.body.read + "\n"
-  # if $doug == nil
-  #   redirect to('/set_doug')
-  # end
 end
 
 get '/' do
-  redirect to("/view")
+  if $doug
+    redirect to("/view")
+  else
+    p "There is NO DOUG. Please Add a DOUG in the My DAO Button."
+    redirect to('/view/0x')
+  end
 end
 
 get '/view' do
@@ -78,7 +80,7 @@ end
 
 post '/view/:contract/upvote' do
   post = VotePost.new params[:contract], 'upvote', get_dougs_storage('BLWVoteUpDown')
-  if post.vote_count != ('0x' || nil )
+  if post.voted == true
     result = true
   else
     result = false
@@ -89,7 +91,7 @@ end
 
 post '/view/:contract/downvote' do
   post = VotePost.new params[:contract], 'downvote', get_dougs_storage('BLWVoteUpDown')
-  if post.vote_count != ('0x' || nil )
+  if post.voted == true
     result = true
   else
     result = false
@@ -181,5 +183,11 @@ end
 
 post '/set_doug' do
   $doug = params[:newDoug]
+  redirect to '/'
+end
+
+post '/deployDoug' do
+  EPM::Deploy.new(ERIS_REPO).deploy_package
+  $doug = get_latest_doug
   redirect to '/'
 end
