@@ -37,3 +37,7 @@
 #newcontent {
   padding-top: 3em;
 }
+
+.popover {
+  max-width: 500px;
+}

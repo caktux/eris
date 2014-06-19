@@ -21,8 +21,8 @@
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
           %ul.nav.navbar-nav.navbar-affix
             %li
-              %a{href: '/'}
-                %button.btn.btn-default.btn-lg.glyphicon.glyphicon-inbox
+              %a{href: '#'}
+                %button#doug.btn.btn-default.btn-lg.glyphicon.glyphicon-inbox{ data: { container: 'body', toggle: 'popover', placement: 'left', title: 'DOUG', content: "#{$doug}", html: true, container: 'body' } }
               %h4 My DAO
             %li
               %a{href: '/issueslist'}
