@@ -50,7 +50,7 @@
               %h4.modal-title Doug
             .modal-body
               %p= $doug
-              %form.form.form-horizontal{ role: 'form', action:"/view/#{@this_contract}/new_topic", method: 'post'}
+              %form.form.form-horizontal{ role: 'form', action:"/set_doug", method: 'post'}
                 .form-group
                   %label{ for: 'newDoug' } New Doug
                   %input.form-control{ id: 'newDoug', name: 'newDoug'}
