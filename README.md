@@ -49,6 +49,8 @@ Third, you will need to clone this repo and run the install sequence:
 * `git clone https://github.com/project-douglas/eris.git`
 * `bundle install`
 
+One last thing, which is predominantly for linux. When `apt-get` installs transmission it starts up the daemon. C3D will need to run the daemon manually with the config it puts into ~/.epm/settings.json (that is the transmission config file). So you will have to turn it off the first time with `sudo service transmission-daemon stop` and if you want to permanently turn it off (if you want) with `sudo update-rc.d -f transmission-daemon remove`.
+
 After that you are ready to go. Start the server with `foreman start` and you are ready to interact with your own DAO.
 
 ### But Wait, I Don't Have a DAO.
