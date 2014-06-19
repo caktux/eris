@@ -22,7 +22,7 @@
           %ul.nav.navbar-nav.navbar-affix
             %li
               %a{href: '#'}
-                %button#doug.btn.btn-default.btn-lg.glyphicon.glyphicon-inbox{ data: { container: 'body', toggle: 'popover', placement: 'left', title: 'DOUG', content: "#{$doug}", html: true, container: 'body' } }
+                %button#doug.btn.btn-default.btn-lg.glyphicon.glyphicon-inbox{ data: { toggle: 'modal', target: '.doug-modal' } }
               %h4 My DAO
             %li
               %a{href: '/issueslist'}
@@ -42,6 +42,19 @@
               %h4 Configure
 
     .container.col-xs-12.col-sm-8.col-md-8.col-sm-offset-2.col-md-offset-2
+      .modal.fade.doug-modal{ role: "dialog" }
+        .modal-dialog
+          .modal-content
+            .modal-header
+              %button{ type: "button", class: "close", data: { dismiss: "modal" } } &times;
+              %h4.modal-title Doug
+            .modal-body
+              %p= $doug
+              %form.form.form-horizontal{ role: 'form', action:"/view/#{@this_contract}/new_topic", method: 'post'}
+                .form-group
+                  %label{ for: 'newDoug' } New Doug
+                  %input.form-control{ id: 'newDoug', name: 'newDoug'}
+                %input.button.btn.btn-primary{ type:'submit', value: 'Change My Doug!' }
       .row
         %br
       =yield

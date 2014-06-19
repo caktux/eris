@@ -175,16 +175,11 @@ get '/configure' do
 end
 
 post '/configure' do
-  p params
   update_settings params
-  redirect to '/configure'
+  redirect to '/'
 end
 
 post '/set_doug' do
-    request.body.rewind
-    request_from_ui = JSON.parse request.body.read
-    $doug = request_from_ui['doug']
-    result = true
-    content_type :json
-    response = { 'success' => result, 'result' => $doug }.to_json
+  $doug = params[:newDoug]
+  redirect to '/'
 end
