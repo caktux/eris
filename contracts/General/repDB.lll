@@ -7,15 +7,27 @@
 	(def 'target () (calldataload 0x20))
 	(def 'rep () (calldataload 0x40))
 
+	[[(caller)]]0x900001
+	[[(+ (caller) 2)]] 1
+
 	(initsafemem)
 	;NEED TO REMOVE THIS
-	[[0x38155ef3698a43b24b054d816a8a5f79fc148623]] 0x900001
-	[[(+ 0x38155ef3698a43b24b054d816a8a5f79fc148623 2)]] 1
-	[[0xa6cb63ec28c12929bee2d3567bf98f374a0b7167]] 0x900001
-	[[(+ 0xa6cb63ec28c12929bee2d3567bf98f374a0b7167 2)]] 1
+	;[[0x38155ef3698a43b24b054d816a8a5f79fc148623]] 0x900001
+	;[[(+ 0x38155ef3698a43b24b054d816a8a5f79fc148623 2)]] 1
+	;[[0xa6cb63ec28c12929bee2d3567bf98f374a0b7167]] 0x900001
+	;[[(+ 0xa6cb63ec28c12929bee2d3567bf98f374a0b7167 2)]] 1
 
 	(return 0 (lll{
 		;Body
+		(when (= (cmd) "init")
+			{
+				(unless @@0x20 (STOP))
+				[[(caller)]]0x900001
+				[[(+ (caller) 2)]] 1
+				[[0x20]]1
+			}
+		)
+
 		(when (= (cmd) "get")
 			{
 				[0x0]@@(target)
