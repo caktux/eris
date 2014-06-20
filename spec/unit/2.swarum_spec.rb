@@ -70,9 +70,9 @@ describe "Publishing Content from c3D to Ethereum" do
 
   it "should change the status of individual posts." do
     print "\n\nChecking status of Flagged Posts.\n\n"
-    status_fp1 = $eth.get_storage_at @multiple_post_ids[0], '0x21'
-    status_fp2 = $eth.get_storage_at @multiple_post_ids[1], '0x21'
-    status_fp3 = $eth.get_storage_at @multiple_post_ids[2], '0x21'
+    status_fp1 = Celluloid::Actor[:eth].get_storage_at @multiple_post_ids[0], '0x21'
+    status_fp2 = Celluloid::Actor[:eth].get_storage_at @multiple_post_ids[1], '0x21'
+    status_fp3 = Celluloid::Actor[:eth].get_storage_at @multiple_post_ids[2], '0x21'
     print "\n"
     expect( status_fp1 ).to eq('0x01')
     expect( status_fp2 ).to eq('0x01')
@@ -178,10 +178,10 @@ def get_latest_doug
 end
 
 def get_another_topic
-  first_topic = $eth.get_storage_at @swarum, '0x19'
+  first_topic = Celluloid::Actor[:eth].get_storage_at @swarum, '0x19'
   if first_topic == @topic.topic_id
     next_topic = "0x" + ((first_topic.hex + 0x1).to_s(16))
-    return $eth.get_storage_at @swarum, next_topic
+    return Celluloid::Actor[:eth].get_storage_at @swarum, next_topic
   else
     return first_topic
   end
@@ -191,7 +191,7 @@ def get_dougs_storage position
   unless position[0..1] == '0x'
     position = EPM::HexData.construct_data [position]
   end
-  return $eth.get_storage_at @doug, position
+  return Celluloid::Actor[:eth].get_storage_at @doug, position
 end
 
 def make_test_file
@@ -201,13 +201,13 @@ end
 
 def before_orig_push_helper
   @blobb4 = Dir.glob(File.join(ENV['BLOBS_DIR'], '*')).count
-  @torsb4 = $puller.all.count
+  @torsb4 = Celluloid::Actor[:puller].all.count
 end
 
 def after_orig_push_helper
   @blobaf       = Dir.glob(File.join(ENV['BLOBS_DIR'], '*')).count
-  @torsaf       = $puller.all.count
-  @recent_names = $puller.all.map{|e| e['id']}.sort![-3..-1].map{|e| $puller.find(e)['name']}
+  @torsaf       = Celluloid::Actor[:puller].all.count
+  @recent_names = Celluloid::Actor[:puller].all.map{|e| e['id']}.sort![-3..-1].map{|e| Celluloid::Actor[:puller].find(e)['name']}
 end
 
 def remove_flag

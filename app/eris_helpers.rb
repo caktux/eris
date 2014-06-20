@@ -23,11 +23,11 @@ helpers do
 
   def find_the_peak contract
     lineage  = []
-    parent   = $eth.get_storage_at contract, '0x14'
+    parent   = Celluloid::Actor[:eth].get_storage_at contract, '0x14'
     until parent == '0x'
       lineage << parent
       child  = parent
-      parent = $eth.get_storage_at parent, '0x14'
+      parent = Celluloid::Actor[:eth].get_storage_at parent, '0x14'
       break if child == parent
     end
     return lineage
@@ -38,7 +38,7 @@ helpers do
       position = EPM::HexData.construct_data [position]
     end
     begin
-      return $eth.get_storage_at $doug, position
+      return Celluloid::Actor[:eth].get_storage_at $doug, position
     rescue
     end
   end
@@ -104,20 +104,13 @@ helpers do
     C3D::SetupC3D.new
     Celluloid::Actor[:puller].terminate
     Celluloid::Actor[:eth].terminate
-
     C3D::ConnectTorrent.supervise_as :puller, {
         username: ENV['TORRENT_USER'],
         password: ENV['TORRENT_PASS'],
         url:      ENV['TORRENT_RPC'] }
     C3D::ConnectEth.supervise_as :eth, :cpp
-
-    # # todo, need to trap_exit on these actors if they crash
-    $puller = Celluloid::Actor[:puller]
-    $eth    = Celluloid::Actor[:eth]
-
     C3D::Utility.save_key
-
-    $key = $eth.get_key
+    $key = Celluloid::Actor[:eth].get_key
   end
 
   def get_latest_doug
@@ -128,7 +121,7 @@ helpers do
     rescue
       doug = '0x'
     end
-    doug_check = $eth.get_storage_at doug, '0x10'
+    doug_check = Celluloid::Actor[:eth].get_storage_at doug, '0x10'
     if doug_check != '0x'
       return doug
     else

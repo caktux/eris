@@ -23,14 +23,8 @@ C3D::ConnectTorrent.supervise_as :puller, {
     password: ENV['TORRENT_PASS'],
     url:      ENV['TORRENT_RPC'] }
 C3D::ConnectEth.supervise_as :eth, :cpp
-
-# todo, need to trap_exit on these actors if they crash
-$puller = Celluloid::Actor[:puller]
-$eth    = Celluloid::Actor[:eth]
-
 C3D::Utility.save_key
-
-$key = $eth.get_key
+$key = Celluloid::Actor[:eth].get_key
 
 def get_latest_doug
   log_file = File.join(ENV['HOME'], '.epm', 'deployed-log.csv')
@@ -40,7 +34,7 @@ def get_latest_doug
   rescue
     doug = '0x'
   end
-  doug_check = $eth.get_storage_at doug, '0x10'
+  doug_check = Celluloid::Actor[:eth].get_storage_at doug, '0x10'
   if doug_check != '0x'
     return doug
   else

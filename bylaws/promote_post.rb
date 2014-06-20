@@ -14,12 +14,12 @@ class PromotePost
 
     def build_transaction post_id, promote_post_bylaw
       data      = [ post_id ]
-      $eth.transact promote_post_bylaw, data
+      Celluloid::Actor[:eth].transact promote_post_bylaw, data
     end
 
     def get_values post_id, promote_list_top
       sleep 0.1                # to make sure the client has received the tx and posted to state machine
-      post_position = $eth.get_storage_at promote_list_top, '0x19'
+      post_position = Celluloid::Actor[:eth].get_storage_at promote_list_top, '0x19'
       if post_position == post_id
         @added = true
       else
