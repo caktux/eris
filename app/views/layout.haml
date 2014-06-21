@@ -52,10 +52,11 @@
                 .form-group
                   %label{ for: 'newDoug' } New Doug
                   %input.form-control{ id: 'newDoug', name: 'newDoug'}
-                %input.button.btn.btn-primary{ type:'submit', value: 'Change My Doug!' }
+                %input.button.btn.btn-info{ type:'submit', value: 'Switch Communities' }
+                %input.button.btn.btn-primary{ type: 'submit', value: 'Request to Join this Community', name: 'join_and_subscribe' }
               %hr
               %form{ action:"/deployDoug", method: 'post'}
-                %input.button.btn.btn-success{type:'submit', value: 'Deploy a New Doug! (be patient, this will take some time)'}
+                %input.button.btn.btn-success{type:'submit', value: 'Deploy a New Community (be patient, this will take some time)'}
       .row
         %br
       =yield

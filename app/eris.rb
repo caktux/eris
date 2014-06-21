@@ -187,8 +187,15 @@ post '/configure' do
 end
 
 post '/set_doug' do
-  $doug = params[:newDoug]
-  redirect to '/'
+  if params[:join_and_subscribe]
+    $doug = params[:newDoug]
+    registration_bylaw = get_dougs_storage 'BLWReg'
+    MemberRegistration.new registration_bylaw
+    redirect to '/'
+  else
+    $doug = params[:newDoug]
+    redirect to '/'
+  end
 end
 
 post '/deployDoug' do
