@@ -30,7 +30,31 @@ Finally this package is wrapped up in a small API and view component. Together t
 
 ## Cool. How Do I Play With It?
 
-In the very near future, we hope to have this process greatly simplified, but for now it will require some work to get this system up and running.
+### Easy Install Method (Requires Trust)
+
+To run the easy install method, first download and install Virtual Box.
+
+Then, throw this magnet link in your torrent client: magnet:?xt=urn:btih:05c402749fb155c9b41fd386791ec187d237e001&dn=Project%20Douglas.ova
+
+When the torrent finishes (please seed!), then import the application into your virtual box.
+
+After that you can SSH into the virtual box using:
+
+```bash
+ssh -p 3022 pd@127.0.0.1
+```
+
+Then enter the password of `projectdouglas`. After that then you will do the following commands:
+
+```bash
+cd eris
+foreman start &disown
+exit
+```
+
+Then follow the post install instructions below.
+
+### Harder Install Method (DIY)
 
 As a precursor, you will need Ruby. On linux platforms, you can simply install ruby 2.0 from your friendly package manager. On OSX it comes preinstalled so there's nothing to install.
 
@@ -52,6 +76,20 @@ Third, you will need to clone this repo and run the install sequence:
 One last thing, which is predominantly for linux. When `apt-get` installs transmission it starts up the daemon. C3D will need to run the daemon manually with the config it puts into ~/.epm/settings.json (that is the transmission config file). So you will have to turn it off the first time with `sudo service transmission-daemon stop` and if you want to permanently turn it off (if you want) with `sudo update-rc.d -f transmission-daemon remove`.
 
 After that you are ready to go. Start the server with `foreman start` and you are ready to interact with your own DAO.
+
+## Post Install
+
+Once you have `foreman start` running without errors then in your browser go to: http://localhost:5000 (or... if you are using the Easy Install Method: http://localhost:5005 ). Once you are there you will see something like this:
+
+![Eris No DOUG 1](https://raw.githubusercontent.com/project-douglas/eris/master/docs/Eris-NoDoug1.png)
+
+Click the MY DAO Button and you will see something like this:
+
+![Eris No DOUG 2](https://raw.githubusercontent.com/project-douglas/eris/master/docs/Eris-NoDoug2.png)
+
+Enter a DOUG address and you are all set.
+
+In the very near future we will have a `Gain Membership with this DAO` button but we currently are still building that method
 
 ### But Wait, I Don't Have a DAO.
 
