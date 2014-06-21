@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     bencode (0.8.1)
-    c3d (0.4.10)
+    c3d (0.4.11)
       bencode (~> 0.8)
       celluloid (~> 0.15)
       commander (~> 4.1)
@@ -45,7 +45,7 @@ GEM
       rspec-support (~> 3.0.0)
     rspec-mocks (3.0.2)
       rspec-support (~> 3.0.0)
-    rspec-support (3.0.1)
+    rspec-support (3.0.2)
     sinatra (1.4.5)
       rack (~> 1.4)
       rack-protection (~> 1.4)
