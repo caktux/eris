@@ -79,6 +79,30 @@ modify-deploy:
 modify-deploy:
   Bylaws/RemoveFlag.lll => {{BLWRemoveFlag}}
   (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/AddAP.lll => {{BLWAddAP}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/AddBylaw.lll => {{BLWAddBylaw}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/AddPerm.lll => {{BLWAddPerm}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/AddToDoug.lll => {{BLWAddToDoug}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/DecentralizedBanhammer.lll => {{BLWDBH}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/MemberRegistration.lll => {{BLWReg}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/RemovePerms.lll => {{BLWRemovePerms}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
+modify-deploy:
+  Bylaws/SetPerms.lll => {{BLWSetPerms}}
+  (def 'DOUG 0x9c0182658c9d57928b06d3ee20bb2b619a9cbf7b) => (def 'DOUG {{DOUG}})
 
 # Now. We must register Everything
 transact:
@@ -121,6 +145,22 @@ transact:
   {{DOUG}} => register BLWRemovePromoted {{BLWRemovePromoted}}
 transact:
   {{DOUG}} => register BLWMoveThread {{BLWMoveThread}}
+transact:
+  {{DOUG}} => register BLWAddAP {{BLWAddAP}}
+transact:
+  {{DOUG}} => register BLWAddBylaw {{BLWAddBylaw}}
+transact:
+  {{DOUG}} => register BLWAddPerm {{BLWAddPerm}}
+transact:
+  {{DOUG}} => register BLWAddToDoug {{BLWAddToDoug}}
+transact:
+  {{DOUG}} => register BLWDBH {{BLWDBH}}
+transact:
+  {{DOUG}} => register BLWReg {{BLWReg}}
+transact:
+  {{DOUG}} => register BLWRemovePerms {{BLWRemovePerms}}
+transact:
+  {{DOUG}} => register BLWSetPerms {{BLWSetPerms}}
 
 #This one should be 5 normally
 transact:
@@ -160,6 +200,22 @@ transact:
   {{DOUG}} => setperm doug {{BLWMoveThread}} 0x1
 transact:
   {{DOUG}} => setperm doug {{BLWRemovePromoted}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWAddAP}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWAddBylaw}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWAddPerm}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWAddToDoug}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWDBH}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWReg}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWRemovePerms}} 0x1
+transact:
+  {{DOUG}} => setperm doug {{BLWSetPerms}} 0x1
 
 # Log those deploys.
 log:
@@ -204,5 +260,21 @@ log:
   RemovePromoted => {{BLWRemovePromoted}}
 log:
   MoveThread => {{BLWMoveThread}}
+log:
+  AddAP => {{BLWAddAP}}
+log:
+  AddByLaw => {{BLWAddBylaw}}
+log:
+  AddPerm => {{BLWAddPerm}}
+log:
+  AddtoDoug => {{BLWAddToDoug}}
+log:
+  DecentralizedBanHammer => {{BLWDBH}}
+log:
+  MemberReg => {{BLWReg}}
+log:
+  RemovePerms => {{BLWRemovePerms}}
+log:
+  SetPerms => {{BLWSetPerms}}
 log:
   All => Done
