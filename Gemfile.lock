@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     bencode (0.8.1)
-    c3d (0.4.11)
+    c3d (0.4.12)
       bencode (~> 0.8)
       celluloid (~> 0.15)
       commander (~> 4.1)
