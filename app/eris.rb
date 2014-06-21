@@ -19,8 +19,13 @@ get '/' do
 end
 
 get '/view' do
-  swarum = get_dougs_storage 'swarum'
-  redirect to("/view/#{swarum}")
+  if $doug
+    swarum = get_dougs_storage 'swarum'
+    redirect to("/view/#{swarum}")
+  else
+    p "There is NO DOUG. Please Add a DOUG in the My DAO Button."
+    redirect to('/view/0x')
+  end
 end
 
 get '/flaggedlist' do
