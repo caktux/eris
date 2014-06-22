@@ -54,6 +54,25 @@ exit
 
 Then follow the post install instructions below.
 
+### Docker Install Method (No-trust)
+
+Install [Docker](https://docker.io) from their docs for [Ubuntu](https://docs.docker.com/installation/ubuntulinux/) and [OS X](https://docs.docker.com/installation/mac/).
+
+Get Eris and build a container:
+```
+git clone https://github.com/project-douglas/eris.git
+cd eris/docker
+docker build -t eris
+```
+
+Run your container:
+```
+docker run -i -p 5000:5000 -p 30302:30302 -t eris
+```
+
+You can edit configurations, address and key in `c3d-config.json` and rebuild your container.
+
+
 ### Harder Install Method (DIY)
 
 As a precursor, you will need Ruby. On linux platforms, you can simply install ruby 2.0 from your friendly package manager. On OSX it comes preinstalled so there's nothing to install.
