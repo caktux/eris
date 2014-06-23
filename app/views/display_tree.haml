@@ -8,15 +8,19 @@
 
 - @contents.each do |group|
   .row
+    - i = 0
     - group.each do |contr, conte|
       - if @type == 0 or @type == 1
         #cit-actions.col-md-1
-          %form{ action:"../view/#{contr}/upvote", method: 'post'}
+          %form.pull-left{ action:"../view/#{contr}/upvote", method: 'post'}
             %button.btn.btn-default.glyphicon.glyphicon-arrow-up{type:'submit', value: ''}
-          %form{ action:"../view/#{contr}/downvote", method: 'post'}
+          %p.vote-pad.pull-left= @upvotes[i]
+          %form.pull-left{ action:"../view/#{contr}/downvote", method: 'post'}
             %button.btn.btn-default.glyphicon.glyphicon-arrow-down{type:'submit', value: ''}
+          %p.vote-pad.pull-left= @downvotes[i]
+        -# #cit-votes.col-md-1
 
-      #content.col-md-9
+      #content.col-md-8
         - if @type != 0
           %h4
             %a{href:"../view/#{contr}"}= address_unguard contr
@@ -29,15 +33,16 @@
 
         - if @moderate_this == 'flaggedlist'
           %form{ action:"../moderate/#{contr}/promote", method: 'post'}
-            %input.button.btn.btn-danger{type:'submit', value: 'Flag This'}
+            %input.button.btn.btn-danger{type:'submit', value: 'Promote This'}
           %form{ action:"../moderate/#{contr}/remove_flag", method: 'post'}
-            %input.button.btn.btn-info{type:'submit', value: 'Flag This'}
+            %input.button.btn.btn-info{type:'submit', value: 'Remove Flag'}
 
         - if @moderate_this == 'promotedlist'
           %form{ action:"../moderate/#{contr}/blacklist", method: 'post'}
-            %input.button.btn.btn-danger{type:'submit', value: 'Flag This'}
+            %input.button.btn.btn-danger{type:'submit', value: 'Blacklist This'}
           %form{ action:"../moderate/#{contr}/remove_promotion", method: 'post'}
-            %input.button.btn.btn-info{type:'submit', value: 'Flag This'}
+            %input.button.btn.btn-info{type:'submit', value: 'Remove Flag'}
+      - i += 1
 
 .row
   #newcontent.clearfix.col-md-6.col-md-offset-3

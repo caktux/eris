@@ -50,6 +50,7 @@ get '/view/:contract' do
   @contents      = C3D::Assemble.new(@this_contract).content
   @lineage       = find_the_peak @this_contract
   @type          = contract_type @this_contract, @contents, @lineage
+  assemble_content_votes
   haml :display_tree
 end
 
