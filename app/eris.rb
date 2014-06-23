@@ -30,14 +30,23 @@ end
 
 get '/flaggedlist' do
   @moderate_this = 'flaggedlist'
-  flaggedlist    = get_dougs_storage 'flaggedlist'
-  redirect to("/view/#{flaggedlist}")
+  @this_contract = address_guard get_dougs_storage @moderate_this
+  @contents      = C3D::Assemble.new(@this_contract).content
+  @lineage       = find_the_peak @this_contract
+  @type          = contract_type @this_contract, @contents, @lineage
+  assemble_content_votes
+  haml :display_tree
 end
 
 get '/promotedlist' do
   @moderate_this = 'promotedlist'
-  promotedlist   = get_dougs_storage 'promotedlist'
-  redirect to("/view/#{promotedlist}")
+  @this_contract = address_guard get_dougs_storage @moderate_this
+  @contents      = C3D::Assemble.new(@this_contract, true).content
+  @lineage       = find_the_peak @this_contract
+  @type          = contract_type @this_contract, @contents, @lineage
+  assemble_content_votes
+  p @contents
+  haml :display_tree
 end
 
 get '/issueslist' do
@@ -45,8 +54,7 @@ get '/issueslist' do
 end
 
 get '/view/:contract' do
-  @this_contract = params[:contract]
-  @this_contract = address_guard @this_contract
+  @this_contract = address_guard params[:contract]
   @contents      = C3D::Assemble.new(@this_contract).content
   @lineage       = find_the_peak @this_contract
   @type          = contract_type @this_contract, @contents, @lineage
@@ -162,19 +170,19 @@ post '/moderate/:contract/blacklist' do
 end
 
 post '/vote/:contract/endorse' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
+  # request.body.rewind
+  # request_from_ui = JSON.parse request.body.read
   # result = C3D::Settings.set_settings request_from_ui
-  content_type :json
-  response = { 'success' => result }.to_json
+  # content_type :json
+  # response = { 'success' => result }.to_json
 end
 
 post '/vote/:contract/vote' do
-  request.body.rewind
-  request_from_ui = JSON.parse request.body.read
+  # request.body.rewind
+  # request_from_ui = JSON.parse request.body.read
   # result = C3D::Settings.set_settings request_from_ui
-  content_type :json
-  response = { 'success' => result }.to_json
+  # content_type :json
+  # response = { 'success' => result }.to_json
 end
 
 get '/configure' do
