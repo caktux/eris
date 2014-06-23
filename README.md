@@ -58,7 +58,13 @@ Then follow the post install instructions below.
 
 Install [Docker](https://docker.io) from their docs for [Ubuntu](https://docs.docker.com/installation/ubuntulinux/) and [OS X](https://docs.docker.com/installation/mac/).
 
-Get Eris and build a container:
+You can use pre-built images from the [Docker Hub](https://hub.docker.com/):
+```
+docker pull caktux/eris
+docker run -i -p 5000:5000 -p 30302:30302 -t caktux/eris
+```
+
+Or get Eris and build your own container:
 ```
 git clone https://github.com/project-douglas/eris.git
 cd eris/docker
