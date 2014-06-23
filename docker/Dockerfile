@@ -71,13 +71,13 @@ RUN cd /eris/cpp-ethereum && sed -ri "s/Status OK/Status Ok/g" /usr/include/leve
 RUN mkdir /eris/cpp-ethereum/cpp-ethereum-build && cd /eris/cpp-ethereum/cpp-ethereum-build && cmake /eris/cpp-ethereum/cpp-ethereum-build -DCMAKE_BUILD_TYPE=Eris -DHEADLESS=1 /eris/cpp-ethereum && make -j $(cat /proc/cpuinfo | grep processor | wc -l)
 
 # Install Eris
-RUN cd /eris && git clone https://github.com/project-douglas/eris.git && cd eris && git checkout 3194ce3517d7da02627f393e7c77e4172f684e78 && /bin/bash -l -c "bundle install --system"
+RUN cd /eris && git clone https://github.com/project-douglas/eris.git && cd eris && git checkout 7fa5bfd63e9e4317f44f489ecc0db5f5930216a5 && /bin/bash -l -c "bundle install --system"
 
 # TODO - edit c3d-config.json
 RUN mkdir /.epm
 ADD c3d-config.json /.epm/
 
-RUN /bin/echo -e "Doug,0x61363f0d19cfe71a5c130642016e37649610294b" > /.epm/deployed-log.csv
+RUN /bin/echo -e "Doug,0x6c40e4c11f95fd9c6d8ffeefeded5061588a464a" > /.epm/deployed-log.csv
 
 CMD ["-l", "-c", "foreman start"]
 ENTRYPOINT ["/bin/bash"]

@@ -38,8 +38,18 @@
   padding-top: 3em;
 }
 
+.row {
+  margin-bottom: 1em;
+}
+
 .vote-pad {
-  padding-left: 10px;
+  line-height: 2em;
+  padding: 0 1em;
+}
+
+#cit-actions {
+  padding-top: 1em;
+  width: 8em;
 }
 
 @media (max-width: 767px) {
