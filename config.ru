@@ -17,7 +17,6 @@ Dir[File.dirname(__FILE__) + '/bylaws/*.rb'].each {|file| require file }
 ERIS_REPO = 'https://github.com/project-douglas/eris.git'
 
 C3D::SetupC3D.new
-
 C3D::ConnectTorrent.supervise_as :puller, {
     username: ENV['TORRENT_USER'],
     password: ENV['TORRENT_PASS'],

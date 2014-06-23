@@ -8,6 +8,7 @@ helpers do
 
   def address_unguard contract
     if contract.class == String
+      contract = '0x0' if contract == '0x'
       contract = contract[2..-1] if contract[0..1] == '0x'
     elsif contract.class == Array
       tmp = []
@@ -58,6 +59,32 @@ helpers do
       end
     end
     return 1
+  end
+
+  def assemble_content_votes
+    if @type == 0 || @type == 1
+      i = 0
+      @upvotes       = []
+      @downvotes     = []
+      @contents.each do |group|
+        group.each do |contract,contents|
+          @upvotes[i]   = address_unguard(contract_upvotes(contract)).to_i
+          @downvotes[i] = address_unguard(contract_downvotes(contract)).to_i
+        end
+        i += 1
+      end
+    else
+      @upvotes   = [0]
+      @downvotes = [0]
+    end
+  end
+
+  def contract_upvotes this_contract
+    return Celluloid::Actor[:eth].get_storage_at this_contract, '0x19'
+  end
+
+  def contract_downvotes this_contract
+    return Celluloid::Actor[:eth].get_storage_at this_contract, '0x20'
   end
 
   def update_settings params
