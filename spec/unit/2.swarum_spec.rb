@@ -68,7 +68,7 @@ describe "Publishing Content from c3D to Ethereum" do
     expect( fp3.added ).to be_truthy
   end
 
-  it "should change the status of individual posts." do
+  it "should change the status of flagged posts." do
     print "\n\nChecking status of Flagged Posts.\n\n"
     status_fp1 = Celluloid::Actor[:eth].get_storage_at @multiple_post_ids[0], '0x21'
     status_fp2 = Celluloid::Actor[:eth].get_storage_at @multiple_post_ids[1], '0x21'
@@ -95,11 +95,36 @@ describe "Publishing Content from c3D to Ethereum" do
     expect( pp2.added ).to be_truthy
   end
 
+  it "should change the status of promoted posts." do
+    print "\n\nChecking status of Promoted Posts.\n\n"
+    status_pp1 = Celluloid::Actor[:eth].get_storage_at @multiple_post_ids[1], '0x21'
+    status_pp2 = Celluloid::Actor[:eth].get_storage_at @multiple_post_ids[2], '0x21'
+    print "\n"
+    expect( status_pp1 ).to eq('0x02')
+    expect( status_pp2 ).to eq('0x02')
+  end
+
+  it "should remove promoted posts from the flagged list." do
+    print "\n\nChecking Flagged List for Removed Promoted Posts.\n\n"
+    status_pp1 = Celluloid::Actor[:eth].get_storage_at @flaglist, @multiple_post_ids[1]
+    status_pp2 = Celluloid::Actor[:eth].get_storage_at @flaglist, @multiple_post_ids[2]
+    print "\n"
+    expect( status_pp1 ).to eq('0x')
+    expect( status_pp2 ).to eq('0x')
+  end
+
   it "should be able to remove promoted posts." do
     print "\n\nRemoving a Promoted Post.\n\n"
     rp      = RemovePromoted.new @multiple_post_ids[1], @rm_pr_bl, @promlist
     print "\n"
     expect( rp.removed ).to be_truthy
+  end
+
+  it "should change the status of removed promotions for posts." do
+    print "\n\nChecking Removed Promotion.\n\n"
+    status_rp = Celluloid::Actor[:eth].get_storage_at @multiple_post_ids[1], '0x21'
+    print "\n"
+    expect( status_rp ).to eq('0x')
   end
 
   it "should be able to blacklist promoted posts." do
