@@ -75,4 +75,8 @@
 .row
   #modstep.clearfix.col-md-offset-1
     - if @moderate_this == 'flaggedlist'
-      %a.btn.btn-default{href:'/promotedlist'} Promoted List
+      %a.btn.btn-default{ href:'/promotedlist' } Promoted List
+      %a.btn.btn-default{ href: '/view' } Back to Discussion
+    - elsif @moderate_this == 'promotedlist'
+      %a.btn.btn-default{ href:'/flaggedlist' } Flag List
+      %a.btn.btn-default{ href: '/view' } Back to Discussion

@@ -52,6 +52,7 @@ end
 
 get '/issueslist' do
   #todo
+  haml :wip
 end
 
 get '/view/:contract' do
