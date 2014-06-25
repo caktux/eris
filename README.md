@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/project-douglas/eris.png?label=ready&title=Ready)](https://waffle.io/project-douglas/eris)
 ## Introduction
 
 `Eris` is a platform on which decentralized applications may be built. At its core, what Eris seeks to do is to revisit the current state of how consumer applications are developed. Eris was designed as an attempt to provide a framework for development of applications which leverage web technologies, but *without servers*. This is the fundamental, driving design imperative of what Eris is seeking to achieve. We are building a framework which allows developers to build serverless integrated applications using technologies they are already familiar with.
