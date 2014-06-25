@@ -7,13 +7,15 @@ set :views, File.join(File.dirname(__FILE__), 'views')
 before do
   print "[ERIS::#{Time.now.strftime( "%F %T" )}] Params Recieved >>\t" + params.inspect + "\n"
   print "[ERIS::#{Time.now.strftime( "%F %T" )}] Request >>\t\t" + request.body.read + "\n"
+  @watched       = get_watched_contracts
+  @ignored       = get_ignored_contracts
 end
 
 get '/' do
   if $doug
     redirect to("/view")
   else
-    p "There is NO DOUG. Please Add a DOUG in the My DAO Button."
+    p "There is NO DOUG. Please Deploy a DOUG in the My DAO Button."
     redirect to('/view/0x')
   end
 end
@@ -23,7 +25,7 @@ get '/view' do
     swarum = get_dougs_storage 'swarum'
     redirect to("/view/#{swarum}")
   else
-    p "There is NO DOUG. Please Add a DOUG in the My DAO Button."
+    p "There is NO DOUG. Please Deploy a DOUG in the My DAO Button."
     redirect to('/view/0x')
   end
 end
@@ -45,12 +47,12 @@ get '/promotedlist' do
   @lineage       = find_the_peak @this_contract
   @type          = contract_type @this_contract, @contents, @lineage
   assemble_content_votes
-  p @contents
   haml :display_tree
 end
 
 get '/issueslist' do
   #todo
+  haml :wip
 end
 
 get '/view/:contract' do
@@ -111,6 +113,26 @@ post '/view/:contract/downvote' do
     result = false
   end
   content_type :json
+  redirect to("/view/#{params[:contract]}")
+end
+
+post '/view/:contract/subscribe' do
+  C3D::EyeOfZorax.subscribe params[:contract]
+  redirect to("/view/#{params[:contract]}")
+end
+
+post '/view/:contract/unsubscribe' do
+  C3D::EyeOfZorax.unsubscribe params[:contract]
+  redirect to("/view/#{params[:contract]}")
+end
+
+post '/view/:contract/ignore' do
+  C3D::EyeOfZorax.ignore params[:contract]
+  redirect to("/view/#{params[:contract]}")
+end
+
+post '/view/:contract/unignore' do
+  C3D::EyeOfZorax.unignore params[:contract]
   redirect to("/view/#{params[:contract]}")
 end
 

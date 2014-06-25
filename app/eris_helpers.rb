@@ -87,6 +87,24 @@ helpers do
     return Celluloid::Actor[:eth].get_storage_at this_contract, '0x20'
   end
 
+  def get_watched_contracts
+    watch_file = ENV['WATCH_FILE']
+    begin
+      watched = JSON.parse(File.read(watch_file))
+    rescue
+      watched = []
+    end
+  end
+
+  def get_ignored_contracts
+    ignore_file = ENV['IGNORE_FILE']
+    begin
+      ignored = JSON.parse(File.read(ignore_file))
+    rescue
+      watched = []
+    end
+  end
+
   def update_settings params
     epm_settings_file = File.join(ENV['HOME'], '.epm', 'epm-rpc.json')
     c3d_settings_file = File.join(ENV['HOME'], '.epm', 'c3d-config.json')
