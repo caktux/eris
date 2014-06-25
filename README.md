@@ -73,7 +73,7 @@ docker build -t eris
 
 Run your container:
 ```
-docker run -i -p 5000:5000 -p 30302:30302 -t eris
+docker run -i -p 5000:5000 -p 30302:30302 -p 51413:51413 -t eris
 ```
 
 You can edit configurations, address and key in `c3d-config.json` and rebuild your container.

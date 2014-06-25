@@ -7,7 +7,7 @@
 # sudo docker build -t eris .
 #
 # # Run
-# docker run -i -p 5000:5000 -p 30302:30302 -t eris
+# docker run -i -p 5000:5000 -p 30302:30302 -p 51413:51413 -t eris
 #
 # # Using boot2docker on OS X, open ports with :
 # VBoxManage controlvm boot2docker-vm natpf1 "eth,tcp,127.0.0.1,5000,,5000"
@@ -56,13 +56,7 @@ RUN mkdir /eris/jsonrpc && cd /eris/jsonrpc && git clone git://github.com/cinema
 RUN cd /eris && git clone https://github.com/project-douglas/cpp-ethereum.git
 
 # Checkout branch, hard to update container that way...
-# cd /eris/cpp-ethereum && git checkout develop
-
-# Fixed commit
-cd /eris/cpp-ethereum && git checkout dc8613bffc7c7641fe621c294656a094a82f9b65
-
-# Example patch
-# RUN cd /eris/cpp-ethereum && wget https://github.com/project-douglas/cpp-ethereum/pull/20.patch && git apply 20.patch
+cd /eris/cpp-ethereum && git pull && git checkout develop
 
 # Hot patch leveldb
 RUN cd /eris/cpp-ethereum && sed -ri "s/Status OK/Status Ok/g" /usr/include/leveldb/status.h
@@ -71,13 +65,12 @@ RUN cd /eris/cpp-ethereum && sed -ri "s/Status OK/Status Ok/g" /usr/include/leve
 RUN mkdir /eris/cpp-ethereum/cpp-ethereum-build && cd /eris/cpp-ethereum/cpp-ethereum-build && cmake /eris/cpp-ethereum/cpp-ethereum-build -DCMAKE_BUILD_TYPE=Eris -DHEADLESS=1 /eris/cpp-ethereum && make -j $(cat /proc/cpuinfo | grep processor | wc -l)
 
 # Install Eris
-RUN cd /eris && git clone https://github.com/project-douglas/eris.git && cd eris && git checkout 7fa5bfd63e9e4317f44f489ecc0db5f5930216a5 && /bin/bash -l -c "bundle install --system"
+RUN cd /eris && git clone https://github.com/project-douglas/eris.git
+RUN cd /eris/eris && git pull && /bin/bash -l -c "bundle install --system"
 
 # TODO - edit c3d-config.json
 RUN mkdir /.epm
 ADD c3d-config.json /.epm/
-
-RUN /bin/echo -e "Doug,0x6c40e4c11f95fd9c6d8ffeefeded5061588a464a" > /.epm/deployed-log.csv
 
 CMD ["-l", "-c", "foreman start"]
 ENTRYPOINT ["/bin/bash"]
