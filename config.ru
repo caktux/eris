@@ -24,6 +24,7 @@ C3D::ConnectTorrent.supervise_as :puller, {
 C3D::ConnectEth.supervise_as :eth, :cpp
 C3D::Utility.save_key
 $key = Celluloid::Actor[:eth].get_key
+C3D::Utility.save_address
 
 def get_latest_doug
   log_file = File.join(ENV['HOME'], '.epm', 'deployed-log.csv')
