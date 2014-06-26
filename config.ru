@@ -23,7 +23,7 @@ C3D::ConnectTorrent.supervise_as :puller, {
     url:      ENV['TORRENT_RPC'] }
 
 # Give some time for eth to start
-sleep 5
+sleep 15
 
 C3D::ConnectEth.supervise_as :eth, :cpp
 C3D::Utility.save_key
