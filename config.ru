@@ -22,9 +22,6 @@ C3D::ConnectTorrent.supervise_as :puller, {
     password: ENV['TORRENT_PASS'],
     url:      ENV['TORRENT_RPC'] }
 
-# Give some time for eth to start
-sleep 15
-
 C3D::ConnectEth.supervise_as :eth, :cpp
 C3D::Utility.save_key
 $key = Celluloid::Actor[:eth].get_key
