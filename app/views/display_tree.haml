@@ -6,9 +6,9 @@
       %a{href:"../view/#{contr}"}= contr[0..8]
   %li.active= address_unguard @this_contract.downcase
 
+- i = 0
 - @contents.each do |group|
   .row
-    - i = 0
     - group.each do |contr, conte|
       - if @type == 0 or @type == 1
         #cit-actions.col-md-1
@@ -48,7 +48,7 @@
             %input.button.btn.btn-danger{type:'submit', value: 'Blacklist This'}
           %form{ action:"../moderate/#{contr}/remove_promotion", method: 'post'}
             %input.button.btn.btn-info{type:'submit', value: 'Remove Flag'}
-      - i += 1
+  - i += 1
 
 .row
   #newcontent.clearfix.col-md-6.col-md-offset-3
