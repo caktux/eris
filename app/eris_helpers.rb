@@ -168,7 +168,7 @@ helpers do
     sleep 1
     if C3D::EthRunner.is_eth_running?
       eth = C3D::EthRunner.eth_process
-      `kill #{eth}`
+      spawn "kill #{eth}"
     end
   end
 
