@@ -22,8 +22,10 @@ C3D::ConnectTorrent.supervise_as :puller, {
     password: ENV['TORRENT_PASS'],
     url:      ENV['TORRENT_RPC'] }
 C3D::ConnectEth.supervise_as :eth, :cpp
+
 C3D::Utility.save_key
 $key = Celluloid::Actor[:eth].get_key
+
 C3D::Utility.save_address
 $doug = C3D::Utility.get_latest_doug
 
