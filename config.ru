@@ -29,6 +29,10 @@ $key = Celluloid::Actor[:eth].get_key
 C3D::Utility.save_address
 $doug = C3D::Utility.get_latest_doug
 
+if ENV['ETH_REMOTE'] == '173.246.105.207'
+  ENV['GAS_PRICE'] = '0'
+end
+
 map '/assets' do
   environment = Sprockets::Environment.new
   environment.append_path 'app/assets/scripts/bootstrap/dist'
