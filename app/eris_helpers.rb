@@ -14,7 +14,11 @@ helpers do
       tmp = []
       until contract.empty?
         c = contract.shift
-        c = c[2..-1] if c[0..1] == '0x'
+        if c.class == String
+          c = c[2..-1] if c[0..1] == '0x'
+        else
+          c = '0x'
+        end
         tmp.push c
       end
       contract = tmp
