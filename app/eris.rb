@@ -30,6 +30,17 @@ get '/view' do
   end
 end
 
+get '/view/:contract' do
+  @this_contract = address_guard params[:contract]
+  @contents      = C3D::Assemble.new(@this_contract).content
+  @lineage       = find_the_peak @this_contract
+  @type          = contract_type @this_contract, @contents, @lineage
+  assemble_content_votes
+  p @upvotes
+  p @downvotes
+  haml :display_tree
+end
+
 get '/flaggedlist' do
   @moderate_this = 'flaggedlist'
   @this_contract = address_guard get_dougs_storage @moderate_this
@@ -55,14 +66,7 @@ get '/issueslist' do
   haml :wip
 end
 
-get '/view/:contract' do
-  @this_contract = address_guard params[:contract]
-  @contents      = C3D::Assemble.new(@this_contract).content
-  @lineage       = find_the_peak @this_contract
-  @type          = contract_type @this_contract, @contents, @lineage
-  assemble_content_votes
-  haml :display_tree
-end
+## These methods can be abstracted
 
 post '/view/:contract/new_topic' do
   topic = CreateTopic.new params[:content], get_dougs_storage('BLWCTopic'), params[:contract]
@@ -113,26 +117,6 @@ post '/view/:contract/downvote' do
     result = false
   end
   content_type :json
-  redirect to("/view/#{params[:contract]}")
-end
-
-post '/view/:contract/subscribe' do
-  C3D::EyeOfZorax.subscribe params[:contract]
-  redirect to("/view/#{params[:contract]}")
-end
-
-post '/view/:contract/unsubscribe' do
-  C3D::EyeOfZorax.unsubscribe params[:contract]
-  redirect to("/view/#{params[:contract]}")
-end
-
-post '/view/:contract/ignore' do
-  C3D::EyeOfZorax.ignore params[:contract]
-  redirect to("/view/#{params[:contract]}")
-end
-
-post '/view/:contract/unignore' do
-  C3D::EyeOfZorax.unignore params[:contract]
   redirect to("/view/#{params[:contract]}")
 end
 
@@ -207,6 +191,28 @@ post '/vote/:contract/vote' do
   # response = { 'success' => result }.to_json
 end
 
+## These methods cannot be abstracted.
+
+post '/view/:contract/subscribe' do
+  C3D::EyeOfZorax.subscribe params[:contract]
+  redirect to("/view/#{params[:contract]}")
+end
+
+post '/view/:contract/unsubscribe' do
+  C3D::EyeOfZorax.unsubscribe params[:contract]
+  redirect to("/view/#{params[:contract]}")
+end
+
+post '/view/:contract/ignore' do
+  C3D::EyeOfZorax.ignore params[:contract]
+  redirect to("/view/#{params[:contract]}")
+end
+
+post '/view/:contract/unignore' do
+  C3D::EyeOfZorax.unignore params[:contract]
+  redirect to("/view/#{params[:contract]}")
+end
+
 get '/configure' do
   @settings = JSON.parse(File.read(File.join(ENV['HOME'], '.epm', 'c3d-config.json')))
   haml :configure
@@ -232,5 +238,12 @@ end
 post '/deployDoug' do
   EPM::Deploy.new(ERIS_REPO).deploy_package
   $doug = get_latest_doug
+  redirect to '/'
+end
+
+post '/resetChain' do
+  stop_eth
+  kank_chain
+  start_eth
   redirect to '/'
 end

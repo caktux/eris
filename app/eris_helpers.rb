@@ -163,6 +163,29 @@ helpers do
     $key = Celluloid::Actor[:eth].get_key
   end
 
+  def stop_eth
+    Celluloid::Actor[:eth].terminate
+    sleep 1
+    if C3D::EthRunner.is_eth_running?
+      eth = C3D::EthRunner.eth_process
+      `kill #{eth}`
+    end
+  end
+
+  def kank_chain
+    chain = ENV['BLOCKCHAIN_DIR']
+    chain.gsub!('~', ENV['HOME']) if chain[/~/]
+    FileUtils.rm_rf chain
+  end
+
+  def start_eth
+    print "This will take a few seconds. Please be patient.\n"
+    settings = C3D::Utility.get_config
+    C3D::EthRunner.start_ethereum settings
+    C3D::ConnectEth.supervise_as :eth, :cpp
+    $key = Celluloid::Actor[:eth].get_key
+  end
+
   def get_latest_doug
     log_file = File.join(ENV['HOME'], '.epm', 'deployed-log.csv')
     begin

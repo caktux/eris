@@ -87,3 +87,7 @@
           %b Update Your EPM Settings Also?
   %input.button.btn.btn-primary{type:'submit', value: 'Submit Configuration'}
   %a.btn.btn-default{ href:'/view' } Cancel
+%form{ action:"../resetChain", method: 'post'}
+  %input.button.btn.btn-danger{type:'submit', value: 'Reset Blockchain'}
+.clearfix
+%h4.text-center Please be patient as these commands will take a few seconds to operate.
