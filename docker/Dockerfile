@@ -34,7 +34,7 @@ RUN apt-get update --fix-missing -y && apt-get upgrade -y && apt-get dist-upgrad
 RUN apt-get install --fix-missing -y software-properties-common ntp apt-utils git sudo ssh openssh-server vim screen inotify-tools supervisor
 RUN apt-get install --fix-missing -y build-essential g++-4.8 automake libtool unzip cmake libncurses5-dev
 RUN apt-get install --fix-missing -y libgmp-dev libgmp3-dev libboost-all-dev libleveldb-dev yasm libminiupnpc-dev
-RUN apt-get install --fix-missing -y qtbase5-dev qt5-default qtdeclarative5-dev libqt5webkit5-dev
+RUN apt-get install --fix-missing -y qtbase5-dev qt5-default qtdeclarative5-dev libqt5webkit5-dev libreadline-dev scons
 RUN apt-get install --fix-missing -y curl transmission-daemon && service transmission-daemon stop && update-rc.d -f transmission-daemon remove
 
 # Ruby
@@ -46,7 +46,7 @@ RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
 RUN mkdir /eris
 
 # Build dependencies for Ethereum
-RUN mkdir /eris/cryptopp562 && cd /eris/cryptopp562 && wget http://www.cryptopp.com/cryptopp562.zip && unzip cryptopp562.zip && make -j $(cat /proc/cpuinfo | grep processor | wc -l)
+RUN cd /ethereum && git clone https://github.com/mmoss/cryptopp.git && cd cryptopp && scons --shared --prefix=/usr
 
 # JSON-RPC support
 RUN apt-get install --fix-missing -y libcurl4-openssl-dev
@@ -59,7 +59,7 @@ RUN cd /eris && git clone https://github.com/project-douglas/cpp-ethereum.git
 cd /eris/cpp-ethereum && git pull && git checkout develop
 
 # Hot patch leveldb
-RUN cd /eris/cpp-ethereum && sed -ri "s/Status OK/Status Ok/g" /usr/include/leveldb/status.h
+RUN sed -ri "s/Status OK/Status Ok/g" /usr/include/leveldb/status.h
 
 # Build Ethereum
 RUN mkdir /eris/cpp-ethereum/cpp-ethereum-build && cd /eris/cpp-ethereum/cpp-ethereum-build && cmake /eris/cpp-ethereum/cpp-ethereum-build -DCMAKE_BUILD_TYPE=Eris -DHEADLESS=1 /eris/cpp-ethereum && make -j $(cat /proc/cpuinfo | grep processor | wc -l)
