@@ -32,7 +32,7 @@ RUN apt-get update --fix-missing -y && apt-get upgrade -y && apt-get dist-upgrad
 #
 
 RUN apt-get install --fix-missing -y software-properties-common ntp apt-utils git sudo ssh openssh-server vim screen inotify-tools supervisor
-RUN apt-get install --fix-missing -y build-essential g++-4.8 automake libtool unzip cmake libncurses5-dev
+RUN apt-get install --fix-missing -y build-essential g++-4.8 automake libtool unzip cmake libncurses5-dev libcurl4-openssl-dev
 RUN apt-get install --fix-missing -y libgmp-dev libgmp3-dev libboost-all-dev libleveldb-dev yasm libminiupnpc-dev
 RUN apt-get install --fix-missing -y qtbase5-dev qt5-default qtdeclarative5-dev libqt5webkit5-dev libreadline-dev scons
 RUN apt-get install --fix-missing -y curl transmission-daemon && service transmission-daemon stop && update-rc.d -f transmission-daemon remove
@@ -46,10 +46,9 @@ RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
 RUN mkdir /eris
 
 # Build dependencies for Ethereum
-RUN cd /ethereum && git clone https://github.com/mmoss/cryptopp.git && cd cryptopp && scons --shared --prefix=/usr
+RUN cd /eris && git clone https://github.com/mmoss/cryptopp.git && cd cryptopp && scons --shared --prefix=/usr
 
 # JSON-RPC support
-RUN apt-get install --fix-missing -y libcurl4-openssl-dev
 RUN mkdir /eris/jsonrpc && cd /eris/jsonrpc && git clone git://github.com/cinemast/libjson-rpc-cpp.git && cd libjson-rpc-cpp/build && cmake .. && make -j $(cat /proc/cpuinfo | grep processor | wc -l) && make install && ldconfig
 
 # Clone latest Ethereum
